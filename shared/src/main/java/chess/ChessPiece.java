@@ -1,5 +1,8 @@
 package chess;
 
+import chess.piece_moves.KingMoves;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -55,7 +58,34 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+
+        switch (this.type){
+            case KING:
+                KingMoves allMoves = new KingMoves(myPosition);
+                return subtractBlocked(allMoves.getMoves(), board);
+            case QUEEN:
+                //
+            case BISHOP:
+                //
+            case KNIGHT:
+                //
+            case ROOK:
+                //
+            case PAWN:
+                //
+        }
+
         throw new RuntimeException("Not implemented");
+    }
+    private Collection<ChessMove> subtractBlocked(Collection<ChessMove> allMoves, ChessBoard board){
+        Collection<ChessMove> updatedMoves = new ArrayList<>();
+        for (ChessMove move : allMoves){
+            if (board.getPiece(move.getEndPosition()) == null
+            || board.getPiece(move.getEndPosition()).getTeamColor() != this.pieceColor){
+                updatedMoves.add(move);
+            }
+        }
+        return updatedMoves;
     }
 
     @Override

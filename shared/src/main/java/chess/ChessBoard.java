@@ -9,10 +9,10 @@ import java.util.Arrays;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    private ChessPiece[][] squares = new ChessPiece[8][8];
+    private ChessPiece[][] squares = new ChessPiece[8][8];  //remember this takes in index 0-7 not 1-8
 
     public ChessBoard() {
-        this.resetBoard();
+        //this.resetBoard();
     }
 
     /**
@@ -21,7 +21,7 @@ public class ChessBoard {
      * @param position where to add the piece to
      * @param piece    the piece to add
      */
-    public void addPiece(ChessPosition position, ChessPiece piece) {
+    public void addPiece(ChessPosition position, ChessPiece piece) { //remember this takes in index 1-8 not 0-7
         //squares[position.getRow()][position.getColumn()] = piece;
         squares[position.getRow() - 1][position.getColumn() - 1] = piece;
         //throw new RuntimeException("Not implemented");
@@ -34,7 +34,7 @@ public class ChessBoard {
      * @return Either the piece at the position, or null if no piece is at that
      * position
      */
-    public ChessPiece getPiece(ChessPosition position) {
+    public ChessPiece getPiece(ChessPosition position) { //remember this takes in index 1-8 not 0-7
         if (squares[position.getRow() - 1][position.getColumn() - 1] == null) {
             return null;
         }else{

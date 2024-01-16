@@ -5,7 +5,7 @@ which commit finished tests:
     ChessMove       - video suggestions and passed chessMoveTests
     ChessBoard      - passed chessBoardTests
     BishopMove      -
-    KingMove        -
+    KingMove        - passed KingMoveTests
     KnightMove      -
     PawnMove        -
     QueenMove       -
