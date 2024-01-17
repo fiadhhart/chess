@@ -1,6 +1,7 @@
 package chess;
 
 import chess.piece_moves.KingMoves;
+import chess.piece_moves.PawnMoves;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,8 +62,8 @@ public class ChessPiece {
 
         switch (this.type){
             case KING:
-                KingMoves allMoves = new KingMoves(myPosition);
-                return subtractBlocked(allMoves.getMoves(), board);
+                KingMoves allKingMoves = new KingMoves(myPosition);
+                return subtractBlocked(allKingMoves.getMoves(), board);
             case QUEEN:
                 //
             case BISHOP:
@@ -72,7 +73,8 @@ public class ChessPiece {
             case ROOK:
                 //
             case PAWN:
-                //
+                PawnMoves allPawnMoves = new PawnMoves(myPosition, board, this.pieceColor);
+                return allPawnMoves.getMoves();
         }
 
         throw new RuntimeException("Not implemented");

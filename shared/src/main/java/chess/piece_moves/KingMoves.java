@@ -6,6 +6,10 @@ import chess.ChessPosition;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+    calculates (returns via getMoves method) all possible moves for a King from a starting position.
+    DOESN'T take into account other pieces
+ */
 public class KingMoves {
     private Collection<ChessMove> possibleMoves;
     private ChessPosition startingPosition;
