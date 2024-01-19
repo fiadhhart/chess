@@ -9,4 +9,4 @@ which commit finished tests:
     RookMove        - passed RookMoveTests
     BishopMove      - passed BishopMoveTests
     QueenMove       - passed QueenMoveTests
-    KnightMove      -
+    KnightMove      - passed KnightMoveTests

@@ -5,6 +5,7 @@ import chess.piece_moves.PawnMoves;
 import chess.piece_moves.RookMoves;
 import chess.piece_moves.BishopMoves;
 import chess.piece_moves.QueenMoves;
+import chess.piece_moves.KnightMoves;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,7 +75,8 @@ public class ChessPiece {
                 BishopMoves allBishopMoves = new BishopMoves(myPosition, board, this.pieceColor);
                 return allBishopMoves.getMoves();
             case KNIGHT:
-                //
+                KnightMoves allKnightMoves = new KnightMoves(myPosition, board, this.pieceColor);
+                return allKnightMoves.getMoves();
             case ROOK:
                 RookMoves allRookMoves = new RookMoves(myPosition, board, this.pieceColor);
                 return allRookMoves.getMoves();
@@ -82,8 +84,8 @@ public class ChessPiece {
                 PawnMoves allPawnMoves = new PawnMoves(myPosition, board, this.pieceColor);
                 return allPawnMoves.getMoves();
         }
-
-        throw new RuntimeException("Not implemented");
+        return null;
+        //throw new RuntimeException("Not implemented");
     }
 
     @Override
