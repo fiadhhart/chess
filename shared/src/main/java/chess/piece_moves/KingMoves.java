@@ -1,22 +1,29 @@
 package chess.piece_moves;
 
-import chess.ChessMove;
-import chess.ChessPosition;
+import chess.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
     calculates (returns via getMoves method) all possible moves for a King from a starting position.
-    DOESN'T take into account other pieces
  */
 public class KingMoves {
     private Collection<ChessMove> possibleMoves;
     private ChessPosition startingPosition;
+    private ChessBoard board;
+    private ChessGame.TeamColor color;
 
-    public KingMoves(ChessPosition startingPosition) {
+    private int conditionRow;
+    private int addRowStep;
+    private int conditionCol;
+    private int addColStep;
+
+    public KingMoves(ChessPosition startingPosition, ChessBoard board, ChessGame.TeamColor color) {
         this.startingPosition = startingPosition;
         this.possibleMoves = new ArrayList<>();
+        this.board = board;
+        this.color = color;
     }
 
     public Collection<ChessMove> getMoves(){
@@ -25,46 +32,67 @@ public class KingMoves {
     }
 
     private void calculateAll(){
-        if (startingPosition.getRow() != 8) { //can move up
-            ChessPosition oneUp = new ChessPosition(startingPosition.getRow() + 1, startingPosition.getColumn());
-            ChessMove moveUp = new ChessMove(startingPosition, oneUp);
-            possibleMoves.add(moveUp);
-        }
-        if (startingPosition.getRow() != 1) { //can move down
-            ChessPosition oneDown = new ChessPosition(startingPosition.getRow() - 1, startingPosition.getColumn());
-            ChessMove moveDown = new ChessMove(startingPosition, oneDown);
-            possibleMoves.add(moveDown);
-        }
-        if (startingPosition.getColumn() != 8) { //can move right
-            ChessPosition oneRight = new ChessPosition(startingPosition.getRow(), startingPosition.getColumn() + 1);
-            ChessMove moveRight = new ChessMove(startingPosition, oneRight);
-            possibleMoves.add(moveRight);
-        }
-        if (startingPosition.getColumn() != 1) { //can move left
-            ChessPosition oneLeft = new ChessPosition(startingPosition.getRow(), startingPosition.getColumn() - 1);
-            ChessMove moveLeft = new ChessMove(startingPosition, oneLeft);
-            possibleMoves.add(moveLeft);
-        }
+        //up
+        addRowMove(true);
+        //down
+        addRowMove(false);
+        //right
+        addColMove(true);
+        //left
+        addColMove(false);
+        //up right
+        addDiagonalMove(true, true);
+        //down right
+        addDiagonalMove(false, true);
+        //down left
+        addDiagonalMove(false, false);
+        //up left
+        addDiagonalMove(true, false);
 
-        if (startingPosition.getRow() != 8 && startingPosition.getColumn() != 8) { //can move up & right
-            ChessPosition oneUpRight = new ChessPosition(startingPosition.getRow() + 1, startingPosition.getColumn() + 1);
-            ChessMove moveUpRight = new ChessMove(startingPosition, oneUpRight);
-            possibleMoves.add(moveUpRight);
+        subtractBlocked();
+    }
+
+    private void addRowMove(boolean up){
+        if (up){conditionRow = 8;addRowStep = 1;} //up
+        else{conditionRow = 1;addRowStep = -1;} //down
+
+        if (startingPosition.getRow() != conditionRow) {
+            ChessPosition newPosition = new ChessPosition(startingPosition.getRow() + addRowStep, startingPosition.getColumn());
+            ChessMove newMove = new ChessMove(startingPosition, newPosition);
+            possibleMoves.add(newMove);
         }
-        if (startingPosition.getRow() != 1 && startingPosition.getColumn() != 8) { //can move down & right
-            ChessPosition oneDownRight = new ChessPosition(startingPosition.getRow() - 1, startingPosition.getColumn() + 1);
-            ChessMove moveDownRight = new ChessMove(startingPosition, oneDownRight);
-            possibleMoves.add(moveDownRight);
+    }
+    private void addColMove(boolean right){
+        if (right){conditionCol = 8;addColStep = 1;} //right
+        else{conditionCol = 1;addColStep = -1;} //left
+
+        if (startingPosition.getColumn() != conditionCol) {
+            ChessPosition newPosition = new ChessPosition(startingPosition.getRow(), startingPosition.getColumn() + addColStep);
+            ChessMove newMove = new ChessMove(startingPosition, newPosition);
+            possibleMoves.add(newMove);
         }
-        if (startingPosition.getRow() != 1 && startingPosition.getColumn() != 1) { //can move down & left
-            ChessPosition oneDownLeft = new ChessPosition(startingPosition.getRow() - 1, startingPosition.getColumn() - 1);
-            ChessMove moveDownLeft = new ChessMove(startingPosition, oneDownLeft);
-            possibleMoves.add(moveDownLeft);
+    }
+    private void addDiagonalMove(boolean up, boolean right){
+        if (up){conditionRow = 8;addRowStep = 1;} //up
+        else{conditionRow = 1;addRowStep = -1;} //down
+        if (right){conditionCol = 8;addColStep = 1;} //right
+        else{conditionCol = 1;addColStep = -1;} //left
+
+        if (startingPosition.getRow() != conditionRow && startingPosition.getColumn() != conditionCol) {
+            ChessPosition newPosition = new ChessPosition(startingPosition.getRow() + addRowStep, startingPosition.getColumn() + addColStep);
+            ChessMove newMove = new ChessMove(startingPosition, newPosition);
+            possibleMoves.add(newMove);
         }
-        if (startingPosition.getRow() != 8 && startingPosition.getColumn() != 1) { //can move up & left
-            ChessPosition oneUpLeft = new ChessPosition(startingPosition.getRow() + 1, startingPosition.getColumn() - 1);
-            ChessMove moveUpLeft = new ChessMove(startingPosition, oneUpLeft);
-            possibleMoves.add(moveUpLeft);
+    }
+
+    private void subtractBlocked(){
+        Collection<ChessMove> updatedMoves = new ArrayList<>();
+        for (ChessMove move : possibleMoves){
+            if (board.getPiece(move.getEndPosition()) == null
+                    || board.getPiece(move.getEndPosition()).getTeamColor() != color){
+                updatedMoves.add(move);
+            }
         }
+        possibleMoves = updatedMoves;
     }
 }

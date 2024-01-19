@@ -9,4 +9,4 @@ which commit finished tests:
     KnightMove      -
     PawnMove        - passed PawnMoveTests
     QueenMove       -
-    RookMove        -
+    RookMove        - passed RookMoveTests

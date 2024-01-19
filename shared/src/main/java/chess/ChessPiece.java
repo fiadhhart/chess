@@ -2,6 +2,7 @@ package chess;
 
 import chess.piece_moves.KingMoves;
 import chess.piece_moves.PawnMoves;
+import chess.piece_moves.RookMoves;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,8 +63,8 @@ public class ChessPiece {
 
         switch (this.type){
             case KING:
-                KingMoves allKingMoves = new KingMoves(myPosition);
-                return subtractBlocked(allKingMoves.getMoves(), board);
+                KingMoves allKingMoves = new KingMoves(myPosition, board, this.pieceColor);
+                return allKingMoves.getMoves();
             case QUEEN:
                 //
             case BISHOP:
@@ -71,23 +72,14 @@ public class ChessPiece {
             case KNIGHT:
                 //
             case ROOK:
-                //
+                RookMoves allRookMoves = new RookMoves(myPosition, board, this.pieceColor);
+                return allRookMoves.getMoves();
             case PAWN:
                 PawnMoves allPawnMoves = new PawnMoves(myPosition, board, this.pieceColor);
                 return allPawnMoves.getMoves();
         }
 
         throw new RuntimeException("Not implemented");
-    }
-    private Collection<ChessMove> subtractBlocked(Collection<ChessMove> allMoves, ChessBoard board){
-        Collection<ChessMove> updatedMoves = new ArrayList<>();
-        for (ChessMove move : allMoves){
-            if (board.getPiece(move.getEndPosition()) == null
-            || board.getPiece(move.getEndPosition()).getTeamColor() != this.pieceColor){
-                updatedMoves.add(move);
-            }
-        }
-        return updatedMoves;
     }
 
     @Override
