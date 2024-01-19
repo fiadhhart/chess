@@ -8,6 +8,5 @@ which commit finished tests:
     PawnMove        - passed PawnMoveTests
     RookMove        - passed RookMoveTests
     BishopMove      - passed BishopMoveTests
+    QueenMove       - passed QueenMoveTests
     KnightMove      -
-    QueenMove       -
-    

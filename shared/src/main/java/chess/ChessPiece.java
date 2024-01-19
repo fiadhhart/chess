@@ -4,6 +4,7 @@ import chess.piece_moves.KingMoves;
 import chess.piece_moves.PawnMoves;
 import chess.piece_moves.RookMoves;
 import chess.piece_moves.BishopMoves;
+import chess.piece_moves.QueenMoves;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,7 +68,8 @@ public class ChessPiece {
                 KingMoves allKingMoves = new KingMoves(myPosition, board, this.pieceColor);
                 return allKingMoves.getMoves();
             case QUEEN:
-                //
+                QueenMoves allQueenMoves = new QueenMoves(myPosition, board, this.pieceColor);
+                return allQueenMoves.getMoves();
             case BISHOP:
                 BishopMoves allBishopMoves = new BishopMoves(myPosition, board, this.pieceColor);
                 return allBishopMoves.getMoves();
