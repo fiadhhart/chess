@@ -45,6 +45,9 @@ public class ChessGame {
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
+    /*
+    validMoves: Takes as input a position on the chessboard and returns all moves the piece there can legally make. If there is no piece at that location, this method returns null.
+    */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         throw new RuntimeException("Not implemented");
     }
@@ -55,6 +58,9 @@ public class ChessGame {
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
+    /*
+    makeMove: Receives a given move and executes it, provided it is a legal move. If the move is illegal, it throws an InvalidMoveException. A move is illegal if the chess piece cannot move there, if the move leaves the team’s king in danger, or if it’s not the corresponding team's turn.
+    */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         throw new RuntimeException("Not implemented");
     }
@@ -65,6 +71,9 @@ public class ChessGame {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
+    /*
+    isInCheck: Returns true if the specified team’s King could be captured by an opposing piece.
+    */
     public boolean isInCheck(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
     }
@@ -75,6 +84,9 @@ public class ChessGame {
      * @param teamColor which team to check for checkmate
      * @return True if the specified team is in checkmate
      */
+    /*
+    isInCheckmate: Returns true if the given team has no way to protect their king from being captured.
+    */
     public boolean isInCheckmate(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
     }
@@ -86,6 +98,9 @@ public class ChessGame {
      * @param teamColor which team to check for stalemate
      * @return True if the specified team is in stalemate, otherwise false
      */
+    /*
+    isInStalemate: Returns true if the given team has no legal moves and it is currently that team’s turn.
+    */
     public boolean isInStalemate(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
     }
