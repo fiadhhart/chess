@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -93,7 +94,7 @@ public class ChessGame {
         //throw new RuntimeException("Not implemented");
     }
 
-    public boolean isValidMove(ChessMove move) {
+    private boolean isValidMove(ChessMove move) {
 
         ChessPiece testPiece = this.board.getPiece(move.getStartPosition());
 
@@ -128,12 +129,6 @@ public class ChessGame {
         return true;
     }
 
-
-
-
-
-
-
     /**
      * Gets a valid moves for a piece at the given location
      *
@@ -142,11 +137,34 @@ public class ChessGame {
      * startPosition
      */
     /*
-    validMoves: Takes as input a position on the chessboard and returns all moves the piece there can legally make. If there is no piece at that location, this method returns null.
+    validMoves: Takes as input a position on the chessboard and returns all moves the piece there can legally make.
+    If there is no piece at that location, this method returns null.
     */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+
+        ChessPiece piece = this.board.getPiece(startPosition);
+
+        if(piece == null){  //no piece there
+            return null;
+        }
+
+        Collection<ChessMove> allMoves = piece.pieceMoves(this.board, startPosition);
+        Collection<ChessMove> validMoves = new HashSet<>();
+
+        for (ChessMove move : allMoves){
+            if(isValidMove(move)){
+                validMoves.add(move);
+            }
+        }
+
+        return validMoves;
+        //throw new RuntimeException("Not implemented");
     }
+
+
+
+
+
 
     /**
      * Determines if the given team is in check
@@ -172,7 +190,8 @@ public class ChessGame {
     isInCheckmate: Returns true if the given team has no way to protect their king from being captured.
     */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return false;
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -186,7 +205,8 @@ public class ChessGame {
     isInStalemate: Returns true if the given team has no legal moves and it is currently that team’s turn.
     */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return false;
+        //throw new RuntimeException("Not implemented");
     }
 
 
