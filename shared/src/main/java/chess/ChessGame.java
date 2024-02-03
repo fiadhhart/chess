@@ -87,6 +87,12 @@ public class ChessGame {
             this.board.addPiece(move.getEndPosition(), piece);
             this.board.removePiece(move.getStartPosition());
 
+            if(this.teamTurn == TeamColor.WHITE){
+                this.teamTurn = TeamColor.BLACK;
+            }else{
+                this.teamTurn = TeamColor.WHITE;
+            }
+
         }else{
             throw new InvalidMoveException();
         }
@@ -161,10 +167,21 @@ public class ChessGame {
         //throw new RuntimeException("Not implemented");
     }
 
+    private ChessPosition findKingPosition(TeamColor teamColor){
 
-
-
-
+        for (int i = 1; i <= 8; ++i){
+            for (int j = 1; j <= 8; ++j){
+                ChessPosition testPosition = new ChessPosition(i,j);
+                if (this.board.getPiece(testPosition) != null){
+                    if(this.board.getPiece(testPosition).getPieceType() == ChessPiece.PieceType.KING &&
+                            this.board.getPiece(testPosition).getTeamColor() == teamColor){
+                        return testPosition;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      * Determines if the given team is in check
@@ -176,9 +193,35 @@ public class ChessGame {
     isInCheck: Returns true if the specified team’s King could be captured by an opposing piece.
     */
     public boolean isInCheck(TeamColor teamColor) {
+        ChessPosition kingPosition = findKingPosition(teamColor);
+
+        for (int i = 1; i <= 8; ++i){
+            for (int j = 1; j <= 8; ++j){
+                ChessPosition testPosition = new ChessPosition(i,j);
+                ChessPiece testPiece = this.board.getPiece(testPosition);
+
+                if (testPiece != null){
+                    if(testPiece.getTeamColor() != teamColor){
+
+                        Collection<ChessMove> possibleMoves = testPiece.pieceMoves(this.board, testPosition);
+
+                        for (ChessMove move : possibleMoves){
+                            if (move.getEndPosition().equals(kingPosition)){
+                                return true;
+                            }
+                        }
+
+
+                    }
+                }
+            }
+        }
+
         return false;
         //throw new RuntimeException("Not implemented");
     }
+
+
 
     /**
      * Determines if the given team is in checkmate
