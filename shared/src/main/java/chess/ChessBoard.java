@@ -27,6 +27,11 @@ public class ChessBoard {
         //throw new RuntimeException("Not implemented");
     }
 
+    public void removePiece(ChessPosition position) {
+        squares[position.getRow() - 1][position.getColumn() - 1] = null;
+    }
+
+
     /**
      * Gets a chess piece on the chessboard
      *
@@ -90,5 +95,22 @@ public class ChessBoard {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(squares);
+    }
+
+    public ChessBoard cloneBoard() {
+        ChessBoard clonedBoard = new ChessBoard();
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPiece originalPiece = this.getPiece(new ChessPosition(i + 1, j + 1));
+
+                if (originalPiece != null) {
+                    ChessPiece clonedPiece = new ChessPiece(originalPiece.getTeamColor(), originalPiece.getPieceType());
+                    clonedBoard.addPiece(new ChessPosition(i + 1, j + 1), clonedPiece);
+                }
+            }
+        }
+
+        return clonedBoard;
     }
 }

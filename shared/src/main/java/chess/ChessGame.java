@@ -18,6 +18,14 @@ public class ChessGame {
     }
 
     /**
+     * Enum identifying the 2 possible teams in a chess game
+     */
+    public enum TeamColor {
+        WHITE,
+        BLACK
+    }
+
+    /**
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
@@ -36,12 +44,95 @@ public class ChessGame {
     }
 
     /**
-     * Enum identifying the 2 possible teams in a chess game
+     * Gets the current chessboard
+     *
+     * @return the chessboard
      */
-    public enum TeamColor {
-        WHITE,
-        BLACK
+    public ChessBoard getBoard() {
+        return this.board;
+        //throw new RuntimeException("Not implemented");
     }
+
+    /**
+     * Sets this game's chessboard with a given board
+     *
+     * @param board the new board to use
+     */
+    public void setBoard(ChessBoard board) {
+        this.board = board;
+        //throw new RuntimeException("Not implemented");
+    }
+
+
+    /**
+     * Makes a move in a chess game
+     *
+     * @param move chess move to preform
+     * @throws InvalidMoveException if move is invalid
+     */
+    /*
+    makeMove: Receives a given move and executes it, provided it is a legal move.
+    If the move is illegal, it throws an InvalidMoveException.
+    A move is illegal if
+        the chess piece cannot move there,
+        the move leaves the team’s king in danger,
+        it’s not the corresponding team's turn.
+    */
+    public void makeMove(ChessMove move) throws InvalidMoveException {
+
+        if(isValidMove(move)){
+            //do move
+            ChessPiece piece = this.board.getPiece(move.getStartPosition());
+            this.board.addPiece(move.getEndPosition(), piece);
+            this.board.removePiece(move.getStartPosition());
+
+        }else{
+            throw new InvalidMoveException();
+        }
+
+        //throw new RuntimeException("Not implemented");
+    }
+
+    public boolean isValidMove(ChessMove move) {
+
+        ChessPiece testPiece = this.board.getPiece(move.getStartPosition());
+
+        if(testPiece == null){  //no piece to move in the first place
+            return false;
+        }
+
+        if(testPiece.getTeamColor() != this.teamTurn){ //it’s not the corresponding team's turn
+            return false;
+        }
+
+        Collection<ChessMove> testPossibleMoves = testPiece.pieceMoves(this.board, move.getStartPosition());
+
+        if(!testPossibleMoves.contains(move)){  //the chess piece cannot move there
+            return false;
+        }
+
+        ChessBoard testBoard = this.board.cloneBoard();
+
+        ChessPiece piece = testBoard.getPiece(move.getStartPosition());
+        testBoard.addPiece(move.getEndPosition(), piece);
+        testBoard.removePiece(move.getStartPosition());
+
+        ChessGame testGame = new ChessGame();
+        testGame.setBoard(testBoard);
+        testGame.setTeamTurn(this.teamTurn);
+
+        if(testGame.isInCheck(testPiece.getTeamColor())){   //the move leaves the team’s king in danger
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+
+
+
 
     /**
      * Gets a valid moves for a piece at the given location
@@ -58,19 +149,6 @@ public class ChessGame {
     }
 
     /**
-     * Makes a move in a chess game
-     *
-     * @param move chess move to preform
-     * @throws InvalidMoveException if move is invalid
-     */
-    /*
-    makeMove: Receives a given move and executes it, provided it is a legal move. If the move is illegal, it throws an InvalidMoveException. A move is illegal if the chess piece cannot move there, if the move leaves the team’s king in danger, or if it’s not the corresponding team's turn.
-    */
-    public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
-    }
-
-    /**
      * Determines if the given team is in check
      *
      * @param teamColor which team to check for check
@@ -80,7 +158,8 @@ public class ChessGame {
     isInCheck: Returns true if the specified team’s King could be captured by an opposing piece.
     */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return false;
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -110,23 +189,6 @@ public class ChessGame {
         throw new RuntimeException("Not implemented");
     }
 
-    /**
-     * Sets this game's chessboard with a given board
-     *
-     * @param board the new board to use
-     */
-    public void setBoard(ChessBoard board) {
-        this.board = board;
-        //throw new RuntimeException("Not implemented");
-    }
 
-    /**
-     * Gets the current chessboard
-     *
-     * @return the chessboard
-     */
-    public ChessBoard getBoard() {
-        return this.board;
-        //throw new RuntimeException("Not implemented");
-    }
 }
+
