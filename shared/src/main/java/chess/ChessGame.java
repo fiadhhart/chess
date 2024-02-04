@@ -126,6 +126,10 @@ public class ChessGame {
         ChessBoard testBoard = this.board.cloneBoard();
 
         ChessPiece piece = testBoard.getPiece(move.getStartPosition());
+        if(move.getPromotionPiece() != null){
+            piece.setPieceType(move.getPromotionPiece());
+        }
+
         testBoard.addPiece(move.getEndPosition(), piece);
         testBoard.removePiece(move.getStartPosition());
 
@@ -215,13 +219,10 @@ public class ChessGame {
                                 return true;
                             }
                         }
-
-
                     }
                 }
             }
         }
-
         return false;
         //throw new RuntimeException("Not implemented");
     }
@@ -238,7 +239,36 @@ public class ChessGame {
     isInCheckmate: Returns true if the given team has no way to protect their king from being captured.
     */
     public boolean isInCheckmate(TeamColor teamColor) {
-        return false;
+
+        for (int i = 1; i <= 8; ++i){
+            for (int j = 1; j <= 8; ++j){
+                ChessPosition currPosition = new ChessPosition(i,j);
+                ChessPiece currPiece = this.board.getPiece(currPosition);
+
+                if (currPiece != null){
+                    if(currPiece.getTeamColor() == teamColor){
+
+                        Collection<ChessMove> possibleMoves = currPiece.pieceMoves(this.board, currPosition);
+
+                        for (ChessMove move : possibleMoves){
+                            try{
+                                ChessGame testGame = new ChessGame();
+                                ChessBoard testBoard = this.board.cloneBoard();
+                                testGame.setBoard(testBoard);
+                                testGame.setTeamTurn(teamColor);
+
+                                testGame.makeMove(move);
+
+                                if(!testGame.isInCheck(teamColor)){
+                                    return false;
+                                }
+                            } catch (InvalidMoveException e){/*continue the loop*/}
+                        }
+                    }
+                }
+            }
+        }
+        return true;
         //throw new RuntimeException("Not implemented");
     }
 
