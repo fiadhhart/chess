@@ -283,7 +283,27 @@ public class ChessGame {
     isInStalemate: Returns true if the given team has no legal moves and it is currently that team’s turn.
     */
     public boolean isInStalemate(TeamColor teamColor) {
-        return false;
+
+        if(this.teamTurn != teamColor){
+            return false;
+        }
+
+        for (int i = 1; i <= 8; ++i){
+            for (int j = 1; j <= 8; ++j){
+                ChessPosition currPosition = new ChessPosition(i,j);
+                ChessPiece currPiece = this.board.getPiece(currPosition);
+
+                if (currPiece != null){
+                    if(currPiece.getTeamColor() == teamColor){
+
+                        if(!validMoves(currPosition).isEmpty()){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
         //throw new RuntimeException("Not implemented");
     }
 
