@@ -22,7 +22,6 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) { //remember this takes in index 1-8 not 0-7
-        //squares[position.getRow()][position.getColumn()] = piece;
         squares[position.getRow() - 1][position.getColumn() - 1] = piece;
         //throw new RuntimeException("Not implemented");
     }
@@ -30,7 +29,6 @@ public class ChessBoard {
     public void removePiece(ChessPosition position) {
         squares[position.getRow() - 1][position.getColumn() - 1] = null;
     }
-
 
     /**
      * Gets a chess piece on the chessboard
