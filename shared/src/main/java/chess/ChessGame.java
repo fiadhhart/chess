@@ -113,7 +113,8 @@ public class ChessGame {
             return false;
         }
 
-        if(testPiece.getTeamColor() != this.teamTurn){ //it’s not the corresponding team's turn
+
+        if(testPiece.getTeamColor() != this.teamTurn && this.teamTurn != null){ //it’s not the corresponding team's turn
             return false;
         }
 
