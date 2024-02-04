@@ -55,6 +55,10 @@ public class ChessPiece {
         //throw new RuntimeException("Not implemented");
     }
 
+    public void setPieceType(PieceType newType){
+        this.type = newType;
+    }
+
     /**
      * Calculates all the positions a chess piece can move to
      * Does not take into account moves that are illegal due to leaving the king in

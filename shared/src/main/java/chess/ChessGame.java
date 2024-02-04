@@ -84,6 +84,11 @@ public class ChessGame {
         if(isValidMove(move)){
             //do move
             ChessPiece piece = this.board.getPiece(move.getStartPosition());
+
+            if(move.getPromotionPiece() != null){
+                piece.setPieceType(move.getPromotionPiece());
+            }
+
             this.board.addPiece(move.getEndPosition(), piece);
             this.board.removePiece(move.getStartPosition());
 
