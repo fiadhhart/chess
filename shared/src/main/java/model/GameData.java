@@ -1,20 +1,20 @@
 package model;
 import chess.ChessGame;
 
-public class Game {
+public class GameData {
 
     private int gameID;
     private String whiteUsername;
     private String blackUsername;
     private String gameName;
-    private ChessGame implementation;
+    private ChessGame game;
 
-    public Game(int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame implementation){
+    public GameData(int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game){
         this.gameID = gameID;
         this.whiteUsername = whiteUsername;
         this.blackUsername = blackUsername;
         this.gameName = gameName;
-        this.implementation = implementation;
+        this.game = game;
     }
 
     public int getGameID() {
@@ -41,10 +41,10 @@ public class Game {
     public void setGameName(String gameName) {
         this.gameName = gameName;
     }
-    public ChessGame getImplementation() {
-        return implementation;
+    public ChessGame getGame() {
+        return game;
     }
-    public void setImplementation(ChessGame implementation) {
-        this.implementation = implementation;
+    public void setGame(ChessGame game) {
+        this.game = game;
     }
 }

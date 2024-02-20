@@ -1,11 +1,11 @@
 package model;
 
-public class Auth {
+public class AuthData {
 
     private String authToken;
     private String username;
 
-    public Auth(String authToken, String username){
+    public AuthData(String authToken, String username){
         this.authToken = authToken;
         this.username = username;
     }
