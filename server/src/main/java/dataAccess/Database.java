@@ -13,4 +13,10 @@ public class Database {
     protected static Map<Integer, GameData> games = new HashMap<>();    //key is gameID
     protected static Map<String, AuthData> auths = new HashMap<>();     //key is authToken
 
+    public void clearDatabase(){
+        users.clear();
+        games.clear();
+        auths.clear();
+    }
+
 }
