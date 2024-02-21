@@ -3,24 +3,25 @@ import chess.ChessGame;
 
 public class GameData {
 
-    private int gameID;
+    private Integer gameID;
     private String whiteUsername;
     private String blackUsername;
     private String gameName;
     private ChessGame game;
 
-    public GameData(int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game){
+    public GameData(Integer gameID, String gameName){
         this.gameID = gameID;
-        this.whiteUsername = whiteUsername;
-        this.blackUsername = blackUsername;
+        this.whiteUsername = null;
+        this.blackUsername = null;
         this.gameName = gameName;
-        this.game = game;
+        this.game = new ChessGame();
     }
 
-    public int getGameID() {
+
+    public Integer getGameID() {
         return gameID;
     }
-    public void setGameID(int gameID) {
+    public void setGameID(Integer gameID) {
         this.gameID = gameID;
     }
     public String getWhiteUsername() {

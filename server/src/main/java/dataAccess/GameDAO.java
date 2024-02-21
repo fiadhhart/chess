@@ -1,68 +1,93 @@
 package dataAccess;
+import chess.ChessGame;
 import model.GameData;
-import model.UserData;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class GameDAO {
+
+    //createGame(gameName)
+    //insert gameID, gameName, game into game
+    //return gameID
+    private Integer insertGame(String gameName) throws DataAccessException{
+
+        Integer gameID = gameName.hashCode();
+        while (Database.games.containsKey(gameID)) {
+            gameID++;
+        }
+
+        GameData game = new GameData(gameID, gameName);
+        Database.games.put(gameID, game);
+
+        return gameID;
+    }
+
+    //updateGame(playerColor, gameID, username)
+    //insert whiteUsername or blackUsername or observer into game
+    //no return
+    private void updateGameUsername(ChessGame.TeamColor playerColor, Integer gameID, String username) throws DataAccessException{
+
+        if (playerColor == ChessGame.TeamColor.WHITE){
+            Database.games.get(gameID).setWhiteUsername(username);
+        } else if (playerColor == ChessGame.TeamColor.BLACK) {
+            Database.games.get(gameID).setBlackUsername(username);
+        } else if (playerColor == null) {
+            //add as observer
+        }
+
+    }
+
 
     //listGames()
     //select gameID, whiteUsername, blackUsername, gameName from all game
     //return list games: {gameID, whiteUsername, blackUsername, gameName}
-    Collection[] selectGames() throws DataAccessException{
+    private List<List<String>> selectAllGames() throws DataAccessException{
 
-        int gameID = 0;
-        String whiteUsername = "";
-        String blackUsername = "";
-        String gameName = "";
-        Collection[] gameInfo = {Collections.singleton(gameID),
-                                    Collections.singleton(whiteUsername),
-                                    Collections.singleton(blackUsername),
-                                    Collections.singleton(gameName)};
-        Collection[] allGames = {List.of(gameInfo)};
+        List<List<String>> allGames = new ArrayList<>();
+
+        for (Map.Entry<Integer, GameData> entry : Database.games.entrySet()) {
+            GameData game = entry.getValue();
+
+            List<String> gameInfo = new ArrayList<>();
+
+            gameInfo.add(String.valueOf(game.getGameID()));
+            gameInfo.add(game.getWhiteUsername());
+            gameInfo.add(game.getBlackUsername());
+            gameInfo.add(game.getGameName());
+
+            allGames.add(gameInfo);
+        }
         return allGames;
-
     }
 
     //getGame(gameName)
     //select gameName from game
     //return gameName or null
-    String selectGame(String gameName) throws DataAccessException{
-        return gameName;
+    private String selectGame(String gameName) throws DataAccessException{
+        for (Map.Entry<Integer, GameData> entry : Database.games.entrySet()) {
+            GameData game = entry.getValue();
+            if (game.getGameName().equals(gameName)) {
+                return gameName;
+            }
+        }
+        return null;
     }
 
     //getGame(gameID)
     //select gameID from game
-    //return gameID
-    int selectGame(int gameID) throws DataAccessException{
-        return gameID;
+    //return gameID or null
+    private Integer selectGame(Integer gameID) throws DataAccessException{
+        if (Database.games.containsKey(gameID)) {
+            return gameID;
+        }
+        return null;
     }
-
-    //createGame(gameName)
-    //insert gameID, gameName, game into game
-    //return gameID
-    int insertGame(String gameName) throws DataAccessException{
-
-        int gameID = 0;
-        return gameID;
-
-    }
-
-    //updateGame(playerColor, gameID)
-    //insert whiteUsername or blackUsername or observer into game
-    //return null
-    void insertGame_whiteUsernames(String username) throws DataAccessException{
-
-    }
-
 
     //clear()
     //remove all from game
-    //return null
-    void removeGames (GameData g) throws DataAccessException{
-
+    //no return
+    private void clearGames () throws DataAccessException{
+        Database.games.clear();
     }
 
 
