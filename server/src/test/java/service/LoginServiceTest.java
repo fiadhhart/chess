@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LoginServiceTest {
 
     private static Database database = new Database();;
-    private static UserDAO userDAO = new UserDAO();
+    private static UserMemDAO userDAO = new UserMemDAO();
 
 
     @BeforeEach
@@ -21,7 +21,7 @@ public class LoginServiceTest {
         String username = "validUsername";
         String password = "validPassword";
         String email = "validEmail";
-        UserDAO.createUser(username, password, email);
+        UserMemDAO.createUser(username, password, email);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package handler;
 
 import com.google.gson.Gson;
+import service.UnauthorizedException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -20,8 +21,18 @@ public class LoginHandler implements Route {
         LoginRequest request = gson.fromJson(req.body(), LoginRequest.class);
 
         // Call LoginService to perform login operation
-        LoginResponse response = loginService.login(request);
-        res.status(response.getStatusCode());
+        LoginResponse response = null;
+        try {
+            response = loginService.login(request);
+            res.status(200);
+        } catch (UnauthorizedException e) {
+            res.status(401);
+            response = new LoginResponse(e.getMessage());
+        } catch (Exception e){
+            res.status(500);
+            response = new LoginResponse(e.getMessage());
+        }
+        //res.status(response.getStatusCode());
 
         // Serialize LoginResponse object to JSON and return
         res.type("application/json");

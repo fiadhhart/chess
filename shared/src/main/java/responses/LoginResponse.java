@@ -3,24 +3,23 @@ package responses;
 public class LoginResponse {
     private String username;
     private String authToken;
-    private int statusCode;
     private String message;
 
 
     // Default constructor (required by Gson for serialization)
     public LoginResponse() {}
 
+
+
     // Parameterized constructor for successful login
-    public LoginResponse(int statusCode, String username, String authToken) {
-        this.statusCode = statusCode;
+    public LoginResponse(String username, String authToken) {
         this.username = username;
         this.authToken = authToken;
     }
 
     // Parameterized constructor for failed login with error message
-    public LoginResponse(int statusCode, String errorMessage) {
-        this.statusCode = statusCode;
-        this.message = errorMessage;
+    public LoginResponse(String message){
+        this.message = message;
     }
 
     // Getters and setters
@@ -48,12 +47,5 @@ public class LoginResponse {
         this.message = message;
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
 }
 
