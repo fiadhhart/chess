@@ -17,12 +17,12 @@ class UserDAOTest {
     }
 
     @Test
-    public void testInsertUser() throws DataAccessException {
+    public void testCreateUser() throws DataAccessException {
         String usernameOne = "myUsername";
         String passwordOne = "myPassword";
         String emailOne = "myEmail";
 
-        UserDAO.insertUser(usernameOne, passwordOne, emailOne);
+        UserDAO.createUser(usernameOne, passwordOne, emailOne);
 
         assertTrue(Database.users.containsKey(usernameOne));
         assertNotNull(Database.users.get(usernameOne));
@@ -32,29 +32,29 @@ class UserDAOTest {
     }
 
     @Test
-    public void testSelectUser_username() throws DataAccessException {
+    public void testGetUser_username() throws DataAccessException {
         String usernameOne = "myUsername";
         String passwordOne = "myPassword";
         String emailOne = "myEmail";
-        UserDAO.insertUser(usernameOne, passwordOne, emailOne);
+        UserDAO.createUser(usernameOne, passwordOne, emailOne);
 
-        String testUsernameOne = UserDAO.selectUser(usernameOne);
-        String testNullUsername = UserDAO.selectUser("DNE");
+        String testUsernameOne = UserDAO.getUser(usernameOne);
+        String testNullUsername = UserDAO.getUser("DNE");
 
         assertEquals(usernameOne, testUsernameOne);
         assertNull(testNullUsername);
     }
 
     @Test
-    public void testSelectUser_usernameAndPassword() throws DataAccessException {
+    public void testGetUser_usernameAndPassword() throws DataAccessException {
         String usernameOne = "myUsername";
         String passwordOne = "myPassword";
         String emailOne = "myEmail";
-        UserDAO.insertUser(usernameOne, passwordOne, emailOne);
+        UserDAO.createUser(usernameOne, passwordOne, emailOne);
 
-        String[] testUsernameOne = UserDAO.selectUser(usernameOne, passwordOne);
-        String[] testNullUsername = UserDAO.selectUser("DNE", "alsoDNE");
-        String[] testUsernameTwo = UserDAO.selectUser(usernameOne, "wrongPassword");
+        String[] testUsernameOne = UserDAO.getUser(usernameOne, passwordOne);
+        String[] testNullUsername = UserDAO.getUser("DNE", "alsoDNE");
+        String[] testUsernameTwo = UserDAO.getUser(usernameOne, "wrongPassword");
 
         assertNotNull(testUsernameOne);
         assertEquals(usernameOne, testUsernameOne[0]);
@@ -64,18 +64,18 @@ class UserDAOTest {
     }
 
     @Test
-    public void testClearUsers() throws DataAccessException {
+    public void testClear() throws DataAccessException {
         String usernameOne = "myUsername";
         String passwordOne = "myPassword";
         String emailOne = "myEmail";
-        UserDAO.insertUser(usernameOne, passwordOne, emailOne);
+        UserDAO.createUser(usernameOne, passwordOne, emailOne);
 
         String usernameTwo = "yourUsername";
         String passwordTwo = "yourPassword";
         String emailTwo = "yourEmail";
-        UserDAO.insertUser(usernameTwo, passwordTwo, emailTwo);
+        UserDAO.createUser(usernameTwo, passwordTwo, emailTwo);
 
-        UserDAO.clearUsers();
+        UserDAO.clear();
 
         assertTrue(Database.users.isEmpty());
     }

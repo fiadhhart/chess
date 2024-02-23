@@ -9,7 +9,8 @@ public class GameDAO {
     //createGame(gameName)
     //insert gameID, gameName, game into game
     //return gameID
-    public static Integer insertGame(String gameName) throws DataAccessException{
+    //insertGame
+    public static Integer createGame(String gameName) throws DataAccessException{
 
         Integer gameID = gameName.hashCode();
         while (Database.games.containsKey(gameID)) {
@@ -22,9 +23,10 @@ public class GameDAO {
         return gameID;
     }
 
-    //updateGame(playerColor, gameID, username)
+    //updateGameUsername(playerColor, gameID, username)
     //insert whiteUsername or blackUsername or observer into game
     //no return
+    //updateGameUsername
     public static void updateGameUsername(ChessGame.TeamColor playerColor, Integer gameID, String username) throws DataAccessException{
 
         if (playerColor == ChessGame.TeamColor.WHITE){
@@ -41,7 +43,8 @@ public class GameDAO {
     //listGames()
     //select gameID, whiteUsername, blackUsername, gameName from all game
     //return list games: {gameID, whiteUsername, blackUsername, gameName}
-    public static List<List<String>> selectAllGames() throws DataAccessException{
+    //selectAllGames
+    public static List<List<String>> listGames() throws DataAccessException{
 
         List<List<String>> allGames = new ArrayList<>();
 
@@ -63,7 +66,8 @@ public class GameDAO {
     //getGame(gameName)
     //select gameName from game
     //return gameName or null
-    public static String selectGame(String gameName) throws DataAccessException{
+    //selectGame
+    public static String getGame(String gameName) throws DataAccessException{
         for (Map.Entry<Integer, GameData> entry : Database.games.entrySet()) {
             GameData game = entry.getValue();
             if (game.getGameName().equals(gameName)) {
@@ -76,7 +80,8 @@ public class GameDAO {
     //getGame(gameID)
     //select gameID from game
     //return gameID or null
-    public static Integer selectGame(Integer gameID) throws DataAccessException{
+    //selectGame
+    public static Integer getGame(Integer gameID) throws DataAccessException{
         if (Database.games.containsKey(gameID)) {
             return gameID;
         }
@@ -86,7 +91,8 @@ public class GameDAO {
     //clear()
     //remove all from game
     //no return
-    public static void clearGames () throws DataAccessException{
+    //clearGames
+    public static void clear () throws DataAccessException{
         Database.games.clear();
     }
 

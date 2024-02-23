@@ -8,7 +8,8 @@ public class AuthDAO {
     //createAuth(username)
     //insert username, authToken into auth
     //returns authToken
-    public static String insertAuth(String username) throws DataAccessException{
+    //insertAuth
+    public static String createAuth(String username) throws DataAccessException{
         String authToken = UUID.randomUUID().toString();
 
         AuthData auth = new AuthData(authToken, username);
@@ -20,7 +21,8 @@ public class AuthDAO {
     //getAuth(authToken)
     //select authToken from auth
     //return authToken or null
-    public static String selectAuth(String authToken) throws DataAccessException{
+    //selectAuth
+    public static String getAuth(String authToken) throws DataAccessException{
         if (Database.auths.containsKey(authToken)) {
             return authToken;
         }
@@ -30,7 +32,8 @@ public class AuthDAO {
     //getUsername(authToken)
     //select username from auth
     //return username
-    public static String selectAuthUsername(String authToken) throws DataAccessException{
+    //selectAuthUsername
+    public static String getUsername(String authToken) throws DataAccessException{
         if (Database.auths.containsKey(authToken)) {
             return Database.auths.get(authToken).getUsername();
         }
@@ -40,14 +43,16 @@ public class AuthDAO {
     //deleteAuth(authToken)
     //remove username, authToken from auth
     //no return
-    public static void removeAuth (String authToken) throws DataAccessException{
+    //removeAuth
+    public static void deleteAuth (String authToken) throws DataAccessException{
         Database.auths.remove(authToken);
     }
 
     //clear()
     //remove all from auth
     //no return
-    public static void clearAuths () throws DataAccessException{
+    //clearAuths
+    public static void clear () throws DataAccessException{
         Database.auths.clear();
     }
 }

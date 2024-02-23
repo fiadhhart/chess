@@ -20,10 +20,10 @@ class GameDAOTest {
     }
 
     @Test
-    public void testInsertGame() throws DataAccessException {
+    public void testCreateGame() throws DataAccessException {
 
         String gameName = "TestGame";
-        Integer gameID = GameDAO.insertGame(gameName);
+        Integer gameID = GameDAO.createGame(gameName);
 
         assertNotNull(gameID);
 
@@ -32,7 +32,7 @@ class GameDAOTest {
     @Test
     public void testUpdateGameUsername() throws DataAccessException {
 
-        Integer gameID = GameDAO.insertGame("TestGame");
+        Integer gameID = GameDAO.createGame("TestGame");
 
         String whiteUsername = "Alice";
         String blackUsername = "Bob";
@@ -40,50 +40,50 @@ class GameDAOTest {
         GameDAO.updateGameUsername(ChessGame.TeamColor.WHITE, gameID, whiteUsername);
         GameDAO.updateGameUsername(ChessGame.TeamColor.BLACK, gameID, blackUsername);
 
-        assertEquals(whiteUsername, GameDAO.selectAllGames().get(0).get(1));
-        assertEquals(blackUsername, GameDAO.selectAllGames().get(0).get(2));
+        assertEquals(whiteUsername, GameDAO.listGames().get(0).get(1));
+        assertEquals(blackUsername, GameDAO.listGames().get(0).get(2));
 
     }
 
     @Test
-    public void testSelectAllGames() throws DataAccessException {
+    public void testListGames() throws DataAccessException {
 
-        GameDAO.insertGame("Game1");
-        GameDAO.insertGame("Game2");
+        GameDAO.createGame("Game1");
+        GameDAO.createGame("Game2");
 
-        List<List<String>> allGames = GameDAO.selectAllGames();
+        List<List<String>> allGames = GameDAO.listGames();
 
         assertEquals(2, allGames.size());
 
     }
 
     @Test
-    public void testSelectGame_gameName() throws DataAccessException {
+    public void testGetGame_gameName() throws DataAccessException {
         String gameName = "TestGame";
-        Integer gameID = GameDAO.insertGame(gameName);
+        Integer gameID = GameDAO.createGame(gameName);
 
-        assertEquals(gameName, GameDAO.selectGame(gameName));
+        assertEquals(gameName, GameDAO.getGame(gameName));
     }
 
     @Test
-    public void testSelectGame_gameID() throws DataAccessException {
+    public void testGetGame_gameID() throws DataAccessException {
 
         String gameName = "TestGame";
-        Integer gameID = GameDAO.insertGame(gameName);
+        Integer gameID = GameDAO.createGame(gameName);
 
-        assertEquals(gameID, GameDAO.selectGame(gameID));
+        assertEquals(gameID, GameDAO.getGame(gameID));
 
     }
 
     @Test
-    public void testClearGames() throws DataAccessException {
+    public void testClear() throws DataAccessException {
 
-        GameDAO.insertGame("Game1");
-        GameDAO.insertGame("Game2");
+        GameDAO.createGame("Game1");
+        GameDAO.createGame("Game2");
 
-        GameDAO.clearGames();
+        GameDAO.clear();
 
-        assertEquals(0, GameDAO.selectAllGames().size());
+        assertEquals(0, GameDAO.listGames().size());
 
     }
 
