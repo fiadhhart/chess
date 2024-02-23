@@ -23,8 +23,8 @@ public class LoginHandler implements Route {
         // Call LoginService to perform login operation
         LoginResponse response = null;
         try {
-            response = loginService.login(request);
             res.status(200);
+            response = loginService.login(request);
         } catch (UnauthorizedException e) {
             res.status(401);
             response = new LoginResponse(e.getMessage());
@@ -32,7 +32,6 @@ public class LoginHandler implements Route {
             res.status(500);
             response = new LoginResponse(e.getMessage());
         }
-        //res.status(response.getStatusCode());
 
         // Serialize LoginResponse object to JSON and return
         res.type("application/json");

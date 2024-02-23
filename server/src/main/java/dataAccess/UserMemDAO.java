@@ -3,6 +3,8 @@ import model.UserData;
 
 public class UserMemDAO implements UserDAO{
 
+    private Database database = new Database();
+
     //createUser(username, password, email)
     //insert username, password, email into user
     //no return
@@ -10,15 +12,16 @@ public class UserMemDAO implements UserDAO{
     @Override
     public void createUser(String username, String password, String email) throws DataAccessException{
         UserData user = new UserData(username, password, email);
-        Database.users.put(username, user);
+        database.users.put(username, user);
     }
 
     //getUser(username)
     //select username from user
     //returns the username or null
     //selectUser
-    public static String getUser(String username) throws DataAccessException{
-        if (Database.users.containsKey(username)) {
+    @Override
+    public String getUser(String username) throws DataAccessException{
+        if (database.users.containsKey(username)) {
             return username;
         }
         return null;
@@ -28,9 +31,10 @@ public class UserMemDAO implements UserDAO{
     //select username, password from user
     //returns the username, password or null
     //selectUser
-    public static String[] getUser(String username, String password) throws DataAccessException{
-        if (Database.users.containsKey(username)) {
-            if (Database.users.get(username).getPassword().equals(password)){
+    @Override
+    public String[] getUser(String username, String password) throws DataAccessException{
+        if (database.users.containsKey(username)) {
+            if (database.users.get(username).getPassword().equals(password)){
                 return new String[]{username, password};
             }
         }
@@ -41,8 +45,9 @@ public class UserMemDAO implements UserDAO{
     //remove all from user
     //no return
     //clearUsers
-    public static void clear () throws DataAccessException{
-        Database.users.clear();
+    @Override
+    public void clear () throws DataAccessException{
+        database.users.clear();
     }
 
 }

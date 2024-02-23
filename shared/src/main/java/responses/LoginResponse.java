@@ -5,11 +5,8 @@ public class LoginResponse {
     private String authToken;
     private String message;
 
-
     // Default constructor (required by Gson for serialization)
     public LoginResponse() {}
-
-
 
     // Parameterized constructor for successful login
     public LoginResponse(String username, String authToken) {

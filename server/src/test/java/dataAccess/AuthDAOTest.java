@@ -1,78 +1,80 @@
 package dataAccess;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthDAOTest {
-    private static Database database;
+    private Database database;
+    private AuthDAO authDAO;
+
 
     @BeforeEach
     void setUp() {
         database = new Database();
         database.clearDatabase();
+        authDAO = new AuthMemDAO();
     }
 
     @Test
     public void testCreateAuth() throws DataAccessException {
         String usernameOne = "myUsername";
-        String testAuthTokenOne = AuthDAO.createAuth(usernameOne);
+        String testAuthTokenOne = authDAO.createAuth(usernameOne);
 
         assertNotNull(testAuthTokenOne);
-        assertEquals(usernameOne, AuthDAO.getUsername(testAuthTokenOne));
+        assertEquals(usernameOne, authDAO.getUsername(testAuthTokenOne));
 
     }
 
     @Test
     public void testGetAuth() throws DataAccessException {
         String usernameOne = "myUsername";
-        String testAuthTokenOne = AuthDAO.createAuth(usernameOne);
-        String test = AuthDAO.getAuth(testAuthTokenOne);
+        String testAuthTokenOne = authDAO.createAuth(usernameOne);
+        String test = authDAO.getAuth(testAuthTokenOne);
 
-        assertNotNull(AuthDAO.getAuth(testAuthTokenOne));
-        assertEquals(usernameOne, AuthDAO.getUsername(testAuthTokenOne));
+            assertNotNull(authDAO.getAuth(testAuthTokenOne));
+        assertEquals(usernameOne, authDAO.getUsername(testAuthTokenOne));
     }
 
     @Test
     public void testGetUsername() throws DataAccessException {
         String usernameOne = "myUsername";
-        String testAuthTokenOne = AuthDAO.createAuth(usernameOne);
-        String test = AuthDAO.getUsername(testAuthTokenOne);
+        String testAuthTokenOne = authDAO.createAuth(usernameOne);
+        String test = authDAO.getUsername(testAuthTokenOne);
 
-        assertEquals(usernameOne, AuthDAO.getUsername(testAuthTokenOne));
+        assertEquals(usernameOne, authDAO.getUsername(testAuthTokenOne));
 
     }
 
     @Test
     public void testDeleteAuth() throws DataAccessException {
         String usernameOne = "myUsername";
-        String testAuthTokenOne = AuthDAO.createAuth(usernameOne);
+        String testAuthTokenOne = authDAO.createAuth(usernameOne);
 
         String usernameTwo = "yourUsername";
-        String testAuthTokenTwo = AuthDAO.createAuth(usernameTwo);
+        String testAuthTokenTwo = authDAO.createAuth(usernameTwo);
 
-        assertNotNull(AuthDAO.getAuth(testAuthTokenOne));
+        assertNotNull(authDAO.getAuth(testAuthTokenOne));
 
-        AuthDAO.deleteAuth(testAuthTokenOne);
+        authDAO.deleteAuth(testAuthTokenOne);
 
-        assertNull(AuthDAO.getAuth(testAuthTokenOne));
+        assertNull(authDAO.getAuth(testAuthTokenOne));
 
     }
 
     @Test
     public void testClear() throws DataAccessException {
         String usernameOne = "myUsername";
-        String testAuthTokenOne = AuthDAO.createAuth(usernameOne);
+        String testAuthTokenOne = authDAO.createAuth(usernameOne);
 
         String usernameTwo = "yourUsername";
-        String testAuthTokenTwo = AuthDAO.createAuth(usernameTwo);
+        String testAuthTokenTwo = authDAO.createAuth(usernameTwo);
 
-        AuthDAO.clear();
+        authDAO.clear();
 
-        assertNull(AuthDAO.getAuth(testAuthTokenOne));
-        assertNull(AuthDAO.getAuth(testAuthTokenTwo));
+        assertNull(authDAO.getAuth(testAuthTokenOne));
+        assertNull(authDAO.getAuth(testAuthTokenTwo));
 
     }
 

@@ -1,9 +1,6 @@
 package service;
 
-import dataAccess.AuthDAO;
-import dataAccess.DataAccessException;
-import dataAccess.UserDAO;
-import dataAccess.UserMemDAO;
+import dataAccess.*;
 import requests.LoginRequest;
 import responses.LoginResponse;
 
@@ -14,13 +11,13 @@ public class LoginService {
 
         try {
             UserDAO userDAO = new UserMemDAO();
-
+            AuthDAO authDAO = new AuthMemDAO();
 
             // Check if the username and password are valid
-            String[] userData = UserMemDAO.getUser(username, password);
+            String[] userData = userDAO.getUser(username, password);
             if (userData != null) {
                 // If the user is authenticated, create an auth token
-                String authToken = AuthDAO.createAuth(username);
+                String authToken = authDAO.createAuth(username);
                 // Return a successful login response with the auth token
                 return new LoginResponse(username, authToken);
             } else {

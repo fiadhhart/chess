@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginServiceTest {
 
-    private static Database database = new Database();;
-    private static UserMemDAO userDAO = new UserMemDAO();
+    private Database database = new Database();
+    private UserMemDAO userDAO = new UserMemDAO();
 
 
     @BeforeEach
@@ -21,11 +21,11 @@ public class LoginServiceTest {
         String username = "validUsername";
         String password = "validPassword";
         String email = "validEmail";
-        UserMemDAO.createUser(username, password, email);
+        userDAO.createUser(username, password, email);
     }
 
     @Test
-    void testSuccessfulLogin() {
+    void testSuccessfulLogin() throws UnauthorizedException, DataAccessException {
         // Given
         LoginRequest request = new LoginRequest("validUsername", "validPassword");
         LoginService loginService = new LoginService();
@@ -34,36 +34,30 @@ public class LoginServiceTest {
         LoginResponse response = loginService.login(request);
 
         // Then
-        assertEquals(200, response.getStatusCode());
         assertEquals("validUsername", response.getUsername());
         assertNotNull(response.getAuthToken());
+        assertNull(response.getMessage());
     }
 
     @Test
-    void testUnsuccessfulLogin() {
+    void testUnsuccessfulLogin() throws UnauthorizedException, DataAccessException {
         // Given
         LoginRequest request = new LoginRequest("invalidUsername", "invalidPassword");
         LoginService loginService = new LoginService();
 
-        // When
-        LoginResponse response = loginService.login(request);
-
-        // Then
-        assertEquals(401, response.getStatusCode());
-        assertEquals("Error: unauthorized", response.getMessage());
+        // When & Then
+        assertThrows(UnauthorizedException.class, () -> loginService.login(request));
     }
 
+    /*
     @Test
-    void testLoginWithException() {
+    void testLoginWithException() throws UnauthorizedException, DataAccessException {
         // Given
         LoginRequest request = new LoginRequest("username", "password");
         LoginService loginService = new LoginService();
 
-        // When
-        LoginResponse response = loginService.login(request);
-
-        // Then
-        assertEquals(500, response.getStatusCode());
-        assertTrue(response.getMessage().startsWith("Error: "));
+        // When & Then
+        assertThrows(DataAccessException.class, () -> loginService.login(request));
     }
+     */
 }

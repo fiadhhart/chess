@@ -7,12 +7,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserDAOTest {
 
-    private static Database database;
+    private Database databaseTest;
+    private UserDAO userDAO;
 
     @BeforeEach
     void setUp() {
-        database = new Database();
-        database.clearDatabase();
+        databaseTest = new Database();
+        databaseTest.clearDatabase();
+        userDAO = new UserMemDAO();
     }
 
     @Test
@@ -21,13 +23,13 @@ class UserDAOTest {
         String passwordOne = "myPassword";
         String emailOne = "myEmail";
 
-        UserMemDAO.createUser(usernameOne, passwordOne, emailOne);
+        userDAO.createUser(usernameOne, passwordOne, emailOne);
 
-        assertTrue(Database.users.containsKey(usernameOne));
-        assertNotNull(Database.users.get(usernameOne));
-        assertEquals(usernameOne, Database.users.get(usernameOne).getUsername());
-        assertEquals(passwordOne, Database.users.get(usernameOne).getPassword());
-        assertEquals(emailOne, Database.users.get(usernameOne).getEmail());
+        assertTrue(databaseTest.users.containsKey(usernameOne));
+        assertNotNull(databaseTest.users.get(usernameOne));
+        assertEquals(usernameOne, databaseTest.users.get(usernameOne).getUsername());
+        assertEquals(passwordOne, databaseTest.users.get(usernameOne).getPassword());
+        assertEquals(emailOne, databaseTest.users.get(usernameOne).getEmail());
     }
 
     @Test
@@ -35,10 +37,10 @@ class UserDAOTest {
         String usernameOne = "myUsername";
         String passwordOne = "myPassword";
         String emailOne = "myEmail";
-        UserMemDAO.createUser(usernameOne, passwordOne, emailOne);
+        userDAO.createUser(usernameOne, passwordOne, emailOne);
 
-        String testUsernameOne = UserMemDAO.getUser(usernameOne);
-        String testNullUsername = UserMemDAO.getUser("DNE");
+        String testUsernameOne = userDAO.getUser(usernameOne);
+        String testNullUsername = userDAO.getUser("DNE");
 
         assertEquals(usernameOne, testUsernameOne);
         assertNull(testNullUsername);
@@ -49,11 +51,11 @@ class UserDAOTest {
         String usernameOne = "myUsername";
         String passwordOne = "myPassword";
         String emailOne = "myEmail";
-        UserMemDAO.createUser(usernameOne, passwordOne, emailOne);
+        userDAO.createUser(usernameOne, passwordOne, emailOne);
 
-        String[] testUsernameOne = UserMemDAO.getUser(usernameOne, passwordOne);
-        String[] testNullUsername = UserMemDAO.getUser("DNE", "alsoDNE");
-        String[] testUsernameTwo = UserMemDAO.getUser(usernameOne, "wrongPassword");
+        String[] testUsernameOne = userDAO.getUser(usernameOne, passwordOne);
+        String[] testNullUsername = userDAO.getUser("DNE", "alsoDNE");
+        String[] testUsernameTwo = userDAO.getUser(usernameOne, "wrongPassword");
 
         assertNotNull(testUsernameOne);
         assertEquals(usernameOne, testUsernameOne[0]);
@@ -67,16 +69,16 @@ class UserDAOTest {
         String usernameOne = "myUsername";
         String passwordOne = "myPassword";
         String emailOne = "myEmail";
-        UserMemDAO.createUser(usernameOne, passwordOne, emailOne);
+        userDAO.createUser(usernameOne, passwordOne, emailOne);
 
         String usernameTwo = "yourUsername";
         String passwordTwo = "yourPassword";
         String emailTwo = "yourEmail";
-        UserMemDAO.createUser(usernameTwo, passwordTwo, emailTwo);
+        userDAO.createUser(usernameTwo, passwordTwo, emailTwo);
 
-        UserMemDAO.clear();
+        userDAO.clear();
 
-        assertTrue(Database.users.isEmpty());
+        assertTrue(databaseTest.users.isEmpty());
     }
 
 }

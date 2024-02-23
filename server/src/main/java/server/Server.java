@@ -1,5 +1,6 @@
 package server;
 
+import dataAccess.Database;
 import handler.LoginHandler;
 import spark.*;
 
@@ -9,6 +10,9 @@ public class Server {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
+
+        Database database = new Database();
+        database.clearDatabase();
 
         // Register your endpoints and handle exceptions here.
         Spark.post("/session", (req, res) -> (new LoginHandler()).handle(req, res));
