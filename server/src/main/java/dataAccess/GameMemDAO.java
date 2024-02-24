@@ -20,6 +20,29 @@ public class GameMemDAO implements GameDAO{
     }
 
     @Override
+    public boolean isPlayerOccupied(ChessGame.TeamColor playerColor, Integer gameID) throws DataAccessException{
+        if (playerColor == ChessGame.TeamColor.WHITE){
+            String whiteUsername = database.games.get(gameID).getWhiteUsername();
+            if(whiteUsername == null){
+                return false;
+            }
+            return true;
+
+        } else if (playerColor == ChessGame.TeamColor.BLACK) {
+            String blackUsername = database.games.get(gameID).getBlackUsername();
+            if(blackUsername == null){
+                return false;
+            }
+            return true;
+
+        } else if (playerColor == null) {
+            return false;
+        }else{
+            throw new DataAccessException("playerColor is not type ChessGame.TeamColor");
+        }
+    }
+
+    @Override
     public void updateGameUsername(ChessGame.TeamColor playerColor, Integer gameID, String username) throws DataAccessException{
 
         if (playerColor == ChessGame.TeamColor.WHITE){

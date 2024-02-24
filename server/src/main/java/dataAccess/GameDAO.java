@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface GameDAO {
     Integer createGame(String gameName) throws DataAccessException;
+    boolean isPlayerOccupied(ChessGame.TeamColor playerColor, Integer gameID) throws DataAccessException;
     void updateGameUsername(ChessGame.TeamColor playerColor, Integer gameID, String username) throws DataAccessException;
     List<GameResponse> listGames() throws DataAccessException;
     String getGame(String gameName) throws DataAccessException;
