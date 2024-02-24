@@ -1,6 +1,6 @@
 package requests;
 
-public class RegisterRequest {
+public class RegisterRequest extends BaseRequest {
     private String username;
     private String password;
     private String email;

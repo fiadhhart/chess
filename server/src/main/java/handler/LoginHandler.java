@@ -33,7 +33,7 @@ public class LoginHandler implements Route {
             response = new AuthResponse(e.getMessage());
         }
 
-        // Serialize LoginResponse object to JSON and return
+        // Serialize AuthResponse object to JSON and return
         res.type("application/json");
         return gson.toJson(response);
     }

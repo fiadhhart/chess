@@ -2,7 +2,7 @@ package requests;
 
 
 
-public class LoginRequest {
+public class LoginRequest extends BaseRequest {
     private String username;
     private String password;
 

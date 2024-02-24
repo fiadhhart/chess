@@ -1,9 +1,8 @@
 package responses;
 
-public class AuthResponse {
+public class AuthResponse extends BaseResponse{
     private String username;
     private String authToken;
-    private String message;
 
     // Default constructor (required by Gson for serialization)
     public AuthResponse() {}
@@ -16,7 +15,7 @@ public class AuthResponse {
 
     // Parameterized constructor for failed login with error message
     public AuthResponse(String message){
-        this.message = message;
+        super(message);
     }
 
     // Getters and setters
@@ -34,14 +33,6 @@ public class AuthResponse {
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
 }

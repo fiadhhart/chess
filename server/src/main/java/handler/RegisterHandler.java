@@ -16,7 +16,7 @@ public class RegisterHandler implements Route {
 
     @Override
     public Object handle(Request req, Response res) {
-        // Deserialize JSON request body to LoginRequest object
+        // Deserialize JSON request body to RegisterRequest object
         RegisterRequest request = gson.fromJson(req.body(), RegisterRequest.class);
 
         // Call RegisterService to perform register operation
@@ -35,7 +35,7 @@ public class RegisterHandler implements Route {
             response = new AuthResponse(e.getMessage());
         }
 
-        // Serialize LoginResponse object to JSON and return
+        // Serialize AuthResponse object to JSON and return
         res.type("application/json");
         return gson.toJson(response);
     }

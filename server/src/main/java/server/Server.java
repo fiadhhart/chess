@@ -1,6 +1,7 @@
 package server;
 
 import dataAccess.Database;
+import handler.ClearHandler;
 import handler.LoginHandler;
 import handler.RegisterHandler;
 import spark.*;
@@ -22,7 +23,7 @@ public class Server {
         //Spark.get("/game", (req, res) -> (new ListGamesHandler()).handle(req, res));
         //Spark.post("/game", (req, res) -> (new CreateGameHandler()).handle(req, res));
         //Spark.put("/game", (req, res) -> (new JoinGameHandler()).handle(req, res));
-        //Spark.delete("/db", (req, res) -> (new ClearHandler()).handle(req, res));
+        Spark.delete("/db", (req, res) -> (new ClearHandler()).handle(req, res));
 
         Spark.awaitInitialization();
         return Spark.port();
