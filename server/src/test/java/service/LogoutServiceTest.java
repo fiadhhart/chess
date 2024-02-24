@@ -31,7 +31,7 @@ public class LogoutServiceTest {
 
 
     @Test
-    void testSuccessfulLogout_200() throws UnauthorizedException, DataAccessException {
+    void testSuccessful_200() throws UnauthorizedException, DataAccessException {
         assertNotEquals(0, database.getAuthsSize());
 
         // Given
@@ -47,7 +47,7 @@ public class LogoutServiceTest {
     }
 
     @Test
-    void testUnsuccessfulLogout_401() throws UnauthorizedException, DataAccessException {
+    void testUnsuccessful_401() throws UnauthorizedException, DataAccessException {
         // Given
         BaseRequest request = new BaseRequest();
         LogoutService logoutService = new LogoutService();

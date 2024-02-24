@@ -1,6 +1,7 @@
 package dataAccess;
 import chess.ChessGame;
 import model.GameData;
+import responses.GameResponse;
 
 import java.util.*;
 
@@ -10,10 +11,7 @@ public class GameMemDAO implements GameDAO{
     @Override
     public Integer createGame(String gameName) throws DataAccessException{
 
-        Integer gameID = gameName.hashCode();
-        while (database.games.containsKey(gameID)) {
-            gameID++;
-        }
+        Integer gameID = database.getGamesSize() +1;
 
         GameData game = new GameData(gameID, gameName);
         database.games.put(gameID, game);
@@ -34,19 +32,19 @@ public class GameMemDAO implements GameDAO{
     }
 
     @Override
-    public List<List<String>> listGames() throws DataAccessException{
+    public List<GameResponse> listGames() throws DataAccessException{
 
-        List<List<String>> allGames = new ArrayList<>();
+        List<GameResponse> allGames = new ArrayList<>();
 
         for (Map.Entry<Integer, GameData> entry : database.games.entrySet()) {
             GameData game = entry.getValue();
 
-            List<String> gameInfo = new ArrayList<>();
+            int gameID = game.getGameID();
+            String whiteUsername = game.getWhiteUsername();
+            String blackUsername = game.getBlackUsername();
+            String gameName = game.getGameName();
 
-            gameInfo.add(String.valueOf(game.getGameID()));
-            gameInfo.add(game.getWhiteUsername());
-            gameInfo.add(game.getBlackUsername());
-            gameInfo.add(game.getGameName());
+            GameResponse gameInfo = new GameResponse(gameID, whiteUsername, blackUsername, gameName);
 
             allGames.add(gameInfo);
         }

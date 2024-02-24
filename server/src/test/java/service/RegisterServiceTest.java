@@ -25,7 +25,7 @@ class RegisterServiceTest {
 
 
     @Test
-    void testSuccessfulRegister_200() throws BadRequestException, AlreadyTakenException, DataAccessException {
+    void testSuccessful_200() throws BadRequestException, AlreadyTakenException, DataAccessException {
         // Given
         RegisterRequest request = new RegisterRequest("validUsername", "validPassword", "validEmail");
         RegisterService registerService = new RegisterService();
@@ -40,7 +40,7 @@ class RegisterServiceTest {
     }
 
     @Test
-    void testUnsuccessfulRegister_400() throws BadRequestException, AlreadyTakenException, DataAccessException {
+    void testUnsuccessful_400() throws BadRequestException, AlreadyTakenException, DataAccessException {
         // Given
         RegisterRequest request = new RegisterRequest("", "invalidPassword", "invalidEmail");
         RegisterService registerService = new RegisterService();
@@ -50,7 +50,7 @@ class RegisterServiceTest {
     }
 
     @Test
-    void testUnsuccessfulRegister_403() throws BadRequestException, AlreadyTakenException, DataAccessException {
+    void testUnsuccessful_403() throws BadRequestException, AlreadyTakenException, DataAccessException {
         // Given
         RegisterRequest request = new RegisterRequest("presentUsername", "presentPassword", "presentEmail");
         RegisterService registerService = new RegisterService();

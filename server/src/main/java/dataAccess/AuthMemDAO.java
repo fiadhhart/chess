@@ -9,6 +9,9 @@ public class AuthMemDAO implements AuthDAO{
     @Override
     public String createAuth(String username) throws DataAccessException{
         String authToken = UUID.randomUUID().toString();
+        while (database.auths.containsKey(authToken)) {
+            authToken = UUID.randomUUID().toString();
+        }
 
         AuthData auth = new AuthData(authToken, username);
         database.auths.put(authToken, auth);

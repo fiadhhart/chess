@@ -2,13 +2,13 @@ package handler;
 
 import dataAccess.DataAccessException;
 import requests.CreateGameRequest;
-import responses.GameResponse;
+import responses.CreateGameResponse;
 import service.BadRequestException;
 import service.CreateGameService;
 import service.UnauthorizedException;
 import spark.Request;
 
-public class CreateGameHandler extends BaseHandler<CreateGameRequest, GameResponse>{
+public class CreateGameHandler extends BaseHandler<CreateGameRequest, CreateGameResponse>{
     private CreateGameService createGameService = new CreateGameService();
 
     @Override
@@ -17,18 +17,18 @@ public class CreateGameHandler extends BaseHandler<CreateGameRequest, GameRespon
     }
 
     @Override
-    protected GameResponse createErrorResponse(Exception e) {
-        return new GameResponse(e.getMessage());
+    protected CreateGameResponse createErrorResponse(Exception e) {
+        return new CreateGameResponse(e.getMessage());
     }
 
     @Override
-    protected Tuple<GameResponse, Integer> performOperation(CreateGameRequest request, String authToken) throws DataAccessException {
+    protected Tuple<CreateGameResponse, Integer> performOperation(CreateGameRequest request, String authToken) throws DataAccessException {
         try {
             return new Tuple<>(createGameService.createGame(request, authToken), 200);
         } catch (BadRequestException e) {
-            return new Tuple<>(new GameResponse(e.getMessage()), 400);
+            return new Tuple<>(new CreateGameResponse(e.getMessage()), 400);
         } catch (UnauthorizedException e) {
-            return new Tuple<>(new GameResponse(e.getMessage()), 401);
+            return new Tuple<>(new CreateGameResponse(e.getMessage()), 401);
         }
     }
 }

@@ -4,7 +4,7 @@ import dataAccess.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.CreateGameRequest;
-import responses.GameResponse;
+import responses.CreateGameResponse;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,7 +29,7 @@ class CreateGameServiceTest {
 
 
     @Test
-    void testSuccessfulRegister_200() throws BadRequestException, UnauthorizedException, DataAccessException {
+    void testSuccessful_200() throws BadRequestException, UnauthorizedException, DataAccessException {
         assertEquals(0, database.getGamesSize());
 
         // Given
@@ -37,7 +37,7 @@ class CreateGameServiceTest {
         CreateGameService createGameService = new CreateGameService();
 
         // When
-        GameResponse response = createGameService.createGame(request, this.authToken);
+        CreateGameResponse response = createGameService.createGame(request, this.authToken);
 
         // Then
         assertNotEquals(0, database.getGamesSize());
@@ -46,18 +46,18 @@ class CreateGameServiceTest {
     }
 
     @Test
-    void testUnsuccessfulRegister_400() throws BadRequestException, UnauthorizedException, DataAccessException {
+    void testUnsuccessful_400() throws BadRequestException, UnauthorizedException, DataAccessException {
         // Given
         CreateGameRequest request = new CreateGameRequest("repeatedGameName");
         CreateGameService createGameService = new CreateGameService();
 
         // When & Then
-        GameResponse response = createGameService.createGame(request, this.authToken);
+        CreateGameResponse response = createGameService.createGame(request, this.authToken);
         assertThrows(BadRequestException.class, () -> createGameService.createGame(request, this.authToken));
     }
 
     @Test
-    void testUnsuccessfulRegister_401() throws BadRequestException, UnauthorizedException, DataAccessException {
+    void testUnsuccessful_401() throws BadRequestException, UnauthorizedException, DataAccessException {
         // Given
         CreateGameRequest request = new CreateGameRequest("validGameName");
         CreateGameService createGameService = new CreateGameService();

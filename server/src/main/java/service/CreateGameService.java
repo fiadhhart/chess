@@ -2,10 +2,10 @@ package service;
 
 import dataAccess.*;
 import requests.CreateGameRequest;
-import responses.GameResponse;
+import responses.CreateGameResponse;
 
 public class CreateGameService {
-    public GameResponse createGame(CreateGameRequest request, String authToken) throws BadRequestException, UnauthorizedException, DataAccessException {
+    public CreateGameResponse createGame(CreateGameRequest request, String authToken) throws BadRequestException, UnauthorizedException, DataAccessException {
         String gameName = request.getGameName();
         GameDAO gameDAO = new GameMemDAO();
         AuthDAO authDAO = new AuthMemDAO();
@@ -21,7 +21,7 @@ public class CreateGameService {
             if (verifiedAuthToken != null) {
                 if (gameDAO.getGame(gameName) == null){
                     int gameID = gameDAO.createGame(gameName);
-                    return new GameResponse(gameID);
+                    return new CreateGameResponse(gameID);
 
                 }else{
                     throw new BadRequestException("Error: bad request");

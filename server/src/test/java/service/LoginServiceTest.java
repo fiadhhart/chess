@@ -25,7 +25,7 @@ public class LoginServiceTest {
 
 
     @Test
-    void testSuccessfulLogin_200() throws UnauthorizedException, DataAccessException {
+    void testSuccessful_200() throws UnauthorizedException, DataAccessException {
         // Given
         LoginRequest request = new LoginRequest("validUsername", "validPassword");
         LoginService loginService = new LoginService();
@@ -40,7 +40,7 @@ public class LoginServiceTest {
     }
 
     @Test
-    void testUnsuccessfulLogin_401() throws UnauthorizedException, DataAccessException {
+    void testUnsuccessful_401() throws UnauthorizedException, DataAccessException {
         // Given
         LoginRequest request = new LoginRequest("invalidUsername", "invalidPassword");
         LoginService loginService = new LoginService();

@@ -3,6 +3,7 @@ package dataAccess;
 import chess.ChessGame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import responses.GameResponse;
 
 import java.util.List;
 
@@ -41,8 +42,8 @@ class GameDAOTest {
         gameDAO.updateGameUsername(ChessGame.TeamColor.WHITE, gameID, whiteUsername);
         gameDAO.updateGameUsername(ChessGame.TeamColor.BLACK, gameID, blackUsername);
 
-        assertEquals(whiteUsername, gameDAO.listGames().get(0).get(1));
-        assertEquals(blackUsername, gameDAO.listGames().get(0).get(2));
+        assertEquals(whiteUsername, gameDAO.listGames().getFirst().getWhiteUsername());
+        assertEquals(blackUsername, gameDAO.listGames().getFirst().getBlackUsername());
     }
 
     @Test
@@ -51,7 +52,7 @@ class GameDAOTest {
         gameDAO.createGame("Game1");
         gameDAO.createGame("Game2");
 
-        List<List<String>> allGames = gameDAO.listGames();
+        List<GameResponse> allGames = gameDAO.listGames();
 
         assertEquals(2, allGames.size());
     }

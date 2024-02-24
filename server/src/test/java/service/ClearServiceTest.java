@@ -37,7 +37,7 @@ class ClearServiceTest {
 
 
     @Test
-    void testSuccessfulClear_200() throws DataAccessException{
+    void testSuccessful_200() throws DataAccessException{
         //confirm setup
         assertNotEquals(0, database.getUsersSize());
         assertNotEquals(0, database.getGamesSize());
