@@ -4,14 +4,14 @@ import dataAccess.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.LoginRequest;
-import responses.LoginResponse;
+import responses.AuthResponse;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginServiceTest {
 
     private Database database = new Database();
-    private UserMemDAO userDAO = new UserMemDAO();
+    private UserDAO userDAO = new UserMemDAO();
 
 
     @BeforeEach
@@ -25,13 +25,13 @@ public class LoginServiceTest {
     }
 
     @Test
-    void testSuccessfulLogin() throws UnauthorizedException, DataAccessException {
+    void testSuccessfulLogin_200() throws UnauthorizedException, DataAccessException {
         // Given
         LoginRequest request = new LoginRequest("validUsername", "validPassword");
         LoginService loginService = new LoginService();
 
         // When
-        LoginResponse response = loginService.login(request);
+        AuthResponse response = loginService.login(request);
 
         // Then
         assertEquals("validUsername", response.getUsername());
@@ -40,7 +40,7 @@ public class LoginServiceTest {
     }
 
     @Test
-    void testUnsuccessfulLogin() throws UnauthorizedException, DataAccessException {
+    void testUnsuccessfulLogin_401() throws UnauthorizedException, DataAccessException {
         // Given
         LoginRequest request = new LoginRequest("invalidUsername", "invalidPassword");
         LoginService loginService = new LoginService();
@@ -48,16 +48,4 @@ public class LoginServiceTest {
         // When & Then
         assertThrows(UnauthorizedException.class, () -> loginService.login(request));
     }
-
-    /*
-    @Test
-    void testLoginWithException() throws UnauthorizedException, DataAccessException {
-        // Given
-        LoginRequest request = new LoginRequest("username", "password");
-        LoginService loginService = new LoginService();
-
-        // When & Then
-        assertThrows(DataAccessException.class, () -> loginService.login(request));
-    }
-     */
 }

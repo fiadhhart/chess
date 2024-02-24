@@ -1,32 +1,34 @@
 package handler;
 
 import com.google.gson.Gson;
-import service.UnauthorizedException;
+import requests.RegisterRequest;
+import responses.AuthResponse;
+import service.AlreadyTakenException;
+import service.BadRequestException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import service.RegisterService;
 
-import requests.LoginRequest;
-import responses.AuthResponse;
-import service.LoginService;
-
-
-public class LoginHandler implements Route {
+public class RegisterHandler implements Route {
     private Gson gson = new Gson();
-    private LoginService loginService = new LoginService();
+    private RegisterService registerService = new RegisterService();
 
     @Override
     public Object handle(Request req, Response res) {
         // Deserialize JSON request body to LoginRequest object
-        LoginRequest request = gson.fromJson(req.body(), LoginRequest.class);
+        RegisterRequest request = gson.fromJson(req.body(), RegisterRequest.class);
 
-        // Call LoginService to perform login operation
+        // Call RegisterService to perform register operation
         AuthResponse response = null;
         try {
             res.status(200);
-            response = loginService.login(request);
-        } catch (UnauthorizedException e) {
-            res.status(401);
+            response = registerService.register(request);
+        } catch (BadRequestException e) {
+            res.status(400);
+            response = new AuthResponse(e.getMessage());
+        } catch (AlreadyTakenException e) {
+            res.status(403);
             response = new AuthResponse(e.getMessage());
         } catch (Exception e){
             res.status(500);
@@ -38,9 +40,4 @@ public class LoginHandler implements Route {
         return gson.toJson(response);
     }
 }
-
-
-
-
-
 
