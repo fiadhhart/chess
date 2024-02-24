@@ -22,7 +22,7 @@ public class RegisterHandler extends BaseHandler<RegisterRequest, AuthResponse> 
     }
 
     @Override
-    protected Tuple<AuthResponse,Integer> performOperation(RegisterRequest request) throws DataAccessException {
+    protected Tuple<AuthResponse,Integer> performOperation(RegisterRequest request, String authToken) throws DataAccessException {
         try {
             return new Tuple<>(registerService.register(request), 200);
         } catch (BadRequestException e) {

@@ -22,7 +22,7 @@ public class LoginHandler extends BaseHandler<LoginRequest, AuthResponse> {
     }
 
     @Override
-    protected Tuple<AuthResponse,Integer> performOperation(LoginRequest request) throws DataAccessException {
+    protected Tuple<AuthResponse,Integer> performOperation(LoginRequest request, String authToken) throws DataAccessException {
         try{
             return new Tuple<>(loginService.login(request), 200);
         } catch (UnauthorizedException e) {

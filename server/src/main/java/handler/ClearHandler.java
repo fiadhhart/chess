@@ -21,7 +21,7 @@ public class ClearHandler extends BaseHandler<BaseRequest, BaseResponse> {
     }
 
     @Override
-    protected Tuple<BaseResponse,Integer> performOperation(BaseRequest request) throws DataAccessException {
+    protected Tuple<BaseResponse,Integer> performOperation(BaseRequest request, String authToken) throws DataAccessException {
         return new Tuple<>(clearService.clear(request), 200);
     }
 }
