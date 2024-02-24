@@ -9,7 +9,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameDAOTest {
-
     private Database database;
     private GameDAO gameDAO;
 
@@ -21,6 +20,7 @@ class GameDAOTest {
         gameDAO = new GameMemDAO();
     }
 
+
     @Test
     public void testCreateGame() throws DataAccessException {
 
@@ -28,7 +28,6 @@ class GameDAOTest {
         Integer gameID = gameDAO.createGame(gameName);
 
         assertNotNull(gameID);
-
     }
 
     @Test
@@ -44,7 +43,6 @@ class GameDAOTest {
 
         assertEquals(whiteUsername, gameDAO.listGames().get(0).get(1));
         assertEquals(blackUsername, gameDAO.listGames().get(0).get(2));
-
     }
 
     @Test
@@ -56,7 +54,6 @@ class GameDAOTest {
         List<List<String>> allGames = gameDAO.listGames();
 
         assertEquals(2, allGames.size());
-
     }
 
     @Test
@@ -74,7 +71,6 @@ class GameDAOTest {
         Integer gameID = gameDAO.createGame(gameName);
 
         assertEquals(gameID, gameDAO.getGame(gameID));
-
     }
 
     @Test
@@ -86,7 +82,5 @@ class GameDAOTest {
         gameDAO.clear();
 
         assertEquals(0, gameDAO.listGames().size());
-
     }
-
 }

@@ -14,6 +14,7 @@ class ClearServiceTest {
     private GameDAO gameDAO = new GameMemDAO();
     private AuthDAO authDAO = new AuthMemDAO();
 
+
     @BeforeEach
     void setUp() throws DataAccessException {
         database.clearDatabase();
@@ -34,10 +35,10 @@ class ClearServiceTest {
         authDAO.createAuth(username1);
     }
 
+
     @Test
     void testSuccessfulClear_200() throws DataAccessException{
-
-        //preface
+        //confirm setup
         assertNotEquals(0, database.getUsersSize());
         assertNotEquals(0, database.getGamesSize());
         assertNotEquals(0, database.getAuthsSize());
@@ -55,6 +56,4 @@ class ClearServiceTest {
         assertEquals(0, database.getAuthsSize());
         assertNull(response.getMessage());
     }
-
-
 }

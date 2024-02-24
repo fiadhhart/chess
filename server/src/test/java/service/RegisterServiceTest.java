@@ -23,6 +23,7 @@ class RegisterServiceTest {
         userDAO.createUser(username, password, email);
     }
 
+
     @Test
     void testSuccessfulRegister_200() throws BadRequestException, AlreadyTakenException, DataAccessException {
         // Given

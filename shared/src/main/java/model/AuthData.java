@@ -10,6 +10,7 @@ public class AuthData {
         this.username = username;
     }
 
+
     public String getAuthToken() {
         return authToken;
     }

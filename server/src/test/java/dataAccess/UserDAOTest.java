@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserDAOTest {
-
     private Database databaseTest;
     private UserDAO userDAO;
+
 
     @BeforeEach
     void setUp() {
@@ -16,6 +16,7 @@ class UserDAOTest {
         databaseTest.clearDatabase();
         userDAO = new UserMemDAO();
     }
+
 
     @Test
     public void testCreateUser() throws DataAccessException {
@@ -80,5 +81,4 @@ class UserDAOTest {
 
         assertTrue(databaseTest.users.isEmpty());
     }
-
 }

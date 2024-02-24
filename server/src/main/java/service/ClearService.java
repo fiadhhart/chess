@@ -19,6 +19,5 @@ public class ClearService {
         } catch (DataAccessException e) {
             throw new DataAccessException("Error: " + e.getMessage());
         }
-
     }
 }

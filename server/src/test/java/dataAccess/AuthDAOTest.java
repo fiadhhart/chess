@@ -17,6 +17,7 @@ class AuthDAOTest {
         authDAO = new AuthMemDAO();
     }
 
+
     @Test
     public void testCreateAuth() throws DataAccessException {
         String usernameOne = "myUsername";
@@ -24,7 +25,6 @@ class AuthDAOTest {
 
         assertNotNull(testAuthTokenOne);
         assertEquals(usernameOne, authDAO.getUsername(testAuthTokenOne));
-
     }
 
     @Test
@@ -44,7 +44,6 @@ class AuthDAOTest {
         String test = authDAO.getUsername(testAuthTokenOne);
 
         assertEquals(usernameOne, authDAO.getUsername(testAuthTokenOne));
-
     }
 
     @Test
@@ -60,7 +59,6 @@ class AuthDAOTest {
         authDAO.deleteAuth(testAuthTokenOne);
 
         assertNull(authDAO.getAuth(testAuthTokenOne));
-
     }
 
     @Test
@@ -75,7 +73,5 @@ class AuthDAOTest {
 
         assertNull(authDAO.getAuth(testAuthTokenOne));
         assertNull(authDAO.getAuth(testAuthTokenTwo));
-
     }
-
 }

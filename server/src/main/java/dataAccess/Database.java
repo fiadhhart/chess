@@ -24,13 +24,10 @@ public class Database {
     public int getUsersSize(){
         return users.size();
     }
-
     public int getGamesSize(){
         return games.size();
     }
-
     public int getAuthsSize(){
         return auths.size();
     }
-
 }

@@ -14,10 +14,10 @@ public class ClearHandler implements Route {
 
     @Override
     public Object handle(Request req, Response res) {
-        // Deserialize JSON request body to ClearRequest object
+        // Deserialize JSON request body to BaseRequest object
         BaseRequest request = gson.fromJson(req.body(), BaseRequest.class);
 
-        // Call ClearService to perform register operation
+        // Call ClearService to perform clear operation
         BaseResponse response = null;
         try {
             res.status(200);
@@ -27,7 +27,7 @@ public class ClearHandler implements Route {
             response = new BaseResponse(e.getMessage());
         }
 
-        // Serialize EmptyResponse object to JSON and return
+        // Serialize BaseResponse object to JSON and return
         res.type("application/json");
         return gson.toJson(response);
     }

@@ -9,7 +9,6 @@ import responses.AuthResponse;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginServiceTest {
-
     private Database database = new Database();
     private UserDAO userDAO = new UserMemDAO();
 
@@ -23,6 +22,7 @@ public class LoginServiceTest {
         String email = "validEmail";
         userDAO.createUser(username, password, email);
     }
+
 
     @Test
     void testSuccessfulLogin_200() throws UnauthorizedException, DataAccessException {

@@ -5,13 +5,8 @@ import model.GameData;
 import java.util.*;
 
 public class GameMemDAO implements GameDAO{
-
     private Database database = new Database();
 
-    //createGame(gameName)
-    //insert gameID, gameName, game into game
-    //return gameID
-    //insertGame
     @Override
     public Integer createGame(String gameName) throws DataAccessException{
 
@@ -26,10 +21,6 @@ public class GameMemDAO implements GameDAO{
         return gameID;
     }
 
-    //updateGameUsername(playerColor, gameID, username)
-    //insert whiteUsername or blackUsername or observer into game
-    //no return
-    //updateGameUsername
     @Override
     public void updateGameUsername(ChessGame.TeamColor playerColor, Integer gameID, String username) throws DataAccessException{
 
@@ -40,14 +31,8 @@ public class GameMemDAO implements GameDAO{
         } else if (playerColor == null) {
             //add as observer
         }
-
     }
 
-
-    //listGames()
-    //select gameID, whiteUsername, blackUsername, gameName from all game
-    //return list games: {gameID, whiteUsername, blackUsername, gameName}
-    //selectAllGames
     @Override
     public List<List<String>> listGames() throws DataAccessException{
 
@@ -68,10 +53,6 @@ public class GameMemDAO implements GameDAO{
         return allGames;
     }
 
-    //getGame(gameName)
-    //select gameName from game
-    //return gameName or null
-    //selectGame
     @Override
     public String getGame(String gameName) throws DataAccessException{
         for (Map.Entry<Integer, GameData> entry : database.games.entrySet()) {
@@ -83,10 +64,6 @@ public class GameMemDAO implements GameDAO{
         return null;
     }
 
-    //getGame(gameID)
-    //select gameID from game
-    //return gameID or null
-    //selectGame
     @Override
     public Integer getGame(Integer gameID) throws DataAccessException{
         if (database.games.containsKey(gameID)) {
@@ -95,14 +72,8 @@ public class GameMemDAO implements GameDAO{
         return null;
     }
 
-    //clear()
-    //remove all from game
-    //no return
-    //clearGames
     @Override
     public void clear () throws DataAccessException{
         database.games.clear();
     }
-
-
 }
