@@ -3,9 +3,9 @@ package handler;
 import dataAccess.DataAccessException;
 import requests.CreateGameRequest;
 import responses.CreateGameResponse;
-import service.BadRequestException;
+import service.exceptions.BadRequestException;
 import service.CreateGameService;
-import service.UnauthorizedException;
+import service.exceptions.UnauthorizedException;
 import spark.Request;
 
 public class CreateGameHandler extends BaseHandler<CreateGameRequest, CreateGameResponse>{

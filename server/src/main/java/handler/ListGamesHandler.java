@@ -4,11 +4,10 @@ import dataAccess.DataAccessException;
 import requests.BaseRequest;
 import responses.ListGamesResponse;
 import service.ListGamesService;
-import service.UnauthorizedException;
+import service.exceptions.UnauthorizedException;
 import spark.Request;
 
 public class ListGamesHandler extends BaseHandler<BaseRequest, ListGamesResponse>{
-
     private ListGamesService listGamesService = new ListGamesService();
 
     @Override

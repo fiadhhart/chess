@@ -2,10 +2,16 @@ package service;
 
 import chess.ChessGame;
 import dataAccess.*;
+import dataAccess.AuthMemDAO;
+import dataAccess.GameMemDAO;
+import dataAccess.UserMemDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.JoinGameRequest;
 import responses.BaseResponse;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
+import service.exceptions.UnauthorizedException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -38,4 +38,3 @@ public abstract class BaseHandler<T extends BaseRequest, R extends BaseResponse>
     protected abstract R createErrorResponse(Exception e);
     protected abstract Tuple<R,Integer> performOperation(T request, String authToken) throws DataAccessException;
 }
-

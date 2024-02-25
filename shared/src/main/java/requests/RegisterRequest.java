@@ -1,8 +1,8 @@
 package requests;
 
 public class RegisterRequest extends LoginRequest {
-
     private String email;
+
 
     public RegisterRequest(){}
 

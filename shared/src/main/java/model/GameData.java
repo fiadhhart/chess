@@ -2,12 +2,12 @@ package model;
 import chess.ChessGame;
 
 public class GameData {
-
     private Integer gameID;
     private String whiteUsername;
     private String blackUsername;
     private String gameName;
     private ChessGame game;
+
 
     public GameData(Integer gameID, String gameName){
         this.gameID = gameID;
@@ -41,11 +41,5 @@ public class GameData {
     }
     public void setGameName(String gameName) {
         this.gameName = gameName;
-    }
-    public ChessGame getGame() {
-        return game;
-    }
-    public void setGame(ChessGame game) {
-        this.game = game;
     }
 }

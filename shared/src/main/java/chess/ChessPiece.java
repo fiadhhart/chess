@@ -18,14 +18,15 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPiece {
-
     private ChessGame.TeamColor pieceColor;
     private ChessPiece.PieceType type;
+
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
         this.type = type;
     }
+
 
     /**
      * The various different chess piece options
@@ -44,7 +45,6 @@ public class ChessPiece {
      */
     public ChessGame.TeamColor getTeamColor() {
         return this.pieceColor;
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -52,7 +52,6 @@ public class ChessPiece {
      */
     public PieceType getPieceType() {
         return this.type;
-        //throw new RuntimeException("Not implemented");
     }
 
     public void setPieceType(PieceType newType){
@@ -89,7 +88,6 @@ public class ChessPiece {
                 return allPawnMoves.getMoves();
         }
         return null;
-        //throw new RuntimeException("Not implemented");
     }
 
     @Override

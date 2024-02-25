@@ -5,11 +5,12 @@ import requests.BaseRequest;
 import responses.AuthResponse;
 import responses.BaseResponse;
 import service.LogoutService;
-import service.UnauthorizedException;
+import service.exceptions.UnauthorizedException;
 import spark.Request;
 
 public class LogoutHandler extends BaseHandler<BaseRequest, BaseResponse>{
     private LogoutService logoutService = new LogoutService();
+
     @Override
     protected BaseRequest parseRequest(Request req) {
         return gson.fromJson(req.body(), BaseRequest.class);

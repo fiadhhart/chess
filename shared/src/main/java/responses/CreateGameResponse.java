@@ -1,12 +1,12 @@
 package responses;
 
 public class CreateGameResponse extends BaseResponse{
+    private Integer gameID;
 
-    private int gameID;
 
     public CreateGameResponse(){}
 
-    public CreateGameResponse(int gameID) {
+    public CreateGameResponse(Integer gameID) {
         this.gameID = gameID;
     }
 
@@ -14,11 +14,11 @@ public class CreateGameResponse extends BaseResponse{
         super(message);
     }
 
+
     public int getGameID() {
         return gameID;
     }
-
-    public void setGameID(int gameID) {
+    public void setGameID(Integer gameID) {
         this.gameID = gameID;
     }
 }

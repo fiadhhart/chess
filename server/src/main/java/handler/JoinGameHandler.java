@@ -2,16 +2,14 @@ package handler;
 
 import dataAccess.DataAccessException;
 import requests.JoinGameRequest;
-import responses.AuthResponse;
 import responses.BaseResponse;
-import service.AlreadyTakenException;
-import service.BadRequestException;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
 import service.JoinGameService;
-import service.UnauthorizedException;
+import service.exceptions.UnauthorizedException;
 import spark.Request;
 
 public class JoinGameHandler extends BaseHandler<JoinGameRequest, BaseResponse>{
-
     private JoinGameService joinGameService = new JoinGameService();
 
     @Override

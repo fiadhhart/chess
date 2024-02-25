@@ -1,8 +1,10 @@
 package service;
 
 import dataAccess.*;
+import dataAccess.AuthMemDAO;
 import requests.BaseRequest;
 import responses.BaseResponse;
+import service.exceptions.UnauthorizedException;
 
 public class LogoutService {
     public BaseResponse logout(BaseRequest request, String authToken) throws UnauthorizedException, DataAccessException {

@@ -1,8 +1,11 @@
 package service;
 
 import dataAccess.*;
+import dataAccess.AuthMemDAO;
+import dataAccess.UserMemDAO;
 import requests.LoginRequest;
 import responses.AuthResponse;
+import service.exceptions.UnauthorizedException;
 
 public class LoginService {
     public AuthResponse login(LoginRequest request) throws UnauthorizedException, DataAccessException {

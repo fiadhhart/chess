@@ -1,6 +1,9 @@
 package service;
 
 import dataAccess.*;
+import dataAccess.AuthMemDAO;
+import dataAccess.GameMemDAO;
+import dataAccess.UserMemDAO;
 import requests.BaseRequest;
 import responses.BaseResponse;
 

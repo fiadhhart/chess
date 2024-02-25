@@ -1,10 +1,14 @@
 package service;
 
 import dataAccess.*;
+import dataAccess.AuthMemDAO;
+import dataAccess.UserMemDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.CreateGameRequest;
 import responses.CreateGameResponse;
+import service.exceptions.BadRequestException;
+import service.exceptions.UnauthorizedException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

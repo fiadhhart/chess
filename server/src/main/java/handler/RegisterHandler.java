@@ -3,8 +3,8 @@ package handler;
 import dataAccess.DataAccessException;
 import requests.RegisterRequest;
 import responses.AuthResponse;
-import service.AlreadyTakenException;
-import service.BadRequestException;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
 import spark.Request;
 import service.RegisterService;
 

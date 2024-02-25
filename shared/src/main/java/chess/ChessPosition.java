@@ -9,14 +9,15 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPosition {
-
     private int row;
     private int column;
+
 
     public ChessPosition(int row, int col) {
         this.row = row;
         this.column = col;
     }
+
 
     /**
      * @return which row this position is in
@@ -24,7 +25,6 @@ public class ChessPosition {
      */
     public int getRow() {
         return this.row;
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -33,7 +33,6 @@ public class ChessPosition {
      */
     public int getColumn() {
         return this.column;
-        //throw new RuntimeException("Not implemented");
     }
 
     @Override

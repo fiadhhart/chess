@@ -3,11 +3,11 @@ import model.AuthData;
 
 import java.util.UUID;
 
-public class AuthMemDAO implements AuthDAO{
+public class AuthMemDAO implements AuthDAO {
     private Database database = new Database();
 
     @Override
-    public String createAuth(String username) throws DataAccessException{
+    public String createAuth(String username) throws DataAccessException {
         String authToken = UUID.randomUUID().toString();
         while (database.auths.containsKey(authToken)) {
             authToken = UUID.randomUUID().toString();

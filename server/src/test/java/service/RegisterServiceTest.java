@@ -1,10 +1,13 @@
 package service;
 
 import dataAccess.*;
+import dataAccess.UserMemDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.RegisterRequest;
 import responses.AuthResponse;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +45,7 @@ class RegisterServiceTest {
     @Test
     void testUnsuccessful_400() throws BadRequestException, AlreadyTakenException, DataAccessException {
         // Given
-        RegisterRequest request = new RegisterRequest("", "invalidPassword", "invalidEmail");
+        RegisterRequest request = new RegisterRequest();
         RegisterService registerService = new RegisterService();
 
         // When & Then

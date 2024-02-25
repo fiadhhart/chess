@@ -1,7 +1,6 @@
 package requests;
 
 public class CreateGameRequest extends BaseRequest{
-
     private String gameName;
 
 

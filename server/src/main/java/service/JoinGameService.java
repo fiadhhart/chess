@@ -2,8 +2,13 @@ package service;
 
 import chess.ChessGame;
 import dataAccess.*;
+import dataAccess.AuthMemDAO;
+import dataAccess.GameMemDAO;
 import requests.JoinGameRequest;
 import responses.BaseResponse;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
+import service.exceptions.UnauthorizedException;
 
 import java.util.Objects;
 
@@ -22,11 +27,8 @@ public class JoinGameService {
         try {
             String verifiedAuthToken = authDAO.getAuth(authToken);
             if (verifiedAuthToken != null) {
-
                 if(Objects.equals(gameDAO.getGame(gameID), gameID)){
-
                     if(!gameDAO.isPlayerOccupied(playerColor, gameID)){
-
                         gameDAO.updateGameUsername(playerColor, gameID, username);
                         return new BaseResponse();
 

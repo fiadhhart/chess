@@ -1,9 +1,12 @@
 package service;
 
 import dataAccess.*;
+import dataAccess.AuthMemDAO;
+import dataAccess.GameMemDAO;
 import requests.BaseRequest;
 import responses.GameResponse;
 import responses.ListGamesResponse;
+import service.exceptions.UnauthorizedException;
 
 import java.util.List;
 

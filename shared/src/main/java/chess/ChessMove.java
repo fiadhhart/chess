@@ -9,10 +9,10 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessMove {
-
     private ChessPosition startPosition;
     private ChessPosition endPosition;
     private ChessPiece.PieceType promotionPiece;
+
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
@@ -25,12 +25,12 @@ public class ChessMove {
         this.endPosition = endPosition;
     }
 
+
     /**
      * @return ChessPosition of starting location
      */
     public ChessPosition getStartPosition() {
         return this.startPosition;
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -38,7 +38,6 @@ public class ChessMove {
      */
     public ChessPosition getEndPosition() {
         return this.endPosition;
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -49,7 +48,6 @@ public class ChessMove {
      */
     public ChessPiece.PieceType getPromotionPiece() {
         return this.promotionPiece;
-        //throw new RuntimeException("Not implemented");
     }
 
     @Override

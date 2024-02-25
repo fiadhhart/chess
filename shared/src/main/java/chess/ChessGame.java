@@ -10,13 +10,12 @@ import java.util.HashSet;
  * signature of the existing methods.
  */
 public class ChessGame {
-
     private ChessBoard board;
     private TeamColor teamTurn;
 
-    public ChessGame() {
 
-    }
+    public ChessGame() {}
+
 
     /**
      * Enum identifying the 2 possible teams in a chess game
@@ -31,7 +30,6 @@ public class ChessGame {
      */
     public TeamColor getTeamTurn() {
         return this.teamTurn;
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -41,7 +39,6 @@ public class ChessGame {
      */
     public void setTeamTurn(TeamColor team) {
         this.teamTurn = team;
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -51,7 +48,6 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return this.board;
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -61,24 +57,19 @@ public class ChessGame {
      */
     public void setBoard(ChessBoard board) {
         this.board = board;
-        //throw new RuntimeException("Not implemented");
     }
-
 
     /**
      * Makes a move in a chess game
+     *      Receives a given move and executes it, provided it is a legal move.
+     *      A move is illegal if:
+     *         the chess piece cannot move there,
+     *         the move leaves the team’s king in danger,
+     *         it’s not the corresponding team's turn.
      *
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
-    /*
-    makeMove: Receives a given move and executes it, provided it is a legal move.
-    If the move is illegal, it throws an InvalidMoveException.
-    A move is illegal if
-        the chess piece cannot move there,
-        the move leaves the team’s king in danger,
-        it’s not the corresponding team's turn.
-    */
     public void makeMove(ChessMove move) throws InvalidMoveException {
 
         if(isValidMove(move)){
@@ -99,8 +90,6 @@ public class ChessGame {
         }else{
             throw new InvalidMoveException();
         }
-
-        //throw new RuntimeException("Not implemented");
     }
 
     private boolean isValidMove(ChessMove move) {
@@ -139,15 +128,13 @@ public class ChessGame {
 
     /**
      * Gets a valid moves for a piece at the given location
+     *      Takes as input a position on the chessboard and returns all moves the piece there can legally make.
+     *      If there is no piece at that location, this method returns null.
      *
      * @param startPosition the piece to get valid moves for
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
-    /*
-    validMoves: Takes as input a position on the chessboard and returns all moves the piece there can legally make.
-    If there is no piece at that location, this method returns null.
-    */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
 
         ChessPiece piece = this.board.getPiece(startPosition);
@@ -163,7 +150,6 @@ public class ChessGame {
             }
         }
         return validMoves;
-        //throw new RuntimeException("Not implemented");
     }
 
     private ChessPosition findKingPosition(TeamColor teamColor){
@@ -182,11 +168,11 @@ public class ChessGame {
 
     /**
      * Determines if the given team is in check
+     *      Returns true if the specified team’s King could be captured by an opposing piece.
      *
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
-    //isInCheck: Returns true if the specified team’s King could be captured by an opposing piece.
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingPosition = findKingPosition(teamColor);
 
@@ -206,18 +192,15 @@ public class ChessGame {
             }
         }
         return false;
-        //throw new RuntimeException("Not implemented");
     }
-
-
 
     /**
      * Determines if the given team is in checkmate
+     *      Returns true if the given team has no way to protect their king from being captured.
      *
      * @param teamColor which team to check for checkmate
      * @return True if the specified team is in checkmate
      */
-    //isInCheckmate: Returns true if the given team has no way to protect their king from being captured.
     public boolean isInCheckmate(TeamColor teamColor) {
 
         for (int i = 1; i <= 8; ++i){
@@ -245,17 +228,16 @@ public class ChessGame {
             }
         }
         return true;
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
      * Determines if the given team is in stalemate, which here is defined as having
      * no valid moves
+     *      Returns true if the given team has no legal moves, and it is currently that team’s turn.
      *
      * @param teamColor which team to check for stalemate
      * @return True if the specified team is in stalemate, otherwise false
      */
-    //isInStalemate: Returns true if the given team has no legal moves, and it is currently that team’s turn.
     public boolean isInStalemate(TeamColor teamColor) {
 
         if(this.teamTurn != teamColor){
@@ -275,9 +257,5 @@ public class ChessGame {
             }
         }
         return true;
-        //throw new RuntimeException("Not implemented");
     }
-
-
 }
-

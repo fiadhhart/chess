@@ -1,8 +1,12 @@
 package service;
 
 import dataAccess.*;
+import dataAccess.AuthMemDAO;
+import dataAccess.UserMemDAO;
 import requests.RegisterRequest;
 import responses.AuthResponse;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
 
 public class RegisterService {
     public AuthResponse register(RegisterRequest request) throws BadRequestException, AlreadyTakenException, DataAccessException{
@@ -12,7 +16,7 @@ public class RegisterService {
         UserDAO userDAO = new UserMemDAO();
         AuthDAO authDAO = new AuthMemDAO();
 
-        if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
+        if (username == null || password == null || email == null) {
             throw new BadRequestException("Error: bad request");
         }
 

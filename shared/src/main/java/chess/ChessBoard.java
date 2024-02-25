@@ -11,9 +11,10 @@ import java.util.Arrays;
 public class ChessBoard {
     private ChessPiece[][] squares = new ChessPiece[8][8];  //remember this takes in index 0-7 not 1-8
 
+
     public ChessBoard() {
-        //this.resetBoard();
     }
+
 
     /**
      * Adds a chess piece to the chessboard
@@ -23,7 +24,6 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) { //remember this takes in index 1-8 not 0-7
         squares[position.getRow() - 1][position.getColumn() - 1] = piece;
-        //throw new RuntimeException("Not implemented");
     }
 
     public void removePiece(ChessPosition position) {
@@ -43,7 +43,6 @@ public class ChessBoard {
         }else{
             return squares[position.getRow() - 1][position.getColumn() - 1];
         }
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -78,8 +77,6 @@ public class ChessBoard {
             squares[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
             squares[7][i] = new ChessPiece(ChessGame.TeamColor.BLACK, initialPieceTypesOrder[i]);
         }
-
-        //throw new RuntimeException("Not implemented");
     }
 
     @Override

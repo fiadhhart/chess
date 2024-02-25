@@ -1,11 +1,9 @@
 package requests;
 
-
-
 public class LoginRequest extends BaseRequest {
-
     protected String username;
     protected String password;
+
 
     public LoginRequest() {}
 

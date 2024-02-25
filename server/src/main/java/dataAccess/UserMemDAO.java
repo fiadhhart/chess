@@ -1,11 +1,11 @@
 package dataAccess;
 import model.UserData;
 
-public class UserMemDAO implements UserDAO{
+public class UserMemDAO implements UserDAO {
     private Database database = new Database();
 
     @Override
-    public void createUser(String username, String password, String email) throws DataAccessException{
+    public void createUser(String username, String password, String email) throws DataAccessException {
         UserData user = new UserData(username, password, email);
         database.users.put(username, user);
     }

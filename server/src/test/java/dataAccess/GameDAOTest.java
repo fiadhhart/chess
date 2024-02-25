@@ -32,12 +32,35 @@ class GameDAOTest {
     }
 
     @Test
+    public void testIsPlayerOccupied() throws DataAccessException{
+        Integer gameID = gameDAO.createGame("TestGame");
+
+        assertEquals(false, gameDAO.isPlayerOccupied(null, gameID));
+
+        String whiteUsername = "testWhiteUsername";
+        String blackUsername = "testBlackUsername";
+
+        assertEquals(false, gameDAO.isPlayerOccupied(ChessGame.TeamColor.WHITE, gameID));
+        assertEquals(false, gameDAO.isPlayerOccupied(ChessGame.TeamColor.BLACK, gameID));
+
+        gameDAO.updateGameUsername(ChessGame.TeamColor.WHITE, gameID, whiteUsername);
+
+        assertEquals(true, gameDAO.isPlayerOccupied(ChessGame.TeamColor.WHITE, gameID));
+        assertEquals(false, gameDAO.isPlayerOccupied(ChessGame.TeamColor.BLACK, gameID));
+
+        gameDAO.updateGameUsername(ChessGame.TeamColor.BLACK, gameID, blackUsername);
+
+        assertEquals(true, gameDAO.isPlayerOccupied(ChessGame.TeamColor.WHITE, gameID));
+        assertEquals(true, gameDAO.isPlayerOccupied(ChessGame.TeamColor.BLACK, gameID));
+    }
+
+    @Test
     public void testUpdateGameUsername() throws DataAccessException {
 
         Integer gameID = gameDAO.createGame("TestGame");
 
-        String whiteUsername = "Alice";
-        String blackUsername = "Bob";
+        String whiteUsername = "testWhiteUsername";
+        String blackUsername = "testBlackUsername";
 
         gameDAO.updateGameUsername(ChessGame.TeamColor.WHITE, gameID, whiteUsername);
         gameDAO.updateGameUsername(ChessGame.TeamColor.BLACK, gameID, blackUsername);

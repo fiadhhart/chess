@@ -1,19 +1,17 @@
 package responses;
 
 public class AuthResponse extends BaseResponse{
-
     private String username;
     private String authToken;
 
+
     public AuthResponse() {}
 
-    // constructor for successful login
     public AuthResponse(String username, String authToken) {
         this.username = username;
         this.authToken = authToken;
     }
 
-    // constructor for failed login with error message
     public AuthResponse(String message){
         super(message);
     }
@@ -32,4 +30,3 @@ public class AuthResponse extends BaseResponse{
         this.authToken = authToken;
     }
 }
-

@@ -5,11 +5,11 @@ import responses.GameResponse;
 
 import java.util.*;
 
-public class GameMemDAO implements GameDAO{
+public class GameMemDAO implements GameDAO {
     private Database database = new Database();
 
     @Override
-    public Integer createGame(String gameName) throws DataAccessException{
+    public Integer createGame(String gameName) throws DataAccessException {
 
         Integer gameID = database.getGamesSize() +1;
 

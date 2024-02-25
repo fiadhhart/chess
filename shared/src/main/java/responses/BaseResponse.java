@@ -1,8 +1,8 @@
 package responses;
 
 public class BaseResponse {
-
     protected String message;
+
 
     // Default constructor (required by Gson for serialization)
     public BaseResponse() {}

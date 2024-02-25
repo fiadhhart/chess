@@ -4,7 +4,7 @@ import dataAccess.DataAccessException;
 import requests.LoginRequest;
 import responses.AuthResponse;
 import service.LoginService;
-import service.UnauthorizedException;
+import service.exceptions.UnauthorizedException;
 import spark.Request;
 
 
