@@ -1,9 +1,10 @@
 package service;
 
 import dataAccess.*;
-import dataAccess.AuthMemDAO;
-import dataAccess.GameMemDAO;
-import dataAccess.UserMemDAO;
+import dataAccess.memory.AuthMemDAO;
+import dataAccess.memory.Database;
+import dataAccess.memory.GameMemDAO;
+import dataAccess.memory.UserMemDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.BaseRequest;

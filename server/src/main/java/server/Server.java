@@ -1,6 +1,10 @@
 package server;
 
 import dataAccess.*;
+import dataAccess.memory.AuthMemDAO;
+import dataAccess.memory.Database;
+import dataAccess.memory.GameMemDAO;
+import dataAccess.memory.UserMemDAO;
 import handler.*;
 import spark.*;
 
@@ -12,10 +16,25 @@ public class Server {
         Spark.staticFiles.location("web");
 
         //create DB & DAOs
-        Database database = new Database();
-        UserDAO userDAO = new UserMemDAO(database);
-        GameDAO gameDAO = new GameMemDAO(database);
-        AuthDAO authDAO = new AuthMemDAO(database);
+        UserDAO userDAO;
+        GameDAO gameDAO;
+        AuthDAO authDAO;
+
+        boolean useMemory = false;
+        if(useMemory){
+            Database database = new Database();
+            userDAO = new UserMemDAO(database);
+            gameDAO = new GameMemDAO(database);
+            authDAO = new AuthMemDAO(database);
+        }else{
+            try {
+                userDAO = new SQLUserDAO();
+                gameDAO = new SQLGameDAO();
+                authDAO = new SQLAuthDAO();
+            } catch (DataAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         // Register your endpoints and handle exceptions here.
         Spark.post("/user", (req, res) -> (new RegisterHandler(userDAO, gameDAO, authDAO)).handle(req, res));

@@ -67,4 +67,49 @@ public class DatabaseManager {
             throw new DataAccessException(e.getMessage());
         }
     }
+
+    static void initializeDatabaseAndTables() throws DataAccessException {
+        createDatabase();
+        createTables();
+    }
+
+    private static void createTables() throws DataAccessException {
+        try (Connection conn = DriverManager.getConnection(connectionUrl + "/" + databaseName, user, password)) {
+            // Create users table
+            String createUsersTableQuery = "CREATE TABLE IF NOT EXISTS users (" +
+                    "username VARCHAR(255) NOT NULL PRIMARY KEY," +
+                    "password VARCHAR(255) NOT NULL," +
+                    "email VARCHAR(255) NOT NULL" +
+                    ")";
+            try (var statement = conn.prepareStatement(createUsersTableQuery)) {
+                statement.executeUpdate();
+            }
+
+            // Create games table
+            String createGamesTableQuery = "CREATE TABLE IF NOT EXISTS games (" +
+                    "gameID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                    "whiteUsername VARCHAR(255)," +
+                    "blackUsername VARCHAR(255)," +
+                    "gameName VARCHAR(255) NOT NULL," +
+                    "game LONGTEXT," +
+                    "FOREIGN KEY (whiteUsername) REFERENCES users(username)," +
+                    "FOREIGN KEY (blackUsername) REFERENCES users(username)" +
+                    ")";
+            try (var statement = conn.prepareStatement(createGamesTableQuery)) {
+                statement.executeUpdate();
+            }
+
+            // Create auths table
+            String createAuthsTableQuery = "CREATE TABLE IF NOT EXISTS auths (" +
+                    "authToken VARCHAR(255) NOT NULL PRIMARY KEY," +
+                    "username VARCHAR(255) NOT NULL," +
+                    "FOREIGN KEY (username) REFERENCES users(username)" +
+                    ")";
+            try (var statement = conn.prepareStatement(createAuthsTableQuery)) {
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
 }

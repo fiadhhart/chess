@@ -1,4 +1,4 @@
-package dataAccess;
+package dataAccess.memory;
 
 import model.UserData;
 import model.GameData;

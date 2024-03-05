@@ -1,4 +1,6 @@
-package dataAccess;
+package dataAccess.memory;
+import dataAccess.DataAccessException;
+import dataAccess.UserDAO;
 import model.UserData;
 
 public class UserMemDAO implements UserDAO {
