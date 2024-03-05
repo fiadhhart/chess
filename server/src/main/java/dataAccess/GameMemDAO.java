@@ -6,7 +6,11 @@ import responses.GameResponse;
 import java.util.*;
 
 public class GameMemDAO implements GameDAO {
-    private Database database = new Database();
+    private Database database;
+
+    public GameMemDAO(Database database) {
+        this.database = database;
+    }
 
     @Override
     public Integer createGame(String gameName) throws DataAccessException {

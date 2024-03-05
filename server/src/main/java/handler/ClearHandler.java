@@ -1,6 +1,9 @@
 package handler;
 
+import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
+import dataAccess.GameDAO;
+import dataAccess.UserDAO;
 import responses.BaseResponse;
 import service.ClearService;
 import requests.BaseRequest;
@@ -8,7 +11,12 @@ import spark.Request;
 
 
 public class ClearHandler extends BaseHandler<BaseRequest, BaseResponse> {
-    private ClearService clearService = new ClearService();
+    private ClearService clearService;
+
+    public ClearHandler(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
+        super(userDAO, gameDAO, authDAO);
+        this.clearService = new ClearService(userDAO, gameDAO, authDAO);
+    }
 
     @Override
     protected BaseRequest parseRequest(Request req) {

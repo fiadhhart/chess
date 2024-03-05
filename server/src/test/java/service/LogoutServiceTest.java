@@ -13,8 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LogoutServiceTest {
     private Database database = new Database();
-    private UserDAO userDAO = new UserMemDAO();
-    private AuthDAO authDAO = new AuthMemDAO();
+    private AuthDAO authDAO = new AuthMemDAO(database);
+    private UserDAO userDAO = new UserMemDAO(database);
+    private GameDAO gameDAO = new GameMemDAO(database);
     private String authToken;
 
 
@@ -37,7 +38,7 @@ public class LogoutServiceTest {
 
         // Given
         BaseRequest request = new BaseRequest();
-        LogoutService logoutService = new LogoutService();
+        LogoutService logoutService = new LogoutService(userDAO, gameDAO, authDAO);
 
         // When
         BaseResponse response = logoutService.logout(request, this.authToken);
@@ -51,7 +52,7 @@ public class LogoutServiceTest {
     void testUnsuccessful_401() throws UnauthorizedException, DataAccessException {
         // Given
         BaseRequest request = new BaseRequest();
-        LogoutService logoutService = new LogoutService();
+        LogoutService logoutService = new LogoutService(userDAO, gameDAO, authDAO);
 
         // When & Then
         assertThrows(UnauthorizedException.class, () -> logoutService.logout(request, "invalidAuthToken"));

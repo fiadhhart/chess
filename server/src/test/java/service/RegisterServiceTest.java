@@ -13,7 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RegisterServiceTest {
     private Database database = new Database();
-    private UserDAO userDAO = new UserMemDAO();
+    private AuthDAO authDAO = new AuthMemDAO(database);
+    private UserDAO userDAO = new UserMemDAO(database);
+    private GameDAO gameDAO = new GameMemDAO(database);
 
 
     @BeforeEach
@@ -31,7 +33,7 @@ class RegisterServiceTest {
     void testSuccessful_200() throws BadRequestException, AlreadyTakenException, DataAccessException {
         // Given
         RegisterRequest request = new RegisterRequest("validUsername", "validPassword", "validEmail");
-        RegisterService registerService = new RegisterService();
+        RegisterService registerService = new RegisterService(userDAO, gameDAO, authDAO);
 
         // When
         AuthResponse response = registerService.register(request);
@@ -46,7 +48,7 @@ class RegisterServiceTest {
     void testUnsuccessful_400() throws BadRequestException, AlreadyTakenException, DataAccessException {
         // Given
         RegisterRequest request = new RegisterRequest();
-        RegisterService registerService = new RegisterService();
+        RegisterService registerService = new RegisterService(userDAO, gameDAO, authDAO);
 
         // When & Then
         assertThrows(BadRequestException.class, () -> registerService.register(request));
@@ -56,7 +58,7 @@ class RegisterServiceTest {
     void testUnsuccessful_403() throws BadRequestException, AlreadyTakenException, DataAccessException {
         // Given
         RegisterRequest request = new RegisterRequest("presentUsername", "presentPassword", "presentEmail");
-        RegisterService registerService = new RegisterService();
+        RegisterService registerService = new RegisterService(userDAO, gameDAO, authDAO);
 
         // When & Then
         assertThrows(AlreadyTakenException.class, () -> registerService.register(request));

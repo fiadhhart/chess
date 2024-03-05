@@ -1,18 +1,20 @@
 package service;
 
 import dataAccess.*;
-import dataAccess.AuthMemDAO;
-import dataAccess.GameMemDAO;
-import dataAccess.UserMemDAO;
 import requests.BaseRequest;
 import responses.BaseResponse;
 
 public class ClearService {
-    public BaseResponse clear(BaseRequest request) throws DataAccessException {
-        UserDAO userDAO = new UserMemDAO();
-        AuthDAO authDAO = new AuthMemDAO();
-        GameDAO gameDAO = new GameMemDAO();
+    private UserDAO userDAO;
+    private GameDAO gameDAO;
+    private AuthDAO authDAO;
 
+    public ClearService(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
+        this.userDAO = userDAO;
+        this.gameDAO = gameDAO;
+        this.authDAO = authDAO;
+    }
+    public BaseResponse clear(BaseRequest request) throws DataAccessException {
         try {
             userDAO.clear();
             gameDAO.clear();

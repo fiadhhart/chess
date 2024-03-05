@@ -5,16 +5,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserDAOTest {
-    private Database databaseTest;
+class UserMemDAOTest {
+    private Database database;
     private UserDAO userDAO;
 
 
     @BeforeEach
     void setUp() {
-        databaseTest = new Database();
-        databaseTest.clearDatabase();
-        userDAO = new UserMemDAO();
+        database = new Database();
+        database.clearDatabase();
+        userDAO = new UserMemDAO(database);
     }
 
 
@@ -26,11 +26,11 @@ class UserDAOTest {
 
         userDAO.createUser(usernameOne, passwordOne, emailOne);
 
-        assertTrue(databaseTest.users.containsKey(usernameOne));
-        assertNotNull(databaseTest.users.get(usernameOne));
-        assertEquals(usernameOne, databaseTest.users.get(usernameOne).getUsername());
-        assertEquals(passwordOne, databaseTest.users.get(usernameOne).getPassword());
-        assertEquals(emailOne, databaseTest.users.get(usernameOne).getEmail());
+        assertTrue(database.users.containsKey(usernameOne));
+        assertNotNull(database.users.get(usernameOne));
+        assertEquals(usernameOne, database.users.get(usernameOne).getUsername());
+        assertEquals(passwordOne, database.users.get(usernameOne).getPassword());
+        assertEquals(emailOne, database.users.get(usernameOne).getEmail());
     }
 
     @Test
@@ -79,6 +79,6 @@ class UserDAOTest {
 
         userDAO.clear();
 
-        assertTrue(databaseTest.users.isEmpty());
+        assertTrue(database.users.isEmpty());
     }
 }

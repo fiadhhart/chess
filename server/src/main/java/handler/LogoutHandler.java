@@ -1,6 +1,9 @@
 package handler;
 
+import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
+import dataAccess.GameDAO;
+import dataAccess.UserDAO;
 import requests.BaseRequest;
 import responses.AuthResponse;
 import responses.BaseResponse;
@@ -9,7 +12,12 @@ import service.exceptions.UnauthorizedException;
 import spark.Request;
 
 public class LogoutHandler extends BaseHandler<BaseRequest, BaseResponse>{
-    private LogoutService logoutService = new LogoutService();
+    private LogoutService logoutService;
+
+    public LogoutHandler(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
+        super(userDAO, gameDAO, authDAO);
+        this.logoutService = new LogoutService(userDAO, gameDAO, authDAO);
+    }
 
     @Override
     protected BaseRequest parseRequest(Request req) {

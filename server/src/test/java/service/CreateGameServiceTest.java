@@ -14,8 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CreateGameServiceTest {
     private Database database = new Database();
-    private AuthDAO authDAO = new AuthMemDAO();
-    private UserDAO userDAO = new UserMemDAO();
+    private AuthDAO authDAO = new AuthMemDAO(database);
+    private GameDAO gameDAO = new GameMemDAO(database);
+    private UserDAO userDAO = new UserMemDAO(database);
     private String authToken;
 
 
@@ -38,7 +39,7 @@ class CreateGameServiceTest {
 
         // Given
         CreateGameRequest request = new CreateGameRequest("validGameName");
-        CreateGameService createGameService = new CreateGameService();
+        CreateGameService createGameService = new CreateGameService(userDAO, gameDAO, authDAO);
 
         // When
         CreateGameResponse response = createGameService.createGame(request, this.authToken);
@@ -53,7 +54,7 @@ class CreateGameServiceTest {
     void testUnsuccessful_400() throws BadRequestException, UnauthorizedException, DataAccessException {
         // Given
         CreateGameRequest request = new CreateGameRequest("repeatedGameName");
-        CreateGameService createGameService = new CreateGameService();
+        CreateGameService createGameService = new CreateGameService(userDAO, gameDAO, authDAO);
 
         // When & Then
         CreateGameResponse response = createGameService.createGame(request, this.authToken);
@@ -64,7 +65,7 @@ class CreateGameServiceTest {
     void testUnsuccessful_401() throws BadRequestException, UnauthorizedException, DataAccessException {
         // Given
         CreateGameRequest request = new CreateGameRequest("validGameName");
-        CreateGameService createGameService = new CreateGameService();
+        CreateGameService createGameService = new CreateGameService(userDAO, gameDAO, authDAO);
 
         // When & Then
         assertThrows(UnauthorizedException.class, () -> createGameService.createGame(request, "invalidAuthToken"));

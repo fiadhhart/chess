@@ -9,9 +9,9 @@ import java.util.Map;
 
 
 public class Database {
-    protected static Map<String, UserData> users = new HashMap<>();     //key is username
-    protected static Map<Integer, GameData> games = new HashMap<>();    //key is gameID
-    protected static Map<String, AuthData> auths = new HashMap<>();     //key is authToken
+    protected Map<String, UserData> users = new HashMap<>();     //key is username
+    protected Map<Integer, GameData> games = new HashMap<>();    //key is gameID
+    protected Map<String, AuthData> auths = new HashMap<>();     //key is authToken
 
 
     //methods for testing purposes

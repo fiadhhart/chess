@@ -1,20 +1,25 @@
 package service;
 
 import dataAccess.*;
-import dataAccess.AuthMemDAO;
-import dataAccess.UserMemDAO;
 import requests.RegisterRequest;
 import responses.AuthResponse;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 
 public class RegisterService {
+    private UserDAO userDAO;
+    private GameDAO gameDAO;
+    private AuthDAO authDAO;
+
+    public RegisterService(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
+        this.userDAO = userDAO;
+        this.gameDAO = gameDAO;
+        this.authDAO = authDAO;
+    }
     public AuthResponse register(RegisterRequest request) throws BadRequestException, AlreadyTakenException, DataAccessException{
         String username = request.getUsername();
         String password = request.getPassword();
         String email = request.getEmail();
-        UserDAO userDAO = new UserMemDAO();
-        AuthDAO authDAO = new AuthMemDAO();
 
         if (username == null || password == null || email == null) {
             throw new BadRequestException("Error: bad request");

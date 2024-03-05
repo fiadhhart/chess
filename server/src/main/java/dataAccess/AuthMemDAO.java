@@ -4,7 +4,11 @@ import model.AuthData;
 import java.util.UUID;
 
 public class AuthMemDAO implements AuthDAO {
-    private Database database = new Database();
+    private Database database;
+
+    public AuthMemDAO(Database database) {
+        this.database = database;
+    }
 
     @Override
     public String createAuth(String username) throws DataAccessException {

@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JoinGameServiceTest {
     private Database database = new Database();
-    private AuthDAO authDAO = new AuthMemDAO();
-    private UserDAO userDAO = new UserMemDAO();
-    private GameDAO gameDAO = new GameMemDAO();
+    private AuthDAO authDAO = new AuthMemDAO(database);
+    private UserDAO userDAO = new UserMemDAO(database);
+    private GameDAO gameDAO = new GameMemDAO(database);
     private String authToken1;
     private String authToken2;
     private String authToken3;
@@ -57,7 +57,7 @@ class JoinGameServiceTest {
         JoinGameRequest requestW = new JoinGameRequest(ChessGame.TeamColor.WHITE, this.gameID);
         JoinGameRequest requestB = new JoinGameRequest(ChessGame.TeamColor.BLACK, this.gameID);
         JoinGameRequest requestE = new JoinGameRequest(this.gameID);
-        JoinGameService joinGameService = new JoinGameService();
+        JoinGameService joinGameService = new JoinGameService(userDAO, gameDAO, authDAO);
 
         // When
         BaseResponse response1 = joinGameService.joinGame(requestW, this.authToken1);
@@ -75,7 +75,7 @@ class JoinGameServiceTest {
         // Given
         int invalidGameID = 5;
         JoinGameRequest request = new JoinGameRequest(ChessGame.TeamColor.WHITE, invalidGameID);
-        JoinGameService joinGameService = new JoinGameService();
+        JoinGameService joinGameService = new JoinGameService(userDAO, gameDAO, authDAO);
 
         // When & Then
         assertThrows(BadRequestException.class, () -> joinGameService.joinGame(request, this.authToken1));
@@ -85,7 +85,7 @@ class JoinGameServiceTest {
     void testUnsuccessful_401() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
         // Given
         JoinGameRequest request = new JoinGameRequest(ChessGame.TeamColor.WHITE, this.gameID);
-        JoinGameService joinGameService = new JoinGameService();
+        JoinGameService joinGameService = new JoinGameService(userDAO, gameDAO, authDAO);
 
         // When & Then
         assertThrows(UnauthorizedException.class, () -> joinGameService.joinGame(request, "invalidAuthToken"));
@@ -96,7 +96,7 @@ class JoinGameServiceTest {
         //Given
         JoinGameRequest requestW = new JoinGameRequest(ChessGame.TeamColor.WHITE, this.gameID);
         JoinGameRequest requestW2 = new JoinGameRequest(ChessGame.TeamColor.WHITE, this.gameID);
-        JoinGameService joinGameService = new JoinGameService();
+        JoinGameService joinGameService = new JoinGameService(userDAO, gameDAO, authDAO);
         BaseResponse response = joinGameService.joinGame(requestW, this.authToken1);
 
         // When & Then

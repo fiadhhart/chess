@@ -12,7 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginServiceTest {
     private Database database = new Database();
-    private UserDAO userDAO = new UserMemDAO();
+    private AuthDAO authDAO = new AuthMemDAO(database);
+    private UserDAO userDAO = new UserMemDAO(database);
+    private GameDAO gameDAO = new GameMemDAO(database);
 
 
     @BeforeEach
@@ -30,7 +32,7 @@ public class LoginServiceTest {
     void testSuccessful_200() throws UnauthorizedException, DataAccessException {
         // Given
         LoginRequest request = new LoginRequest("validUsername", "validPassword");
-        LoginService loginService = new LoginService();
+        LoginService loginService = new LoginService(userDAO, gameDAO, authDAO);
 
         // When
         AuthResponse response = loginService.login(request);
@@ -45,7 +47,7 @@ public class LoginServiceTest {
     void testUnsuccessful_401() throws UnauthorizedException, DataAccessException {
         // Given
         LoginRequest request = new LoginRequest("invalidUsername", "invalidPassword");
-        LoginService loginService = new LoginService();
+        LoginService loginService = new LoginService(userDAO, gameDAO, authDAO);
 
         // When & Then
         assertThrows(UnauthorizedException.class, () -> loginService.login(request));

@@ -1,6 +1,9 @@
 package handler;
 
+import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
+import dataAccess.GameDAO;
+import dataAccess.UserDAO;
 import requests.JoinGameRequest;
 import responses.BaseResponse;
 import service.exceptions.AlreadyTakenException;
@@ -10,7 +13,12 @@ import service.exceptions.UnauthorizedException;
 import spark.Request;
 
 public class JoinGameHandler extends BaseHandler<JoinGameRequest, BaseResponse>{
-    private JoinGameService joinGameService = new JoinGameService();
+    private JoinGameService joinGameService;
+
+    public JoinGameHandler(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
+        super(userDAO, gameDAO, authDAO);
+        this.joinGameService = new JoinGameService(userDAO, gameDAO, authDAO);
+    }
 
     @Override
     protected JoinGameRequest parseRequest(Request req) {

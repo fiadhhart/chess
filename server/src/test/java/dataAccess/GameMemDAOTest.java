@@ -9,7 +9,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameDAOTest {
+class GameMemDAOTest {
+
     private Database database;
     private GameDAO gameDAO;
 
@@ -18,7 +19,7 @@ class GameDAOTest {
     void setUp() {
         database = new Database();
         database.clearDatabase();
-        gameDAO = new GameMemDAO();
+        gameDAO = new GameMemDAO(database);
     }
 
 

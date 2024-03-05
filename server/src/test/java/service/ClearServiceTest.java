@@ -13,9 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ClearServiceTest {
     private Database database = new Database();
-    private UserDAO userDAO = new UserMemDAO();
-    private GameDAO gameDAO = new GameMemDAO();
-    private AuthDAO authDAO = new AuthMemDAO();
+    private UserDAO userDAO = new UserMemDAO(database);
+    private GameDAO gameDAO = new GameMemDAO(database);
+    private AuthDAO authDAO = new AuthMemDAO(database);
 
 
     @BeforeEach
@@ -48,7 +48,7 @@ class ClearServiceTest {
 
         //Given
         BaseRequest request = new BaseRequest();
-        ClearService clearService = new ClearService();
+        ClearService clearService = new ClearService(userDAO, gameDAO, authDAO);
 
         //When
         BaseResponse response = clearService.clear(request);

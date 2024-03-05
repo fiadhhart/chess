@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ListGamesServiceTest {
     private Database database = new Database();
-    private AuthDAO authDAO = new AuthMemDAO();
-    private UserDAO userDAO = new UserMemDAO();
-    private GameDAO gameDAO = new GameMemDAO();
+    private AuthDAO authDAO = new AuthMemDAO(database);
+    private UserDAO userDAO = new UserMemDAO(database);
+    private GameDAO gameDAO = new GameMemDAO(database);
     private String authToken;
     private int gameID1;
     private int gameID2;
@@ -42,7 +42,7 @@ class ListGamesServiceTest {
     void testSuccessful_200() throws UnauthorizedException, DataAccessException {
         //Given
         BaseRequest request = new BaseRequest();
-        ListGamesService listGamesService = new ListGamesService();
+        ListGamesService listGamesService = new ListGamesService(userDAO, gameDAO, authDAO);
 
         // When
         ListGamesResponse response = listGamesService.listGames(request, this.authToken);
@@ -62,7 +62,7 @@ class ListGamesServiceTest {
     void testUnsuccessful_401() throws UnauthorizedException, DataAccessException {
         // Given
         BaseRequest request = new BaseRequest();
-        ListGamesService listGamesService = new ListGamesService();
+        ListGamesService listGamesService = new ListGamesService(userDAO, gameDAO, authDAO);
 
         // When & Then
         assertThrows(UnauthorizedException.class, () -> listGamesService.listGames(request, "invalidAuthToken"));

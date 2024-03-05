@@ -1,6 +1,9 @@
 package handler;
 
+import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
+import dataAccess.GameDAO;
+import dataAccess.UserDAO;
 import requests.LoginRequest;
 import responses.AuthResponse;
 import service.LoginService;
@@ -9,7 +12,12 @@ import spark.Request;
 
 
 public class LoginHandler extends BaseHandler<LoginRequest, AuthResponse> {
-    private LoginService loginService = new LoginService();
+    private LoginService loginService;
+
+    public LoginHandler(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
+        super(userDAO, gameDAO, authDAO);
+        this.loginService = new LoginService(userDAO, gameDAO, authDAO);
+    }
 
     @Override
     protected LoginRequest parseRequest(Request req) {

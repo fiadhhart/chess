@@ -1,8 +1,6 @@
 package service;
 
 import dataAccess.*;
-import dataAccess.AuthMemDAO;
-import dataAccess.GameMemDAO;
 import requests.BaseRequest;
 import responses.GameResponse;
 import responses.ListGamesResponse;
@@ -11,10 +9,16 @@ import service.exceptions.UnauthorizedException;
 import java.util.List;
 
 public class ListGamesService {
-    public ListGamesResponse listGames(BaseRequest request, String authToken) throws UnauthorizedException, DataAccessException {
-        GameDAO gameDAO = new GameMemDAO();
-        AuthDAO authDAO = new AuthMemDAO();
+    private UserDAO userDAO;
+    private GameDAO gameDAO;
+    private AuthDAO authDAO;
 
+    public ListGamesService(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
+        this.userDAO = userDAO;
+        this.gameDAO = gameDAO;
+        this.authDAO = authDAO;
+    }
+    public ListGamesResponse listGames(BaseRequest request, String authToken) throws UnauthorizedException, DataAccessException {
         try {
             String verifiedAuthToken = authDAO.getAuth(authToken);
             if (verifiedAuthToken != null) {

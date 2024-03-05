@@ -2,8 +2,6 @@ package service;
 
 import chess.ChessGame;
 import dataAccess.*;
-import dataAccess.AuthMemDAO;
-import dataAccess.GameMemDAO;
 import requests.JoinGameRequest;
 import responses.BaseResponse;
 import service.exceptions.AlreadyTakenException;
@@ -13,11 +11,18 @@ import service.exceptions.UnauthorizedException;
 import java.util.Objects;
 
 public class JoinGameService {
+    private UserDAO userDAO;
+    private GameDAO gameDAO;
+    private AuthDAO authDAO;
+
+    public JoinGameService(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
+        this.userDAO = userDAO;
+        this.gameDAO = gameDAO;
+        this.authDAO = authDAO;
+    }
     public BaseResponse joinGame(JoinGameRequest request, String authToken) throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
         ChessGame.TeamColor playerColor = request.getPlayerColor();
         Integer gameID = request.getGameID();
-        AuthDAO authDAO = new AuthMemDAO();
-        GameDAO gameDAO = new GameMemDAO();
         String username = authDAO.getUsername(authToken);
 
         if (gameID == null) {

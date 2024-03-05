@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AuthDAOTest {
+class AuthMemDAOTest {
+
     private Database database;
     private AuthDAO authDAO;
 
@@ -14,7 +15,7 @@ class AuthDAOTest {
     void setUp() {
         database = new Database();
         database.clearDatabase();
-        authDAO = new AuthMemDAO();
+        authDAO = new AuthMemDAO(database);
     }
 
 
@@ -33,7 +34,7 @@ class AuthDAOTest {
         String testAuthTokenOne = authDAO.createAuth(usernameOne);
         String test = authDAO.getAuth(testAuthTokenOne);
 
-            assertNotNull(authDAO.getAuth(testAuthTokenOne));
+        assertNotNull(authDAO.getAuth(testAuthTokenOne));
         assertEquals(usernameOne, authDAO.getUsername(testAuthTokenOne));
     }
 

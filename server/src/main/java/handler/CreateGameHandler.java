@@ -1,6 +1,9 @@
 package handler;
 
+import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
+import dataAccess.GameDAO;
+import dataAccess.UserDAO;
 import requests.CreateGameRequest;
 import responses.CreateGameResponse;
 import service.exceptions.BadRequestException;
@@ -9,7 +12,12 @@ import service.exceptions.UnauthorizedException;
 import spark.Request;
 
 public class CreateGameHandler extends BaseHandler<CreateGameRequest, CreateGameResponse>{
-    private CreateGameService createGameService = new CreateGameService();
+    private CreateGameService createGameService;
+
+    public CreateGameHandler(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
+        super(userDAO, gameDAO, authDAO);
+        this.createGameService = new CreateGameService(userDAO, gameDAO, authDAO);
+    }
 
     @Override
     protected CreateGameRequest parseRequest(Request req) {
