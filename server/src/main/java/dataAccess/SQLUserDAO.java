@@ -2,8 +2,6 @@ package dataAccess;
 
 import java.sql.*;
 
-import static dataAccess.DatabaseManager.getConnection;
-
 public class SQLUserDAO implements UserDAO{
 
     public SQLUserDAO() throws DataAccessException{
@@ -14,7 +12,7 @@ public class SQLUserDAO implements UserDAO{
     @Override
     public void createUser(String username, String password, String email) throws DataAccessException {
         String sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
-        try (Connection conn = getConnection();
+        try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
@@ -28,7 +26,7 @@ public class SQLUserDAO implements UserDAO{
     @Override
     public String getUser(String username) throws DataAccessException {
         String sql = "SELECT username FROM users WHERE username = ?";
-        try (Connection conn = getConnection();
+        try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -45,7 +43,7 @@ public class SQLUserDAO implements UserDAO{
     @Override
     public String[] getUser(String username, String password) throws DataAccessException {
         String sql = "SELECT username, password FROM users WHERE username = ? AND password = ?";
-        try (Connection conn = getConnection();
+        try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
@@ -63,7 +61,7 @@ public class SQLUserDAO implements UserDAO{
     @Override
     public void clear() throws DataAccessException {
         String sql = "DELETE FROM users";
-        try (Connection conn = getConnection();
+        try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
