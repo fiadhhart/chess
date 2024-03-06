@@ -55,8 +55,11 @@ public class GameMemDAO implements GameDAO {
             database.games.get(gameID).setWhiteUsername(username);
         } else if (playerColor == ChessGame.TeamColor.BLACK) {
             database.games.get(gameID).setBlackUsername(username);
+
         } else if (playerColor == null) {
             //add as observer
+        } else {
+            throw new DataAccessException("playerColor is not type ChessGame.TeamColor");
         }
     }
 

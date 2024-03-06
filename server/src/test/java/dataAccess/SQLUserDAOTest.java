@@ -7,17 +7,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class SQLUserDAOTest {
     private static UserDAO userDAO;
     private static AuthDAO authDAO;
+    private static GameDAO gameDAO;
 
     @BeforeEach
     void setUp() throws DataAccessException {
         userDAO = new SQLUserDAO();
         authDAO = new SQLAuthDAO();
+        gameDAO = new SQLGameDAO();
         authDAO.clear();
+        gameDAO.clear();
         userDAO.clear();
     }
 
     @AfterAll
     public static void cleanUp() throws DataAccessException {
+        authDAO.clear();
+        gameDAO.clear();
         userDAO.clear();
     }
 

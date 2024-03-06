@@ -9,13 +9,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class SQLAuthDAOTest {
     private static AuthDAO authDAO;
     private static UserDAO userDAO;
+    private static GameDAO gameDAO;
     private String username = "testUser";
 
     @BeforeEach
     void setUp() throws DataAccessException {
         userDAO = new SQLUserDAO();
         authDAO = new SQLAuthDAO();
+        gameDAO = new SQLGameDAO();
         authDAO.clear();
+        gameDAO.clear();
         userDAO.clear();
 
         userDAO.createUser(username, "testPassword", "test@example.com");
@@ -24,6 +27,7 @@ class SQLAuthDAOTest {
     @AfterAll
     public static void cleanUp() throws DataAccessException {
         authDAO.clear();
+        gameDAO.clear();
         userDAO.clear();
     }
 
