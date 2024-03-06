@@ -16,9 +16,9 @@ public class ClearService {
     }
     public BaseResponse clear(BaseRequest request) throws DataAccessException {
         try {
-            userDAO.clear();
             gameDAO.clear();
             authDAO.clear();
+            userDAO.clear();
             return new BaseResponse();
 
         } catch (DataAccessException e) {
