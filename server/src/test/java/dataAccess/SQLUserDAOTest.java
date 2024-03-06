@@ -1,6 +1,7 @@
 package dataAccess;
 
 import org.junit.jupiter.api.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,7 +83,9 @@ class SQLUserDAOTest {
 
         assertNotNull(userData);
         assertEquals(username, userData[0]);
-        assertEquals(password, userData[1]);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        assertTrue(encoder.matches(password, userData[1]));
     }
 
     @Test
