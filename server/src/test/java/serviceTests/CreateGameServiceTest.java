@@ -1,4 +1,4 @@
-package service;
+package serviceTests;
 
 import dataAccess.*;
 import dataAccess.memory.AuthMemDAO;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.CreateGameRequest;
 import responses.CreateGameResponse;
+import service.CreateGameService;
 import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 

@@ -1,4 +1,4 @@
-package service;
+package serviceTests;
 
 import dataAccess.*;
 import dataAccess.memory.Database;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.RegisterRequest;
 import responses.AuthResponse;
+import service.RegisterService;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 

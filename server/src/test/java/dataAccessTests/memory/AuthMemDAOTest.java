@@ -1,7 +1,9 @@
-package dataAccess.memory;
+package dataAccessTests.memory;
 
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
+import dataAccess.memory.AuthMemDAO;
+import dataAccess.memory.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

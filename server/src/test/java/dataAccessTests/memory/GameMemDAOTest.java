@@ -1,8 +1,10 @@
-package dataAccess.memory;
+package dataAccessTests.memory;
 
 import chess.ChessGame;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
+import dataAccess.memory.Database;
+import dataAccess.memory.GameMemDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import responses.GameResponse;

@@ -1,5 +1,6 @@
-package dataAccess;
+package dataAccessTests;
 
+import dataAccess.*;
 import org.junit.jupiter.api.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

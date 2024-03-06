@@ -1,4 +1,4 @@
-package service;
+package serviceTests;
 
 import chess.ChessGame;
 import dataAccess.*;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.JoinGameRequest;
 import responses.BaseResponse;
+import service.JoinGameService;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;

@@ -9,7 +9,7 @@ import java.util.Map;
 
 
 public class Database {
-    protected Map<String, UserData> users = new HashMap<>();     //key is username
+    public Map<String, UserData> users = new HashMap<>();     //key is username
     protected Map<Integer, GameData> games = new HashMap<>();    //key is gameID
     protected Map<String, AuthData> auths = new HashMap<>();     //key is authToken
 

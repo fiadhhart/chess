@@ -1,4 +1,4 @@
-package service;
+package serviceTests;
 
 import dataAccess.*;
 import dataAccess.memory.AuthMemDAO;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.BaseRequest;
 import responses.BaseResponse;
+import service.ClearService;
 
 import static org.junit.jupiter.api.Assertions.*;
 
