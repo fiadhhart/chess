@@ -1,6 +1,8 @@
 package dataAccess;
 
 import chess.ChessGame;
+import com.google.gson.Gson;
+import requests.BaseRequest;
 import responses.GameResponse;
 import java.sql.*;
 
@@ -16,10 +18,15 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public Integer createGame(String gameName) throws DataAccessException {
-        String sql = "INSERT INTO games (gameName) VALUES (?)";
+        ChessGame chessGame = new ChessGame();
+        Gson gson = new Gson();
+        String jsonChessGame = gson.toJson(chessGame);
+
+        String sql = "INSERT INTO games (gameName, game) VALUES (?, ?)";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, gameName);
+            preparedStatement.setString(2, jsonChessGame);
             preparedStatement.executeUpdate();
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
