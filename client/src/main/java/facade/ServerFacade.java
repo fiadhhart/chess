@@ -93,7 +93,7 @@ public class ServerFacade {
         connection.setDoOutput(true);
 
         if (authToken != null) {
-            connection.setRequestProperty("Authorization", "Bearer " + authToken);
+            connection.setRequestProperty("Authorization", authToken);
         }
 
         if (requestBody != null) {

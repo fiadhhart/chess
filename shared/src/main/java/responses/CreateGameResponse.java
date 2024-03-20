@@ -15,7 +15,7 @@ public class CreateGameResponse extends BaseResponse{
     }
 
 
-    public int getGameID() {
+    public Integer getGameID() {
         return gameID;
     }
     public void setGameID(Integer gameID) {
