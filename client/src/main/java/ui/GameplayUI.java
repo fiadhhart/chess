@@ -1,5 +1,6 @@
 package ui;
 
+import chess.ChessBoard;
 import facade.ServerFacade;
 
 public class GameplayUI {
@@ -9,5 +10,11 @@ public class GameplayUI {
 
         System.out.println("In gameplayUI");
 
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+
+        DrawBoardTool drawBoardTool = new DrawBoardTool();
+        drawBoardTool.drawWhiteBoard(board);
+        drawBoardTool.drawBlackBoard(board);
     }
 }

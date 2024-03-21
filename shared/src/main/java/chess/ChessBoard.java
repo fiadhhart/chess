@@ -108,4 +108,8 @@ public class ChessBoard {
 
         return clonedBoard;
     }
+
+    public ChessPiece[][] getSquares() {
+        return squares;
+    }
 }

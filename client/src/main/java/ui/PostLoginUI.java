@@ -5,7 +5,6 @@ import facade.ServerFacade;
 import requests.BaseRequest;
 import requests.CreateGameRequest;
 import requests.JoinGameRequest;
-import requests.LoginRequest;
 import responses.*;
 
 import java.util.*;
