@@ -36,8 +36,8 @@ public class DrawBoardTool {
 
         int rowCounter = 0;
         for (int i = 0; i < 4; ++i) {
-            printRow(rowCounter, true, false);
-            printRow(rowCounter + 1, false, false);
+            printRow(rowCounter, false, false);
+            printRow(rowCounter + 1, true, false);
             rowCounter += 2;
         }
 

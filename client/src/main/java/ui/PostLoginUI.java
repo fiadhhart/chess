@@ -59,7 +59,7 @@ public class PostLoginUI {
                     //Logs out the user. Calls the server logout API to logout the user.
                     // After logging out with the server, the client should transition to the Prelogin UI.
                     logout();
-                    break;
+                    return;
                 case "help":
                     //Displays text informing the user what actions they can take.
                     help();
@@ -111,7 +111,8 @@ public class PostLoginUI {
             BaseResponse response = serverFacade.logoutUser(request, this.authToken);
 
             if (response.getMessage() == null) {
-                new PreLoginUI().run(serverFacade);
+                System.out.println("logged out");
+                return;
             } else {
                 System.out.println(response.getMessage());
             }
@@ -129,7 +130,7 @@ public class PostLoginUI {
             CreateGameResponse response = serverFacade.createGame(request, authToken);
 
             if (response.getMessage() == null) {
-                System.out.println("Successfully created game: " + gameName);
+                System.out.println("Created game: " + gameName);
             } else {
                 System.out.println(response.getMessage());
             }
