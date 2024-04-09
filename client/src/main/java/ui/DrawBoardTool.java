@@ -3,6 +3,7 @@ package ui;
 import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessPiece;
+import chess.ChessPosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public class DrawBoardTool {
     private ChessPiece[][] squares;
 
-    public void drawWhiteBoard(ChessBoard board){   //white player at bottom
+    public void drawWhiteBoard(ChessBoard board, List<ChessPosition> highlights){   //white player at bottom
         this.squares = board.getSquares();
 
         System.out.print(EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY);
@@ -19,15 +20,15 @@ public class DrawBoardTool {
 
         int rowCounter = 7;
         for (int i = 0; i < 4; ++i) {
-            printRow(rowCounter, true, true);
-            printRow(rowCounter - 1, false, true);
+            printRow(rowCounter, true, true, highlights);
+            printRow(rowCounter - 1, false, true, highlights);
             rowCounter -= 2;
         }
 
         printHeader("    a  b  c  d  e  f  g  h    ");
     }
 
-    public void drawBlackBoard(ChessBoard board){   //black player at bottom
+    public void drawBlackBoard(ChessBoard board, List<ChessPosition> highlights){   //black player at bottom
         this.squares = board.getSquares();
 
         System.out.print(EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY);
@@ -36,8 +37,8 @@ public class DrawBoardTool {
 
         int rowCounter = 0;
         for (int i = 0; i < 4; ++i) {
-            printRow(rowCounter, false, false);
-            printRow(rowCounter + 1, true, false);
+            printRow(rowCounter, false, false, highlights);
+            printRow(rowCounter + 1, true, false, highlights);
             rowCounter += 2;
         }
 
@@ -52,7 +53,7 @@ public class DrawBoardTool {
         System.out.print("\n");
     }
 
-    private void printRow(int rowNumber, boolean isWhiteFirst, boolean leftToRight) {
+    private void printRow(int rowNumber, boolean isWhiteFirst, boolean leftToRight, List<ChessPosition> highlights) {
         System.out.print(EscapeSequences.SET_BG_COLOR_DARK_GREY);
         System.out.print(" " + (rowNumber+1) + " ");
 
@@ -66,13 +67,27 @@ public class DrawBoardTool {
             endCol = -1;
             step = -1;
         }
+
         for (int colNumber = startCol; colNumber != endCol; colNumber += step) {
+            ChessPosition currentPosition = new ChessPosition(rowNumber + 1, colNumber + 1);
+            boolean isHighlighted = highlights != null && highlights.contains(currentPosition);
+
             if ((colNumber % 2 == 0 && isWhiteFirst) || (colNumber % 2 != 0 && !isWhiteFirst)) {
-                System.out.print(EscapeSequences.SET_BG_COLOR_WHITE);
+                if (isHighlighted) {
+                    System.out.print(EscapeSequences.SET_BG_COLOR_GREEN);
+                }else{
+                    System.out.print(EscapeSequences.SET_BG_COLOR_WHITE);
+                }
             } else {
-                System.out.print(EscapeSequences.SET_BG_COLOR_BLACK);
+                if (isHighlighted) {
+                    System.out.print(EscapeSequences.SET_BG_COLOR_GREEN);
+                }else{
+                    System.out.print(EscapeSequences.SET_BG_COLOR_BLACK);
+                }
             }
             System.out.print(getTypeAndColor(rowNumber, colNumber));
+
+            System.out.print(EscapeSequences.RESET_BG_COLOR);
         }
 
         System.out.print(EscapeSequences.SET_BG_COLOR_DARK_GREY);

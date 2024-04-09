@@ -3,8 +3,7 @@ package ui;
 import chess.*;
 import facade.ServerFacade;
 
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class GameplayUI {
     private ServerFacade serverFacade;
@@ -28,8 +27,8 @@ public class GameplayUI {
         game.setTeamTurn(ChessGame.TeamColor.WHITE);
         this.game = game;
 
-        this.drawBoardTool.drawWhiteBoard(this.game.getBoard());
-        this.drawBoardTool.drawBlackBoard(this.game.getBoard());
+        this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), null);
+        this.drawBoardTool.drawBlackBoard(this.game.getBoard(), null);
         //
 
         Scanner scanner = new Scanner(System.in);
@@ -109,26 +108,57 @@ public class GameplayUI {
 
     private void redraw(){
         if (this.turn == ChessGame.TeamColor.BLACK){
-            this.drawBoardTool.drawBlackBoard(this.game.getBoard());
+            this.drawBoardTool.drawBlackBoard(this.game.getBoard(), null);
         }else{  //white or null(observer)
-            this.drawBoardTool.drawWhiteBoard(this.game.getBoard());
+            this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), null);
         }
     }
     private void leave(){
-
+        ///FIXME
     }
+
     private void move(Scanner scanner) throws InvalidMoveException {
-        System.out.println("Enter the position of the piece you would like to move (i.e. d4).");
+        System.out.println("Enter the position of the piece you would like to move (i.e. d4)");
         String startInput = scanner.next();
-        System.out.println("Enter the position you would like to move this piece to (i.e. d4).");
+        System.out.println("Enter the position you would like to move this piece to (i.e. d4)");
         String endInput = scanner.next();
 
         ChessPosition startPosition = parsePosition(startInput);
         ChessPosition endPosition = parsePosition(endInput);
-        //check if need promote
-        ChessMove move = new ChessMove(startPosition, endPosition);
+
+        ChessPiece.PieceType promotionChoice = null;
+        ChessMove move = null;
+        if (this.game.getBoard().getPiece(startPosition).getPieceType() == ChessPiece.PieceType.PAWN){
+            if ((this.turn == ChessGame.TeamColor.WHITE
+                    && startPosition.getRow() == 7)
+             || (this.turn == ChessGame.TeamColor.BLACK
+                    && startPosition.getRow() == 2) ){
+
+                System.out.println("Enter the type you would like to promote to [KNIGHT|ROOK|QUEEN|BISHOP]:");
+                String promoteInput = scanner.next();
+                switch (promoteInput) {
+                    case "KNIGHT" -> promotionChoice = ChessPiece.PieceType.KNIGHT;
+                    case "ROOK" -> promotionChoice = ChessPiece.PieceType.ROOK;
+                    case "QUEEN" -> promotionChoice = ChessPiece.PieceType.QUEEN;
+                    case "BISHOP" -> promotionChoice = ChessPiece.PieceType.BISHOP;
+                    case null, default -> {
+                        System.out.println("not a valid promotion option");
+                        return;
+                    }
+                }
+            }
+
+            move = new ChessMove(startPosition, endPosition, promotionChoice);
+        }else{
+            move = new ChessMove(startPosition, endPosition);
+        }
+
         this.game.makeMove(move);
-        //check if does the nifty things like checkmate and whatnot
+
+        boolean isInCheck = this.game.isInCheck(this.turn);
+        boolean isInCheckmate = this.game.isInCheckmate(this.turn);
+        boolean isInStalemate = this.game.isInStalemate(this.turn);
+        ///FIXME
 
     }
     public ChessPosition parsePosition(String position) {
@@ -139,6 +169,21 @@ public class GameplayUI {
 
 
     private void highlight(Scanner scanner){
+        System.out.println("Enter the position of the piece (i.e. d4)");
+        String positionInput = scanner.next();
+        ChessPosition position = parsePosition(positionInput);
+
+        Collection<ChessMove> validMoves = this.game.validMoves(position);
+        List<ChessPosition> endPositions = new ArrayList<>();
+        for (ChessMove move : validMoves) {
+            endPositions.add(move.getEndPosition());
+        }
+
+        if (this.turn == ChessGame.TeamColor.BLACK){
+            this.drawBoardTool.drawBlackBoard(this.game.getBoard(), endPositions);
+        }else{  //white or null(observer)
+            this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), endPositions);
+        }
 
     }
 
