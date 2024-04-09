@@ -195,7 +195,7 @@ public class PostLoginUI {
 
             if (response.getMessage() == null) {
                 //new GameplayUI().run(serverFacade, playerColor, game);
-                new GameplayUI().run(serverFacade, playerColor);
+                new GameplayUI().run(playerColor);
 
             } else {
                 System.out.println(response.getMessage());
@@ -223,7 +223,7 @@ public class PostLoginUI {
 
             if (response.getMessage() == null) {
                 //new GameplayUI().run(serverFacade, null, game);
-                new GameplayUI().run(serverFacade, null);
+                new GameplayUI().run(null);
 
             } else {
                 System.out.println(response.getMessage());

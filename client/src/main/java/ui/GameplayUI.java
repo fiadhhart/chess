@@ -6,29 +6,29 @@ import facade.ServerFacade;
 import java.util.*;
 
 public class GameplayUI {
-    private ServerFacade serverFacade;
-    private ChessGame.TeamColor turn;  //null if observer
+    //private ServerFacade serverFacade;
+    private ChessGame.TeamColor userColor;  //null if observer
     private ChessGame game;
     private DrawBoardTool drawBoardTool = new DrawBoardTool();
 
     //public void run(ServerFacade serverFacade, ChessGame.TeamColor playerColor, ChessGame game) {
-    public void run(ServerFacade serverFacade, ChessGame.TeamColor playerColor) throws InvalidMoveException {
-        this.serverFacade = serverFacade;
-        this.turn = playerColor;
+    public void run(ChessGame.TeamColor userColor) throws InvalidMoveException {
+        //this.serverFacade = serverFacade;
         //this.game = game;
+        this.userColor = userColor;
 
-        //
-        System.out.println("In gameplayUI");
+        System.out.println("Now playing/viewing the game\n");
 
+        //FIXME: game from database
+        ChessGame game = new ChessGame();
         ChessBoard board = new ChessBoard();
         board.resetBoard();
-        ChessGame game = new ChessGame();
         game.setBoard(board);
         game.setTeamTurn(ChessGame.TeamColor.WHITE);
         this.game = game;
 
-        this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), null);
-        this.drawBoardTool.drawBlackBoard(this.game.getBoard(), null);
+        //this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), null);
+        //this.drawBoardTool.drawBlackBoard(this.game.getBoard(), null);
         //
 
         Scanner scanner = new Scanner(System.in);
@@ -107,17 +107,17 @@ public class GameplayUI {
     }
 
     private void redraw(){
-        if (this.turn == ChessGame.TeamColor.BLACK){
+        if (this.userColor == ChessGame.TeamColor.BLACK){
             this.drawBoardTool.drawBlackBoard(this.game.getBoard(), null);
         }else{  //white or null(observer)
             this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), null);
         }
     }
     private void leave(){
-        ///FIXME
+        ///FIXME: websocket notify
     }
 
-    private void move(Scanner scanner) throws InvalidMoveException {
+    private void move(Scanner scanner) {
         System.out.println("Enter the position of the piece you would like to move (i.e. d4)");
         String startInput = scanner.next();
         System.out.println("Enter the position you would like to move this piece to (i.e. d4)");
@@ -129,9 +129,9 @@ public class GameplayUI {
         ChessPiece.PieceType promotionChoice = null;
         ChessMove move = null;
         if (this.game.getBoard().getPiece(startPosition).getPieceType() == ChessPiece.PieceType.PAWN){
-            if ((this.turn == ChessGame.TeamColor.WHITE
+            if ((this.game.getTeamTurn() == ChessGame.TeamColor.WHITE
                     && startPosition.getRow() == 7)
-             || (this.turn == ChessGame.TeamColor.BLACK
+             || (this.game.getTeamTurn() == ChessGame.TeamColor.BLACK
                     && startPosition.getRow() == 2) ){
 
                 System.out.println("Enter the type you would like to promote to [KNIGHT|ROOK|QUEEN|BISHOP]:");
@@ -147,18 +147,23 @@ public class GameplayUI {
                     }
                 }
             }
-
             move = new ChessMove(startPosition, endPosition, promotionChoice);
         }else{
             move = new ChessMove(startPosition, endPosition);
         }
 
-        this.game.makeMove(move);
+        try{
+            this.game.makeMove(move);
+        }catch(InvalidMoveException e){
+            System.out.println("invalid move");
+            return;
+        }
 
-        boolean isInCheck = this.game.isInCheck(this.turn);
-        boolean isInCheckmate = this.game.isInCheckmate(this.turn);
-        boolean isInStalemate = this.game.isInStalemate(this.turn);
-        ///FIXME
+        boolean isInCheck = this.game.isInCheck(this.game.getTeamTurn());
+        boolean isInCheckmate = this.game.isInCheckmate(this.game.getTeamTurn());
+        boolean isInStalemate = this.game.isInStalemate(this.game.getTeamTurn());
+
+        ///FIXME: websocket notify and update others
 
     }
     public ChessPosition parsePosition(String position) {
@@ -168,8 +173,24 @@ public class GameplayUI {
     }
 
 
+    private void resign(Scanner scanner){
+        System.out.println("Confirm you want to resign [Yes|No]");
+        String confirmation = scanner.next();
+
+        if (Objects.equals(confirmation, "Yes")){
+            System.out.println("Resigned");
+            ////FIXME
+
+
+        } else if (Objects.equals(confirmation, "No")) {
+            System.out.println("Did not resign");
+        } else{
+            System.out.println("invalid input");
+        }
+    }
+
     private void highlight(Scanner scanner){
-        System.out.println("Enter the position of the piece (i.e. d4)");
+        System.out.println("Enter the position of the piece to see its options (i.e. d4)");
         String positionInput = scanner.next();
         ChessPosition position = parsePosition(positionInput);
 
@@ -179,28 +200,13 @@ public class GameplayUI {
             endPositions.add(move.getEndPosition());
         }
 
-        if (this.turn == ChessGame.TeamColor.BLACK){
+        if (this.game.getTeamTurn() == ChessGame.TeamColor.BLACK){
             this.drawBoardTool.drawBlackBoard(this.game.getBoard(), endPositions);
         }else{  //white or null(observer)
             this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), endPositions);
         }
-
     }
 
-    private void resign(Scanner scanner){
-        System.out.println("Confirm you want to resign [Yes|No]");
-        String confirmation = scanner.next();
 
-        if (Objects.equals(confirmation, "Yes")){
-            System.out.println("Resigned");
-            ////
-
-
-        } else if (Objects.equals(confirmation, "No")) {
-            System.out.println("Did not resign");
-        } else{
-            System.out.println("invalid input");
-        }
-    }
 
 }
