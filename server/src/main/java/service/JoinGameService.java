@@ -33,11 +33,16 @@ public class JoinGameService {
             String verifiedAuthToken = authDAO.getAuth(authToken);
             if (verifiedAuthToken != null) {
                 if(Objects.equals(gameDAO.getGame(gameID), gameID)){
-                    if(!gameDAO.isPlayerOccupied(playerColor, gameID)){
+
+                    if(playerColor == null){
                         gameDAO.updateGameUsername(playerColor, gameID, username);
                         return new BaseResponse();
-
-                    }else{
+                    }
+                    String userThere = gameDAO.getPlayer(playerColor, gameID);
+                    if(userThere == null || userThere.equals(username)){
+                        gameDAO.updateGameUsername(playerColor, gameID, username);
+                        return new BaseResponse();
+                    } else{
                         throw new AlreadyTakenException("Error: already taken");
                     }
 

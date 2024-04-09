@@ -173,4 +173,28 @@ public class SQLGameDAO implements GameDAO{
         }
         return null;
     }
+
+    @Override
+    public String getPlayer(ChessGame.TeamColor playerColor, Integer gameID) throws DataAccessException {
+        String username;
+        if (playerColor == ChessGame.TeamColor.WHITE) {username = "whiteUsername";}
+        else if (playerColor == ChessGame.TeamColor.BLACK) {username = "blackUsername";}
+        else {throw new DataAccessException("Invalid player color");}
+
+        String sql = "SELECT " + username + " FROM games WHERE gameID = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, gameID);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getString(username);
+                } else {
+                    // No username found for the specified player color
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error getting player: " + e.getMessage());
+        }
+    }
 }

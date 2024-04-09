@@ -186,14 +186,16 @@ public class PostLoginUI {
         JoinGameRequest request = new JoinGameRequest(playerColor, gameID);
 
         try {
-            AccessGameRequest accessGameRequest = new AccessGameRequest(gameID);
+            /*AccessGameRequest accessGameRequest = new AccessGameRequest(gameID);
             AccessGameResponse accessGameResponse = serverFacade.getChessGame(accessGameRequest, authToken);
             ChessGame game = accessGameResponse.getGame();
+             */
 
             BaseResponse response = serverFacade.joinGame(request, authToken);
 
             if (response.getMessage() == null) {
-                new GameplayUI().run(serverFacade, playerColor, game);
+                //new GameplayUI().run(serverFacade, playerColor, game);
+                new GameplayUI().run(serverFacade, playerColor);
 
             } else {
                 System.out.println(response.getMessage());
@@ -211,15 +213,17 @@ public class PostLoginUI {
         JoinGameRequest request = new JoinGameRequest(gameID);
 
         try {
+            /*
             AccessGameRequest accessGameRequest = new AccessGameRequest(gameID);
             AccessGameResponse accessGameResponse = serverFacade.getChessGame(accessGameRequest, authToken);
             ChessGame game = accessGameResponse.getGame();
+            */
 
             BaseResponse response = serverFacade.joinGame(request, authToken);
 
             if (response.getMessage() == null) {
-
-                new GameplayUI().run(serverFacade, null, game);
+                //new GameplayUI().run(serverFacade, null, game);
+                new GameplayUI().run(serverFacade, null);
 
             } else {
                 System.out.println(response.getMessage());

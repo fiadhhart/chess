@@ -173,7 +173,7 @@ public class ServerFacadeTests {
         BaseResponse joinGameResponse_empty = facade.joinGame(joinGameRequest_empty, authToken);  //BadRequest
 
         assertNotNull(joinGameResponse_badAuth.getMessage());
-        assertNotNull(joinGameResponse_whiteAgain.getMessage());
+        //assertNotNull(joinGameResponse_whiteAgain.getMessage());  //this functionality does work, but I changed it so the same user can return to a game
         assertNotNull(joinGameResponse_empty.getMessage());
     }
 

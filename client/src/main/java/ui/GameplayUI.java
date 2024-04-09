@@ -1,7 +1,6 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
+import chess.*;
 import facade.ServerFacade;
 
 import java.util.Objects;
@@ -9,24 +8,28 @@ import java.util.Scanner;
 
 public class GameplayUI {
     private ServerFacade serverFacade;
-    private ChessGame.TeamColor side;  //null if observer
+    private ChessGame.TeamColor turn;  //null if observer
     private ChessGame game;
+    private DrawBoardTool drawBoardTool = new DrawBoardTool();
 
-    public void run(ServerFacade serverFacade, ChessGame.TeamColor playerColor, ChessGame game) {
+    //public void run(ServerFacade serverFacade, ChessGame.TeamColor playerColor, ChessGame game) {
+    public void run(ServerFacade serverFacade, ChessGame.TeamColor playerColor) throws InvalidMoveException {
         this.serverFacade = serverFacade;
-        this.side = playerColor;
-        this.game = game;
-
+        this.turn = playerColor;
+        //this.game = game;
 
         //
         System.out.println("In gameplayUI");
 
-        //ChessBoard board = new ChessBoard();
-        //board.resetBoard();
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+        ChessGame game = new ChessGame();
+        game.setBoard(board);
+        game.setTeamTurn(ChessGame.TeamColor.WHITE);
+        this.game = game;
 
-        DrawBoardTool drawBoardTool = new DrawBoardTool();
-        drawBoardTool.drawWhiteBoard(game.getBoard());
-        drawBoardTool.drawBlackBoard(game.getBoard());
+        this.drawBoardTool.drawWhiteBoard(this.game.getBoard());
+        this.drawBoardTool.drawBlackBoard(this.game.getBoard());
         //
 
         Scanner scanner = new Scanner(System.in);
@@ -105,15 +108,36 @@ public class GameplayUI {
     }
 
     private void redraw(){
-
-
+        if (this.turn == ChessGame.TeamColor.BLACK){
+            this.drawBoardTool.drawBlackBoard(this.game.getBoard());
+        }else{  //white or null(observer)
+            this.drawBoardTool.drawWhiteBoard(this.game.getBoard());
+        }
     }
     private void leave(){
 
     }
-    private void move(Scanner scanner){
+    private void move(Scanner scanner) throws InvalidMoveException {
+        System.out.println("Enter the position of the piece you would like to move (i.e. d4).");
+        String startInput = scanner.next();
+        System.out.println("Enter the position you would like to move this piece to (i.e. d4).");
+        String endInput = scanner.next();
+
+        ChessPosition startPosition = parsePosition(startInput);
+        ChessPosition endPosition = parsePosition(endInput);
+        //check if need promote
+        ChessMove move = new ChessMove(startPosition, endPosition);
+        this.game.makeMove(move);
+        //check if does the nifty things like checkmate and whatnot
 
     }
+    public ChessPosition parsePosition(String position) {
+        int column = position.charAt(0) - 'a' + 1; // Convert letter to column number (1-indexed)
+        int row = Character.getNumericValue(position.charAt(1)); // Get numeric value of row
+        return new ChessPosition(row, column);
+    }
+
+
     private void highlight(Scanner scanner){
 
     }

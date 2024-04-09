@@ -2,6 +2,7 @@ package dataAccess.memory;
 import chess.ChessGame;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
+import jdk.jshell.spi.ExecutionControl;
 import model.GameData;
 import responses.GameResponse;
 
@@ -116,5 +117,28 @@ public class GameMemDAO implements GameDAO {
             }
         }
         return null;
+    }
+
+    @Override
+    public String getPlayer(ChessGame.TeamColor playerColor, Integer gameID) throws DataAccessException {
+        if (playerColor == ChessGame.TeamColor.WHITE){
+            String whiteUsername = database.games.get(gameID).getWhiteUsername();
+            if(whiteUsername == null){
+                return null;
+            }
+            return whiteUsername;
+
+        } else if (playerColor == ChessGame.TeamColor.BLACK) {
+            String blackUsername = database.games.get(gameID).getBlackUsername();
+            if(blackUsername == null){
+                return null;
+            }
+            return blackUsername;
+
+        } else if (playerColor == null) {
+            return null;
+        }else{
+            throw new DataAccessException("playerColor is not type ChessGame.TeamColor");
+        }
     }
 }
