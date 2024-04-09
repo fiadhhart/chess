@@ -106,4 +106,15 @@ public class GameMemDAO implements GameDAO {
     public void clear () throws DataAccessException{
         database.games.clear();
     }
+
+    @Override
+    public ChessGame getChessGame(Integer gameID) throws DataAccessException {
+        if (database.games.containsKey(gameID)) {
+            for (Map.Entry<Integer, GameData> entry : database.games.entrySet()) {
+                GameData game = entry.getValue();
+                return game.getGame();
+            }
+        }
+        return null;
+    }
 }

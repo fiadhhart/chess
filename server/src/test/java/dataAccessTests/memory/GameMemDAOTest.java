@@ -1,5 +1,6 @@
 package dataAccessTests.memory;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
@@ -111,5 +112,19 @@ class GameMemDAOTest {
         gameDAO.clear();
 
         assertEquals(0, gameDAO.listGames().size());
+    }
+
+    @Test
+    public void testGetChessGame() throws DataAccessException{
+        Integer gameID = gameDAO.createGame("TestGame");
+        ChessGame game = gameDAO.getChessGame(gameID);
+
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+        ChessGame.TeamColor turn = ChessGame.TeamColor.WHITE;
+
+        assertEquals(game.getBoard(), board);
+        assertEquals(game.getTeamTurn(), turn);
+
     }
 }

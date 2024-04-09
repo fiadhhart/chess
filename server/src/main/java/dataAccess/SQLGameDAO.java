@@ -1,5 +1,6 @@
 package dataAccess;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 import com.google.gson.Gson;
 import requests.BaseRequest;
@@ -19,6 +20,11 @@ public class SQLGameDAO implements GameDAO{
     @Override
     public Integer createGame(String gameName) throws DataAccessException {
         ChessGame chessGame = new ChessGame();
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+        chessGame.setBoard(board);
+        chessGame.setTeamTurn(ChessGame.TeamColor.WHITE);
+
         Gson gson = new Gson();
         String jsonChessGame = gson.toJson(chessGame);
 
@@ -147,5 +153,24 @@ public class SQLGameDAO implements GameDAO{
         } catch (SQLException e) {
             throw new DataAccessException("Error clearing games: " + e.getMessage());
         }
+    }
+
+    public ChessGame getChessGame(Integer gameID) throws DataAccessException{
+        String sql = "SELECT game FROM games WHERE gameID = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, gameID);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String jsonChessGame = resultSet.getString("game");
+
+                    Gson gson = new Gson();
+                    return gson.fromJson(jsonChessGame, ChessGame.class);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error getting chess game: " + e.getMessage());
+        }
+        return null;
     }
 }

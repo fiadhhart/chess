@@ -1,5 +1,6 @@
 package dataAccessTests;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 import dataAccess.*;
 import org.junit.jupiter.api.AfterAll;
@@ -165,5 +166,25 @@ class SQLGameDAOTest {
 
         List<GameResponse> games = gameDAO.listGames();
         assertTrue(games.isEmpty());
+    }
+
+    @Test
+    void testGetChessGame() throws DataAccessException{
+        gameDAO.clear();
+
+        Integer gameId = gameDAO.createGame("myGameName");
+
+        ChessGame game = gameDAO.getChessGame(gameId);
+
+
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+        ChessGame.TeamColor turn = ChessGame.TeamColor.WHITE;
+
+        assertEquals(game.getBoard(), board);
+        assertEquals(game.getTeamTurn(), turn);
+
+
+
     }
 }

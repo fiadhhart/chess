@@ -13,4 +13,6 @@ public interface GameDAO {
     String getGame(String gameName) throws DataAccessException;
     Integer getGame(Integer gameID) throws DataAccessException;
     void clear() throws DataAccessException;
+
+    ChessGame getChessGame(Integer gameID) throws DataAccessException;
 }

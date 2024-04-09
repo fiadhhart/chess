@@ -1,5 +1,8 @@
 package model;
+import chess.ChessBoard;
 import chess.ChessGame;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameData {
     private Integer gameID;
@@ -15,6 +18,11 @@ public class GameData {
         this.blackUsername = null;
         this.gameName = gameName;
         this.game = new ChessGame();
+
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+        this.game.setBoard(board);
+        this.game.setTeamTurn(ChessGame.TeamColor.WHITE);
     }
 
 
@@ -41,5 +49,11 @@ public class GameData {
     }
     public void setGameName(String gameName) {
         this.gameName = gameName;
+    }
+    public ChessGame getGame() {
+        return game;
+    }
+    public void setGame(ChessGame game) {
+        this.game = game;
     }
 }

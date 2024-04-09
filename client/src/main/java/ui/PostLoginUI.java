@@ -2,6 +2,7 @@ package ui;
 
 import chess.ChessGame;
 import facade.ServerFacade;
+import requests.AccessGameRequest;
 import requests.BaseRequest;
 import requests.CreateGameRequest;
 import requests.JoinGameRequest;
@@ -185,10 +186,14 @@ public class PostLoginUI {
         JoinGameRequest request = new JoinGameRequest(playerColor, gameID);
 
         try {
+            AccessGameRequest accessGameRequest = new AccessGameRequest(gameID);
+            AccessGameResponse accessGameResponse = serverFacade.getChessGame(accessGameRequest, authToken);
+            ChessGame game = accessGameResponse.getGame();
+
             BaseResponse response = serverFacade.joinGame(request, authToken);
 
             if (response.getMessage() == null) {
-                new GameplayUI().run(serverFacade);
+                new GameplayUI().run(serverFacade, playerColor, game);
 
             } else {
                 System.out.println(response.getMessage());
@@ -206,10 +211,15 @@ public class PostLoginUI {
         JoinGameRequest request = new JoinGameRequest(gameID);
 
         try {
+            AccessGameRequest accessGameRequest = new AccessGameRequest(gameID);
+            AccessGameResponse accessGameResponse = serverFacade.getChessGame(accessGameRequest, authToken);
+            ChessGame game = accessGameResponse.getGame();
+
             BaseResponse response = serverFacade.joinGame(request, authToken);
 
             if (response.getMessage() == null) {
-                new GameplayUI().run(serverFacade);
+
+                new GameplayUI().run(serverFacade, null, game);
 
             } else {
                 System.out.println(response.getMessage());

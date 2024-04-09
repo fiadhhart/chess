@@ -3,10 +3,7 @@ package facade;
 import chess.ChessGame;
 import com.google.gson.Gson;
 import requests.*;
-import responses.AuthResponse;
-import responses.BaseResponse;
-import responses.CreateGameResponse;
-import responses.ListGamesResponse;
+import responses.*;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -81,6 +78,14 @@ public class ServerFacade {
         String endpoint = baseUrl + "/db";
 
         return sendRequest("DELETE", endpoint, null, null, BaseResponse.class);
+    }
+
+    public AccessGameResponse getChessGame(AccessGameRequest request, String authToken) throws IOException {
+        Integer gameID = request.getGameID();
+
+        String endpoint = baseUrl + "/game/" + gameID; // Assuming the endpoint follows this pattern
+
+        return sendRequest("GET", endpoint, null, authToken, AccessGameResponse.class);
     }
 
 

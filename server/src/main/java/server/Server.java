@@ -6,6 +6,7 @@ import dataAccess.memory.Database;
 import dataAccess.memory.GameMemDAO;
 import dataAccess.memory.UserMemDAO;
 import handler.*;
+import requests.AccessGameRequest;
 import spark.*;
 
 public class Server {
@@ -44,6 +45,12 @@ public class Server {
         Spark.post("/game", (req, res) -> (new CreateGameHandler(userDAO, gameDAO, authDAO)).handle(req, res));
         Spark.put("/game", (req, res) -> (new JoinGameHandler(userDAO, gameDAO, authDAO)).handle(req, res));
         Spark.delete("/db", (req, res) -> (new ClearHandler(userDAO, gameDAO, authDAO)).handle(req, res));
+
+
+        Spark.get("/game/:id", (req, res) -> {
+            int gameID = Integer.parseInt(req.params(":id"));
+            return (new AccessGameHandler(userDAO, gameDAO, authDAO)).handle(req, res);
+        });
 
         Spark.awaitInitialization();
         return Spark.port();
