@@ -9,6 +9,8 @@ import handler.*;
 import requests.AccessGameRequest;
 import spark.*;
 
+import webSocket.WebSocketHandler;
+
 public class Server {
 
     public int run(int desiredPort) {
@@ -46,7 +48,10 @@ public class Server {
         Spark.put("/game", (req, res) -> (new JoinGameHandler(userDAO, gameDAO, authDAO)).handle(req, res));
         Spark.delete("/db", (req, res) -> (new ClearHandler(userDAO, gameDAO, authDAO)).handle(req, res));
 
+        //websocket endpoint
+        Spark.webSocket("/connect", new WebSocketHandler(userDAO, gameDAO, authDAO));
 
+        //I tried to make another... was not a success
         Spark.get("/game/:id", (req, res) -> {
             int gameID = Integer.parseInt(req.params(":id"));
             return (new AccessGameHandler(userDAO, gameDAO, authDAO)).handle(req, res);

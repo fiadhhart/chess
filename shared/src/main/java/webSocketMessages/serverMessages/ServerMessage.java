@@ -40,3 +40,4 @@ public class ServerMessage {
         return Objects.hash(getServerMessageType());
     }
 }
+

@@ -1,22 +1,11 @@
-import chess.*;
 import facade.ServerFacade;
-import server.Server;
 import ui.PreLoginUI;
 
-import java.io.IOException;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         System.out.println("♕ 240 Chess Client starting");
 
-        //Server server = new Server();
-        //server.run(8080);
-        ServerFacade serverFacade = new ServerFacade("http://localhost:" + 8080);
-
-        //serverFacade.clearDatabase(null);
-
+        ServerFacade serverFacade = new ServerFacade("http://localhost:" + 3030);
         new PreLoginUI().run(serverFacade);
-
-        //server.stop();
     }
 }

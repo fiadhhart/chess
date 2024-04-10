@@ -1,21 +1,29 @@
 package ui;
 
 import chess.*;
-import facade.ServerFacade;
-
+import webSocket.WebSocketClient;
+import webSocketMessages.serverMessages.ServerMessage;
+import javax.websocket.DeploymentException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
-public class GameplayUI {
+public class GameplayUI implements Notify{
     private ChessGame.TeamColor userColor;  //null if observer
     private Integer gameID;
     private ChessGame game;
     private DrawBoardTool drawBoardTool = new DrawBoardTool();
+    private WebSocketClient webSocketClient;
 
-    public void run(ChessGame.TeamColor userColor, Integer gameID) throws InvalidMoveException {
-        this.userColor = userColor;
+    public void run(String authToken, Integer gameID, ChessGame.TeamColor playerColor) throws InvalidMoveException, IOException, DeploymentException, URISyntaxException {
+        this.webSocketClient = new WebSocketClient(authToken, gameID, playerColor, this);
+        this.userColor = playerColor;
         this.gameID = gameID;
 
+
         System.out.println("Now playing/observing the game\n");
+        //FIXME: notify joined
+        //FIXME: notify observed
 
         //FIXME: game from database
         ChessGame game = new ChessGame();
@@ -24,10 +32,8 @@ public class GameplayUI {
         game.setBoard(board);
         game.setTeamTurn(ChessGame.TeamColor.WHITE);
         this.game = game;
-
-        //this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), null);
-        //this.drawBoardTool.drawBlackBoard(this.game.getBoard(), null);
         //
+
         redraw(null);
 
         Scanner scanner = new Scanner(System.in);
@@ -114,7 +120,7 @@ public class GameplayUI {
     }
     private void leave(){
         System.out.println("Leaving game");
-        ///FIXME: websocket notify
+        ///FIXME: websocket notify left
     }
 
     private void move(Scanner scanner) {
@@ -171,12 +177,13 @@ public class GameplayUI {
             return;
         }
 
-        ///FIXME: websocket notify and update others
+        ///FIXME: websocket notify moved and update others
 
         boolean isInCheck = this.game.isInCheck(this.game.getTeamTurn());
         boolean isInCheckmate = this.game.isInCheckmate(this.game.getTeamTurn());
         boolean isInStalemate = this.game.isInStalemate(this.game.getTeamTurn());
-        ///FIXME: websocket notifies
+        //FIXME: websocket notify in check
+        //FIXME: websocket notify in checkmate
 
     }
     private ChessPosition parsePosition(String position) {
@@ -192,7 +199,7 @@ public class GameplayUI {
 
         if (Objects.equals(confirmation, "Yes")){
             System.out.println("Resigned. Game over.");
-            ////FIXME: websocket notify
+            ////FIXME: websocket notify resigned
 
 
         } else if (Objects.equals(confirmation, "No")) {
@@ -223,4 +230,9 @@ public class GameplayUI {
         redraw(endPositions);
     }
 
+
+    @Override
+    public void notify(ServerMessage notification) {
+        System.out.println("testing");
+    }
 }

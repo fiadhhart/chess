@@ -194,8 +194,7 @@ public class PostLoginUI {
             BaseResponse response = serverFacade.joinGame(request, authToken);
 
             if (response.getMessage() == null) {
-                new GameplayUI().run(playerColor, gameID);
-
+                new GameplayUI().run(this.authToken, gameID, playerColor);
             } else {
                 System.out.println(response.getMessage());
             }
@@ -221,8 +220,7 @@ public class PostLoginUI {
             BaseResponse response = serverFacade.joinGame(request, authToken);
 
             if (response.getMessage() == null) {
-                new GameplayUI().run(null, gameID);
-
+                new GameplayUI().run(this.authToken, gameID, null);
             } else {
                 System.out.println(response.getMessage());
             }
@@ -231,5 +229,4 @@ public class PostLoginUI {
             System.out.println(exception.getMessage());
         }
     }
-
 }
