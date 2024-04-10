@@ -80,7 +80,7 @@ public class DrawBoardTool {
                 }
             } else {
                 if (isHighlighted) {
-                    System.out.print(EscapeSequences.SET_BG_COLOR_GREEN);
+                    System.out.print(EscapeSequences.SET_BG_COLOR_DARK_GREEN);
                 }else{
                     System.out.print(EscapeSequences.SET_BG_COLOR_BLACK);
                 }

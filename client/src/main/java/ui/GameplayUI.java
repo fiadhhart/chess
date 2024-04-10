@@ -6,18 +6,16 @@ import facade.ServerFacade;
 import java.util.*;
 
 public class GameplayUI {
-    //private ServerFacade serverFacade;
     private ChessGame.TeamColor userColor;  //null if observer
+    private Integer gameID;
     private ChessGame game;
     private DrawBoardTool drawBoardTool = new DrawBoardTool();
 
-    //public void run(ServerFacade serverFacade, ChessGame.TeamColor playerColor, ChessGame game) {
-    public void run(ChessGame.TeamColor userColor) throws InvalidMoveException {
-        //this.serverFacade = serverFacade;
-        //this.game = game;
+    public void run(ChessGame.TeamColor userColor, Integer gameID) throws InvalidMoveException {
         this.userColor = userColor;
+        this.gameID = gameID;
 
-        System.out.println("Now playing/viewing the game\n");
+        System.out.println("Now playing/observing the game\n");
 
         //FIXME: game from database
         ChessGame game = new ChessGame();
@@ -30,6 +28,7 @@ public class GameplayUI {
         //this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), null);
         //this.drawBoardTool.drawBlackBoard(this.game.getBoard(), null);
         //
+        redraw(null);
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -41,7 +40,7 @@ public class GameplayUI {
                     break;
                 case "redraw":
                     //Redraws the chess board upon the user’s request.
-                    redraw();
+                    redraw(null);
                     break;
                 case "leave":
                     //Removes the user from the game (whether they are playing or observing the game).
@@ -106,14 +105,15 @@ public class GameplayUI {
         System.out.print(EscapeSequences.RESET_TEXT_COLOR);
     }
 
-    private void redraw(){
+    private void redraw(List<ChessPosition> highlights){
         if (this.userColor == ChessGame.TeamColor.BLACK){
-            this.drawBoardTool.drawBlackBoard(this.game.getBoard(), null);
+            this.drawBoardTool.drawBlackBoard(this.game.getBoard(), highlights);
         }else{  //white or null(observer)
-            this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), null);
+            this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), highlights);
         }
     }
     private void leave(){
+        System.out.println("Leaving game");
         ///FIXME: websocket notify
     }
 
@@ -123,50 +123,63 @@ public class GameplayUI {
         System.out.println("Enter the position you would like to move this piece to (i.e. d4)");
         String endInput = scanner.next();
 
-        ChessPosition startPosition = parsePosition(startInput);
-        ChessPosition endPosition = parsePosition(endInput);
+        ChessPosition startPosition = null;
+        ChessPosition endPosition = null;
+        try{
+            startPosition = parsePosition(startInput);
+            endPosition = parsePosition(endInput);
+        }catch(Exception e){
+            System.out.println("invalid position");
+            return;
+        }
 
         ChessPiece.PieceType promotionChoice = null;
         ChessMove move = null;
-        if (this.game.getBoard().getPiece(startPosition).getPieceType() == ChessPiece.PieceType.PAWN){
-            if ((this.game.getTeamTurn() == ChessGame.TeamColor.WHITE
-                    && startPosition.getRow() == 7)
-             || (this.game.getTeamTurn() == ChessGame.TeamColor.BLACK
-                    && startPosition.getRow() == 2) ){
+        try{
+            if (this.game.getBoard().getPiece(startPosition).getPieceType() == ChessPiece.PieceType.PAWN){
+                if ((this.game.getTeamTurn() == ChessGame.TeamColor.WHITE
+                        && startPosition.getRow() == 7)
+                 || (this.game.getTeamTurn() == ChessGame.TeamColor.BLACK
+                        && startPosition.getRow() == 2) ){
 
-                System.out.println("Enter the type you would like to promote to [KNIGHT|ROOK|QUEEN|BISHOP]:");
-                String promoteInput = scanner.next();
-                switch (promoteInput) {
-                    case "KNIGHT" -> promotionChoice = ChessPiece.PieceType.KNIGHT;
-                    case "ROOK" -> promotionChoice = ChessPiece.PieceType.ROOK;
-                    case "QUEEN" -> promotionChoice = ChessPiece.PieceType.QUEEN;
-                    case "BISHOP" -> promotionChoice = ChessPiece.PieceType.BISHOP;
-                    case null, default -> {
-                        System.out.println("not a valid promotion option");
-                        return;
+                    System.out.println("Enter the type you would like to promote to [KNIGHT|ROOK|QUEEN|BISHOP]:");
+                    String promoteInput = scanner.next();
+                    switch (promoteInput) {
+                        case "KNIGHT" -> promotionChoice = ChessPiece.PieceType.KNIGHT;
+                        case "ROOK" -> promotionChoice = ChessPiece.PieceType.ROOK;
+                        case "QUEEN" -> promotionChoice = ChessPiece.PieceType.QUEEN;
+                        case "BISHOP" -> promotionChoice = ChessPiece.PieceType.BISHOP;
+                        case null, default -> {
+                            System.out.println("not a valid promotion option");
+                            return;
+                        }
                     }
                 }
-            }
-            move = new ChessMove(startPosition, endPosition, promotionChoice);
-        }else{
-            move = new ChessMove(startPosition, endPosition);
-        }
 
-        try{
+                move = new ChessMove(startPosition, endPosition, promotionChoice);
+            }else{
+                move = new ChessMove(startPosition, endPosition);
+            }
+
             this.game.makeMove(move);
+
         }catch(InvalidMoveException e){
             System.out.println("invalid move");
             return;
+        }catch(Exception e){
+            System.out.println("error creating move");
+            return;
         }
+
+        ///FIXME: websocket notify and update others
 
         boolean isInCheck = this.game.isInCheck(this.game.getTeamTurn());
         boolean isInCheckmate = this.game.isInCheckmate(this.game.getTeamTurn());
         boolean isInStalemate = this.game.isInStalemate(this.game.getTeamTurn());
-
-        ///FIXME: websocket notify and update others
+        ///FIXME: websocket notifies
 
     }
-    public ChessPosition parsePosition(String position) {
+    private ChessPosition parsePosition(String position) {
         int column = position.charAt(0) - 'a' + 1; // Convert letter to column number (1-indexed)
         int row = Character.getNumericValue(position.charAt(1)); // Get numeric value of row
         return new ChessPosition(row, column);
@@ -178,8 +191,8 @@ public class GameplayUI {
         String confirmation = scanner.next();
 
         if (Objects.equals(confirmation, "Yes")){
-            System.out.println("Resigned");
-            ////FIXME
+            System.out.println("Resigned. Game over.");
+            ////FIXME: websocket notify
 
 
         } else if (Objects.equals(confirmation, "No")) {
@@ -192,21 +205,22 @@ public class GameplayUI {
     private void highlight(Scanner scanner){
         System.out.println("Enter the position of the piece to see its options (i.e. d4)");
         String positionInput = scanner.next();
-        ChessPosition position = parsePosition(positionInput);
 
-        Collection<ChessMove> validMoves = this.game.validMoves(position);
+        ChessPosition position = null;
         List<ChessPosition> endPositions = new ArrayList<>();
-        for (ChessMove move : validMoves) {
-            endPositions.add(move.getEndPosition());
+        try {
+            position = parsePosition(positionInput);
+            Collection<ChessMove> validMoves = this.game.validMoves(position);
+            endPositions.add(position);
+            for (ChessMove move : validMoves) {
+                endPositions.add(move.getEndPosition());
+            }
+        }catch(Exception e){
+            System.out.println("invalid position");
+            return;
         }
 
-        if (this.game.getTeamTurn() == ChessGame.TeamColor.BLACK){
-            this.drawBoardTool.drawBlackBoard(this.game.getBoard(), endPositions);
-        }else{  //white or null(observer)
-            this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), endPositions);
-        }
+        redraw(endPositions);
     }
-
-
 
 }
