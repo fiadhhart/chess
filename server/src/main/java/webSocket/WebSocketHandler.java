@@ -1,6 +1,6 @@
 package webSocket;
 
-import chess.ChessGame;
+import chess.*;
 import com.google.gson.Gson;
 import dataAccess.*;
 import org.eclipse.jetty.websocket.api.Session;
@@ -30,7 +30,7 @@ public class WebSocketHandler {
     }
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message) throws IOException, DataAccessException {
+    public void onMessage(Session session, String message) throws IOException, DataAccessException, InvalidMoveException {
 
         /*
         //echo
@@ -41,44 +41,90 @@ public class WebSocketHandler {
         UserGameCommand msg = new Gson().fromJson(message, UserGameCommand.class);
         //webSocketSessions.addSessionToGame(msg.getGameID(), msg.getAuthString(), session);
 
+        Integer gameID;
+        ChessGame game;
+        String authToken;
+        String username;
+        ChessGame.TeamColor playerColor;
+
+
         switch(msg.getCommandType()){
             case UserGameCommand.CommandType.JOIN_PLAYER:
                 JoinPlayerCommand joinPlayerCommand = new Gson().fromJson(message, JoinPlayerCommand.class);
 
-                Integer gameID = joinPlayerCommand.gameID;
-                ChessGame game = gameDAO.getChessGame(gameID);
-                ServerMessage loadGameMessage = new LoadGameMessage(game);
-                session.getRemote().sendString(new Gson().toJson(loadGameMessage));
+                //load game to self
+                gameID = joinPlayerCommand.gameID;
+                game = gameDAO.getChessGame(gameID);
+                session.getRemote().sendString(new Gson().toJson(new LoadGameMessage(game)));
 
-                String authToken = joinPlayerCommand.getAuthString();
-                String username = authDAO.getUsername(authToken);
-                ChessGame.TeamColor playerColor = joinPlayerCommand.playerColor;
-                ServerMessage notificationMessage = new NotificationMessage( username + " joined the game as the " + playerColor.toString() + " player." );
-                session.getRemote().sendString(new Gson().toJson(notificationMessage));
-
-
-                //send broadcast of the notification except self
+                //notify all others //FIXME
+                authToken = joinPlayerCommand.getAuthString();
+                username = authDAO.getUsername(authToken);
+                playerColor = joinPlayerCommand.playerColor;
+                session.getRemote().sendString(new Gson().toJson(new NotificationMessage( username + " joined the game as the " + playerColor.toString() + " player." )));
 
                 break;
+
             case UserGameCommand.CommandType.JOIN_OBSERVER:
                 JoinObserverCommand joinObserverCommand = new Gson().fromJson(message, JoinObserverCommand.class);
-                //JoinObserver commandObj = new Gson().fromJson(message, JoinObserver.class);
-                //GameService.joinObserver(commandObj.getAuthString(), commandObj.getGameID(), webSocketSessions);
+
+                //load game to self
+                gameID = joinObserverCommand.gameID;
+                game = gameDAO.getChessGame(gameID);
+                session.getRemote().sendString(new Gson().toJson(new LoadGameMessage(game)));
+
+                //notify all others //FIXME
+                authToken = joinObserverCommand.getAuthString();
+                username = authDAO.getUsername(authToken);
+                session.getRemote().sendString(new Gson().toJson(new NotificationMessage( username + " joined the game as an observer." )));
+
                 break;
+
             case UserGameCommand.CommandType.MAKE_MOVE:
                 MakeMoveCommand makeMoveCommand = new Gson().fromJson(message, MakeMoveCommand.class);
-                //MakeMove commandObj = new Gson().fromJson(message, MakeMove.class);
-                //GameService.makeMove(commandObj.getAuthString(), commandObj.getGameID(), commandObj.getMove(), webSocketSessions);
+
+                //make the move
+                gameID = makeMoveCommand.gameID;
+                game = gameDAO.getChessGame(gameID);
+                ChessMove move = makeMoveCommand.move;
+                try {
+                    game.makeMove(move);
+                    gameDAO.setGame(gameID, game);
+                }catch(InvalidMoveException e) {
+                    throw e;
+                }
+
+                //notify all others //FIXME
+                authToken = makeMoveCommand.getAuthString();
+                username = authDAO.getUsername(authToken);
+                session.getRemote().sendString(new Gson().toJson(new NotificationMessage( username + " moved " + move.fancyToString() + "." )));
+
+                //load game to all others //FIXME
+                game = gameDAO.getChessGame(gameID);
+                session.getRemote().sendString(new Gson().toJson(new LoadGameMessage(game)));
+
                 break;
+
             case UserGameCommand.CommandType.LEAVE:
                 LeaveCommand leaveCommand = new Gson().fromJson(message, LeaveCommand.class);
-                //Leave commandObj = new Gson().fromJson(message, Leave.class);
-                //GameService.leaveGame(commandObj.getAuthString(), commandObj.getGameID(), webSocketSessions);
+
+                //notify all others //FIXME
+                gameID = leaveCommand.gameID;
+                authToken = leaveCommand.getAuthString();
+                username = authDAO.getUsername(authToken);
+                session.getRemote().sendString(new Gson().toJson(new NotificationMessage( username + " left the game." )));
+
                 break;
+
             case UserGameCommand.CommandType.RESIGN:
                 ResignCommand resignCommand = new Gson().fromJson(message, ResignCommand.class);
-                //Resign commandObj = new Gson().fromJson(message, Resign.class);
-                //GameService.resignGame(commandObj.getAuthString(), commandObj.getGameID(), webSocketSessions);
+
+                //notify all others //FIXME
+                gameID = resignCommand.gameID;
+                authToken = resignCommand.getAuthString();
+                username = authDAO.getUsername(authToken);
+                session.getRemote().sendString(new Gson().toJson(new NotificationMessage( username + " resigned." )));
+
                 break;
         }
     }

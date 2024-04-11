@@ -7,7 +7,7 @@ import webSocketMessages.serverMessages.ErrorMessage;
 import webSocketMessages.serverMessages.LoadGameMessage;
 import webSocketMessages.serverMessages.NotificationMessage;
 import webSocketMessages.serverMessages.ServerMessage;
-import webSocketMessages.userCommands.JoinPlayerCommand;
+import webSocketMessages.userCommands.UserGameCommand;
 
 import javax.websocket.DeploymentException;
 import java.io.IOException;
@@ -15,35 +15,22 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 public class GameplayUI implements Notify{
-    private ChessGame.TeamColor userColor;  //null if observer
+    private String authToken;
     private Integer gameID;
+    private ChessGame.TeamColor playerColor;  //null if observer
     private ChessGame game;
     private DrawBoardTool drawBoardTool = new DrawBoardTool();
-    private WebSocketClient webSocketClient;
 
     public void run(String authToken, Integer gameID, ChessGame.TeamColor playerColor) throws InvalidMoveException, IOException, DeploymentException, URISyntaxException {
-        this.webSocketClient = new WebSocketClient(authToken, gameID, playerColor, this);
-        this.userColor = playerColor;
+        this.playerColor = playerColor;
         this.gameID = gameID;
+        this.authToken = authToken;
 
-
-        System.out.println("Now playing/observing the game\n");
-        //FIXME: notify joined
-        //FIXME: notify observed
-
-        /*
-        //FIXME: game from database
-        ChessGame game = new ChessGame();
-        ChessBoard board = new ChessBoard();
-        board.resetBoard();
-        game.setBoard(board);
-        game.setTeamTurn(ChessGame.TeamColor.WHITE);
-        this.game = game;
-        //
-
-
-        redraw(null);
-        */
+        if(playerColor!=null){
+            new WebSocketClient(authToken, UserGameCommand.CommandType.JOIN_PLAYER, gameID, playerColor, null, this);
+        }else{
+            new WebSocketClient(authToken, UserGameCommand.CommandType.JOIN_OBSERVER, gameID, null, null, this);
+        }
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -119,20 +106,19 @@ public class GameplayUI implements Notify{
 
         System.out.print(EscapeSequences.RESET_TEXT_COLOR);
     }
-
     private void redraw(List<ChessPosition> highlights){
-        if (this.userColor == ChessGame.TeamColor.BLACK){
+        if (this.playerColor == ChessGame.TeamColor.BLACK){
             this.drawBoardTool.drawBlackBoard(this.game.getBoard(), highlights);
         }else{  //white or null(observer)
             this.drawBoardTool.drawWhiteBoard(this.game.getBoard(), highlights);
         }
     }
-    private void leave(){
+    private void leave() throws DeploymentException, URISyntaxException, IOException {
         System.out.println("Leaving game");
-        ///FIXME: websocket notify left
+        new WebSocketClient(authToken, UserGameCommand.CommandType.LEAVE, gameID, null, null, this);
     }
 
-    private void move(Scanner scanner) {
+    private void move(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
         System.out.println("Enter the position of the piece you would like to move (i.e. d4)");
         String startInput = scanner.next();
         System.out.println("Enter the position you would like to move this piece to (i.e. d4)");
@@ -175,18 +161,12 @@ public class GameplayUI implements Notify{
             }else{
                 move = new ChessMove(startPosition, endPosition);
             }
-
-            this.game.makeMove(move);
-
-        }catch(InvalidMoveException e){
-            System.out.println("invalid move");
-            return;
         }catch(Exception e){
             System.out.println("error creating move");
             return;
         }
 
-        ///FIXME: websocket notify moved and update others
+        new WebSocketClient(authToken, UserGameCommand.CommandType.MAKE_MOVE, gameID, null, move, this);
 
         boolean isInCheck = this.game.isInCheck(this.game.getTeamTurn());
         boolean isInCheckmate = this.game.isInCheckmate(this.game.getTeamTurn());
@@ -202,14 +182,13 @@ public class GameplayUI implements Notify{
     }
 
 
-    private void resign(Scanner scanner){
+    private void resign(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
         System.out.println("Confirm you want to resign [Yes|No]");
         String confirmation = scanner.next();
 
         if (Objects.equals(confirmation, "Yes")){
             System.out.println("Resigned. Game over.");
-            ////FIXME: websocket notify resigned
-
+            new WebSocketClient(authToken, UserGameCommand.CommandType.RESIGN, gameID, null, null, this);
 
         } else if (Objects.equals(confirmation, "No")) {
             System.out.println("Did not resign");
@@ -217,7 +196,6 @@ public class GameplayUI implements Notify{
             System.out.println("invalid input");
         }
     }
-
     private void highlight(Scanner scanner){
         System.out.println("Enter the position of the piece to see its options (i.e. d4)");
         String positionInput = scanner.next();

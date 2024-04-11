@@ -1,12 +1,12 @@
 package webSocket;
 
 import chess.ChessGame;
+import chess.ChessMove;
 import com.google.gson.Gson;
 import ui.Notify;
 import webSocketMessages.serverMessages.ServerMessage;
-import webSocketMessages.userCommands.JoinObserverCommand;
-import webSocketMessages.userCommands.JoinPlayerCommand;
-import webSocketMessages.userCommands.UserGameCommand;
+import webSocketMessages.userCommands.*;
+
 import javax.websocket.*;
 import java.net.URI;
 import java.io.IOException;
@@ -16,20 +16,46 @@ import java.sql.SQLOutput;
 public class WebSocketClient extends Endpoint{
     private Session session;
 
-    public WebSocketClient(String authToken, Integer gameID, ChessGame.TeamColor playerColor, Notify notify) throws URISyntaxException, DeploymentException, IOException {
+    public WebSocketClient(String authToken,
+                           UserGameCommand.CommandType commandType,
+                           Integer gameID,
+                           ChessGame.TeamColor playerColor,
+                           ChessMove move,
+                           Notify notify) throws URISyntaxException, DeploymentException, IOException{
+
+        establishConnection();
+
+        UserGameCommand userGameCommand = null;
+        switch (commandType) {
+            case JOIN_PLAYER:
+                userGameCommand = new JoinPlayerCommand(authToken, gameID, playerColor);
+                break;
+            case JOIN_OBSERVER:
+                userGameCommand = new JoinObserverCommand(authToken, gameID);
+                break;
+            case MAKE_MOVE:
+                userGameCommand = new MakeMoveCommand(authToken, gameID, move);
+                break;
+            case LEAVE:
+                userGameCommand = new LeaveCommand(authToken, gameID);
+                break;
+            case RESIGN:
+                userGameCommand = new ResignCommand(authToken, gameID);
+                break;
+        }
+
+        sendAndReceiveMessage(userGameCommand, notify);
+    }
+
+    // Establish WebSocket connection when the WebSocketClient is instantiated
+    private void establishConnection() throws URISyntaxException, DeploymentException, IOException {
         // Establish WebSocket connection when the WebSocketClient is instantiated
         URI uri = new URI("ws://localhost:3030/connect");
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         this.session = container.connectToServer(this, uri);
+    }
 
-        //make JOIN_PLAYER or JOIN_OBSERVER command
-        UserGameCommand userGameCommand;
-        if (playerColor != null){
-            userGameCommand = new JoinPlayerCommand(authToken, gameID, playerColor);
-        }else{
-            userGameCommand = new JoinObserverCommand(authToken, gameID);
-        }
-
+    private void sendAndReceiveMessage(UserGameCommand userGameCommand, Notify notify) throws IOException {
         this.session.addMessageHandler(new MessageHandler.Whole<String>() {
             @Override
             public void onMessage(String message) {

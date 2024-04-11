@@ -141,4 +141,15 @@ public class GameMemDAO implements GameDAO {
             throw new DataAccessException("playerColor is not type ChessGame.TeamColor");
         }
     }
+
+    @Override
+    public void setGame(Integer gameID, ChessGame game) throws DataAccessException {
+        if (database.games.containsKey(gameID)) {
+            GameData gameData = database.games.get(gameID);
+            gameData.setGame(game);
+            database.games.put(gameID, gameData);
+        } else {
+            throw new DataAccessException("Game does not exist in the database.");
+        }
+    }
 }

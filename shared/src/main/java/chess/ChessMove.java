@@ -67,4 +67,19 @@ public class ChessMove {
     public String toString() {
         return "Move{start@" + startPosition + ", end@" + endPosition + ", promote" + promotionPiece + "}\n";
     }
+
+    public String fancyToString(){
+        char chessColumn = (char) ('a' + startPosition.getColumn() - 1);
+        String fancyStartPos = String.valueOf(chessColumn) + startPosition.getRow();
+
+        chessColumn = (char) ('a' + endPosition.getColumn() - 1);
+        String fancyEndPos = String.valueOf(chessColumn) + endPosition.getRow();
+
+        String promotionInfo = "";
+        if(promotionPiece != null){
+            promotionInfo = " promoting to type " + promotionPiece.toString();
+        }
+
+        return "from " + fancyStartPos + " to " + fancyEndPos + promotionInfo;
+    }
 }
