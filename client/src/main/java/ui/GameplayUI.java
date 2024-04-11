@@ -21,7 +21,12 @@ public class GameplayUI implements Notify{
     private ChessGame game;
     private DrawBoardTool drawBoardTool = new DrawBoardTool();
 
-    public void run(String authToken, Integer gameID, ChessGame.TeamColor playerColor) throws InvalidMoveException, IOException, DeploymentException, URISyntaxException {
+    public GameplayUI() {}
+    public GameplayUI(String errorMessage) throws DeploymentException, URISyntaxException, IOException {
+        new WebSocketClient(errorMessage, this);
+    }
+
+    public void run(String authToken, Integer gameID, ChessGame.TeamColor playerColor) throws IOException, DeploymentException, URISyntaxException {
         this.playerColor = playerColor;
         this.gameID = gameID;
         this.authToken = authToken;
@@ -68,7 +73,7 @@ public class GameplayUI implements Notify{
                     highlight(scanner);
                     break;
                 default:
-                    //System.out.println("Error: invalid input in GameplayUI");  //FIXME: invalid input in GameplayUI
+                    //System.out.println("invalid input in GameplayUI");
                     String errorMessage = "invalid input in GameplayUI";
                     new WebSocketClient(errorMessage, this);
             }
@@ -122,12 +127,12 @@ public class GameplayUI implements Notify{
     private void move(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
         ChessGame.TeamColor whosTurn = this.game.getTeamTurn();
         if (this.playerColor == null){
-            //System.out.println("Error: must be a player to move"); //FIXME: error invalid position
+            //System.out.println("must be a player to move");
             String errorMessage = "must be a player to move";
             new WebSocketClient(errorMessage, this);
             return;
         } else if (this.playerColor != whosTurn){
-            //System.out.println("Error: not your turn"); //FIXME: not your turn
+            //System.out.println("not your turn");
             String errorMessage = "not your turn";
             new WebSocketClient(errorMessage, this);
             return;
@@ -144,7 +149,7 @@ public class GameplayUI implements Notify{
             startPosition = parsePosition(startInput);
             endPosition = parsePosition(endInput);
         }catch(Exception e){
-            //System.out.println("Error: invalid position"); //FIXME: error invalid position
+            //System.out.println("invalid position");
             String errorMessage = "invalid position";
             new WebSocketClient(errorMessage, this);
             return;
@@ -167,7 +172,9 @@ public class GameplayUI implements Notify{
                         case "QUEEN" -> promotionChoice = ChessPiece.PieceType.QUEEN;
                         case "BISHOP" -> promotionChoice = ChessPiece.PieceType.BISHOP;
                         case null, default -> {
-                            System.out.println("not a valid promotion option");
+                            //System.out.println("invalid promotion type");
+                            String errorMessage = "invalid promotion type";
+                            new WebSocketClient(errorMessage, this);
                             return;
                         }
                     }
@@ -178,45 +185,33 @@ public class GameplayUI implements Notify{
                 move = new ChessMove(startPosition, endPosition);
             }
         }catch(Exception e){
-            //System.out.println("Error: error creating move");  //FIXME: error: unable to create move
+            //System.out.println("error creating move");
             String errorMessage = "error creating move";
             new WebSocketClient(errorMessage, this);
             return;
         }
 
         new WebSocketClient(authToken, UserGameCommand.CommandType.MAKE_MOVE, gameID, null, move, this);
-
-        checkGameStatus();
-
     }
     private ChessPosition parsePosition(String position) {
         int column = position.charAt(0) - 'a' + 1; // Convert letter to column number (1-indexed)
         int row = Character.getNumericValue(position.charAt(1)); // Get numeric value of row
         return new ChessPosition(row, column);
     }
-    private void checkGameStatus(){
-        boolean isInCheck = this.game.isInCheck(this.game.getTeamTurn());
-        boolean isInCheckmate = this.game.isInCheckmate(this.game.getTeamTurn());
-        boolean isInStalemate = this.game.isInStalemate(this.game.getTeamTurn());
-        //FIXME: websocket notify in check
-        //FIXME: websocket notify in checkmate
-        //FIXME:
-    }
     private void resign(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
         System.out.println("Confirm you want to resign [Yes|No]");
         String confirmation = scanner.next();
 
         if (Objects.equals(confirmation, "Yes")){
-            System.out.println("Resigned. Game over.");
+            this.playerColor = null;
             new WebSocketClient(authToken, UserGameCommand.CommandType.RESIGN, gameID, null, null, this);
 
         } else if (Objects.equals(confirmation, "No")) {
             System.out.println("Did not resign");
         } else{
-            //System.out.println("Error: invalid input");    //FIXME: invalid input
+            //System.out.println("invalid input");
             String errorMessage = "invalid input";
             new WebSocketClient(errorMessage, this);
-
         }
     }
     private void highlight(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
@@ -233,6 +228,7 @@ public class GameplayUI implements Notify{
                 endPositions.add(move.getEndPosition());
             }
         }catch(Exception e){
+            //System.out.println("invalid position");
             String errorMessage = "invalid position";
             new WebSocketClient(errorMessage, this);
             return;

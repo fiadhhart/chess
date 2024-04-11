@@ -7,6 +7,11 @@ import requests.BaseRequest;
 import requests.CreateGameRequest;
 import requests.JoinGameRequest;
 import responses.*;
+import webSocket.WebSocketClient;
+
+import javax.websocket.DeploymentException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class PostLoginUI {
@@ -14,7 +19,7 @@ public class PostLoginUI {
     private ServerFacade serverFacade;
     private Map<Integer, Integer> lastListedGamesIDs = new HashMap<>();
 
-    public void run(ServerFacade serverFacade, String authToken) {
+    public void run(ServerFacade serverFacade, String authToken) throws DeploymentException, URISyntaxException, IOException {
         this.serverFacade = serverFacade;
         this.authToken = authToken;
 
@@ -165,7 +170,7 @@ public class PostLoginUI {
         }
 
     }
-    private void join(Scanner scanner){
+    private void join(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
         System.out.println("Game Number:");
         Integer gameNum = Integer.parseInt(scanner.next());
         Integer gameID = lastListedGamesIDs.get(gameNum);
@@ -195,14 +200,16 @@ public class PostLoginUI {
             if (response.getMessage() == null) {
                 new GameplayUI().run(this.authToken, gameID, playerColor);
             } else {
-                System.out.println(response.getMessage());
+                //System.out.println(response.getMessage());
+                new GameplayUI(response.getMessage());
             }
 
         } catch (Exception exception) {
-            System.out.println(exception.getMessage());
+            //System.out.println(exception.getMessage());
+            new GameplayUI(exception.getMessage());
         }
     }
-    private void observe(Scanner scanner){
+    private void observe(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
         System.out.println("Game Number:");
         Integer gameNum = Integer.parseInt(scanner.next());
         Integer gameID = lastListedGamesIDs.get(gameNum);
@@ -221,11 +228,13 @@ public class PostLoginUI {
             if (response.getMessage() == null) {
                 new GameplayUI().run(this.authToken, gameID, null);
             } else {
-                System.out.println(response.getMessage());
+                //System.out.println(response.getMessage());
+                new GameplayUI(response.getMessage());
             }
 
         } catch (Exception exception) {
-            System.out.println(exception.getMessage());
+            //System.out.println(exception.getMessage());
+            new GameplayUI(exception.getMessage());
         }
     }
 }

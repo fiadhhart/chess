@@ -124,6 +124,29 @@ public class WebSocketHandler {
                 messageToBroadcast = new NotificationMessage( username + " moved " + move.fancyToString() + "." );
                 webSocketSessions.broadcastSession(gameID, authToken, messageToBroadcast);
 
+                //check, checkmate, stalemate?
+                boolean isInCheck = game.isInCheck(game.getTeamTurn());
+                boolean isInCheckmate = game.isInCheckmate(game.getTeamTurn());
+                boolean isInStalemate = game.isInStalemate(game.getTeamTurn());
+                if(isInCheckmate){
+                    messageToBroadcast = new NotificationMessage(username + " is in checkmate. Game over");
+                    webSocketSessions.broadcastSession(gameID, null, messageToBroadcast);
+
+                    gameDAO.removeUser(ChessGame.TeamColor.WHITE, gameID);
+                    gameDAO.removeUser(ChessGame.TeamColor.BLACK, gameID);
+
+                }else if(isInCheck){
+                    messageToBroadcast = new NotificationMessage(username + " is in check.");
+                    webSocketSessions.broadcastSession(gameID, null, messageToBroadcast);
+
+                }else if(isInStalemate){
+                    messageToBroadcast = new NotificationMessage("The game is in stalemate. Game over");
+                    webSocketSessions.broadcastSession(gameID, null, messageToBroadcast);
+
+                    gameDAO.removeUser(ChessGame.TeamColor.WHITE, gameID);
+                    gameDAO.removeUser(ChessGame.TeamColor.BLACK, gameID);
+                }
+
                 break;
 
             case UserGameCommand.CommandType.LEAVE:
@@ -157,18 +180,21 @@ public class WebSocketHandler {
                 authToken = resignCommand.getAuthString();
                 username = authDAO.getUsername(authToken);
 
-                //remove player from db
+                //make sure is a player
                 whiteUsername = gameDAO.getPlayer(ChessGame.TeamColor.WHITE, gameID);
                 blackUsername = gameDAO.getPlayer(ChessGame.TeamColor.BLACK, gameID);
-                if (Objects.equals(username, whiteUsername)){
+                if (!Objects.equals(username, whiteUsername) && !Objects.equals(username, blackUsername)){
+                    session.getRemote().sendString(new Gson().toJson(new ErrorMessage("not a player")));
+                    return;
+                }else{
+
+                    //remove players from db
                     gameDAO.removeUser(ChessGame.TeamColor.WHITE, gameID);
-                }
-                if (Objects.equals(username, blackUsername)){
                     gameDAO.removeUser(ChessGame.TeamColor.BLACK, gameID);
                 }
 
                 //notify all
-                messageToBroadcast = new NotificationMessage( username + " resigned." );
+                messageToBroadcast = new NotificationMessage( username + " resigned. Game over" );
                 webSocketSessions.broadcastSession(gameID, null, messageToBroadcast);
 
                 break;
