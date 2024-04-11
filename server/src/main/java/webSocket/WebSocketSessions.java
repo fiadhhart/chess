@@ -1,6 +1,10 @@
 package webSocket;
 
+import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.Session;
+import webSocketMessages.serverMessages.ServerMessage;
+
+import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -23,7 +27,19 @@ public class WebSocketSessions {
         }
     }
 
-    //FIXME: make broadcast method with for loops
+    public void broadcastSession(Integer gameID, String excludeAuthToken, ServerMessage message) throws IOException {
+
+        Map<String, Session> sessionsForGame = getSessionsForGame(gameID);
+
+        for (Map.Entry<String, Session> entry : sessionsForGame.entrySet()) {
+            String authToken = entry.getKey();
+            Session session = entry.getValue();
+
+            if (excludeAuthToken == null || !authToken.equals(excludeAuthToken)) {
+                session.getRemote().sendString(new Gson().toJson(message));
+            }
+        }
+    }
 
     Map<String, Session> getSessionsForGame(Integer gameID) {
         return sessionMap.get(gameID);
