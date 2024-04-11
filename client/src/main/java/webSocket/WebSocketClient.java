@@ -7,7 +7,6 @@ import webSocketMessages.serverMessages.ServerMessage;
 import webSocketMessages.userCommands.JoinObserverCommand;
 import webSocketMessages.userCommands.JoinPlayerCommand;
 import webSocketMessages.userCommands.UserGameCommand;
-
 import javax.websocket.*;
 import java.net.URI;
 import java.io.IOException;
@@ -22,11 +21,11 @@ public class WebSocketClient extends Endpoint{
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         this.session = container.connectToServer(this, uri);
 
-        //make message (either JOIN_PLAYER or JOIN_OBSERVER)
-        UserGameCommand userGameCommand = null;
-        if (playerColor != null){   //join player
+        //make JOIN_PLAYER or JOIN_OBSERVER command
+        UserGameCommand userGameCommand;
+        if (playerColor != null){
             userGameCommand = new JoinPlayerCommand(authToken, gameID, playerColor);
-        }else{  //observer
+        }else{
             userGameCommand = new JoinObserverCommand(authToken, gameID);
         }
 

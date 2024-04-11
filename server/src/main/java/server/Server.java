@@ -8,7 +8,6 @@ import dataAccess.memory.UserMemDAO;
 import handler.*;
 import requests.AccessGameRequest;
 import spark.*;
-
 import webSocket.WebSocketHandler;
 
 public class Server {

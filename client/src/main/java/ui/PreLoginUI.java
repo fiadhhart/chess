@@ -1,4 +1,3 @@
-
 package ui;
 
 import facade.ServerFacade;
@@ -70,7 +69,6 @@ public class PreLoginUI {
 
         System.out.print(EscapeSequences.RESET_TEXT_COLOR);
     }
-
     private void login(Scanner scanner){
         System.out.println("Username:");
         String username = scanner.next();
@@ -92,7 +90,6 @@ public class PreLoginUI {
             System.out.println(exception.getMessage());
         }
     }
-
     private void register(Scanner scanner){
         System.out.println("Username:");
         String username = scanner.next();

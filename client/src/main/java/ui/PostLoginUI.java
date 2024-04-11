@@ -7,7 +7,6 @@ import requests.BaseRequest;
 import requests.CreateGameRequest;
 import requests.JoinGameRequest;
 import responses.*;
-
 import java.util.*;
 
 public class PostLoginUI {

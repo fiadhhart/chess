@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @WebSocket
 public class WebSocketHandler {
-    private final WebSocketSessions webSocketSessions = new WebSocketSessions();
+    //private final WebSocketSessions webSocketSessions = new WebSocketSessions();
     private UserDAO userDAO;
     private GameDAO gameDAO;
     private AuthDAO authDAO;

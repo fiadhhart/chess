@@ -4,7 +4,6 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import requests.*;
 import responses.*;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -15,7 +14,6 @@ public class ServerFacade {
     public ServerFacade(String baseUrl) {
         this.baseUrl = baseUrl;
     }
-
 
     public AuthResponse registerUser(RegisterRequest request) throws IOException {
         String username = request.getUsername();
@@ -88,7 +86,6 @@ public class ServerFacade {
         return sendRequest("GET", endpoint, null, authToken, AccessGameResponse.class);
     }
 
-
     private <T> T sendRequest(String method, String endpoint, String requestBody, String authToken, Class<T> responseClass) throws IOException {
         URL url = new URL(endpoint);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -124,5 +121,4 @@ public class ServerFacade {
 
         return responseObject;
     }
-
 }
