@@ -11,6 +11,7 @@ import javax.websocket.*;
 import java.net.URI;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.SQLOutput;
 
 public class WebSocketClient extends Endpoint{
     private Session session;
@@ -32,8 +33,9 @@ public class WebSocketClient extends Endpoint{
         this.session.addMessageHandler(new MessageHandler.Whole<String>() {
             @Override
             public void onMessage(String message) {
+                System.out.println("got back to websocketclient");
                 ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
-                notify.notify(serverMessage);
+                notify.notify(serverMessage, message);
             }
         });
 

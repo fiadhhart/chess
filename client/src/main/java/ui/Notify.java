@@ -3,5 +3,5 @@ package ui;
 import webSocketMessages.serverMessages.ServerMessage;
 
 public interface Notify {
-    void notify(ServerMessage notification);
+    void notify(ServerMessage notification, String message);
 }

@@ -38,6 +38,9 @@ public class Server {
             }
         }
 
+        //websocket endpoint
+        Spark.webSocket("/connect", new WebSocketHandler(userDAO, gameDAO, authDAO));
+
         // Register your endpoints and handle exceptions here.
         Spark.post("/user", (req, res) -> (new RegisterHandler(userDAO, gameDAO, authDAO)).handle(req, res));
         Spark.post("/session", (req, res) -> (new LoginHandler(userDAO, gameDAO, authDAO)).handle(req, res));
@@ -47,8 +50,6 @@ public class Server {
         Spark.put("/game", (req, res) -> (new JoinGameHandler(userDAO, gameDAO, authDAO)).handle(req, res));
         Spark.delete("/db", (req, res) -> (new ClearHandler(userDAO, gameDAO, authDAO)).handle(req, res));
 
-        //websocket endpoint
-        Spark.webSocket("/connect", new WebSocketHandler(userDAO, gameDAO, authDAO));
 
         //I tried to make another... was not a success
         Spark.get("/game/:id", (req, res) -> {

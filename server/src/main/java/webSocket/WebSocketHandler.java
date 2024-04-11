@@ -6,6 +6,7 @@ import dataAccess.*;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import webSocketMessages.serverMessages.LoadGameMessage;
 import webSocketMessages.serverMessages.NotificationMessage;
 import webSocketMessages.serverMessages.ServerMessage;
 import webSocketMessages.userCommands.*;
@@ -44,40 +45,41 @@ public class WebSocketHandler {
             case UserGameCommand.CommandType.JOIN_PLAYER:
                 JoinPlayerCommand joinPlayerCommand = new Gson().fromJson(message, JoinPlayerCommand.class);
 
+                Integer gameID = joinPlayerCommand.gameID;
+                ChessGame game = gameDAO.getChessGame(gameID);
+                ServerMessage loadGameMessage = new LoadGameMessage(game);
+                session.getRemote().sendString(new Gson().toJson(loadGameMessage));
+
                 String authToken = joinPlayerCommand.getAuthString();
-                ChessGame.TeamColor playerColor = joinPlayerCommand.playerColor;
                 String username = authDAO.getUsername(authToken);
+                ChessGame.TeamColor playerColor = joinPlayerCommand.playerColor;
+                ServerMessage notificationMessage = new NotificationMessage( username + " joined the game as the " + playerColor.toString() + " player." );
+                session.getRemote().sendString(new Gson().toJson(notificationMessage));
 
-                ServerMessage notificationMessage = new NotificationMessage("Player " + username + "joined side " + playerColor.toString() + "." );
-                session.getRemote().sendString(new Gson().toJson(notificationMessage) );
 
-                //create new server message
-                //send notification of load game to this session
                 //send broadcast of the notification except self
 
                 break;
             case UserGameCommand.CommandType.JOIN_OBSERVER:
-                System.out.println("join_observer");
+                JoinObserverCommand joinObserverCommand = new Gson().fromJson(message, JoinObserverCommand.class);
                 //JoinObserver commandObj = new Gson().fromJson(message, JoinObserver.class);
                 //GameService.joinObserver(commandObj.getAuthString(), commandObj.getGameID(), webSocketSessions);
                 break;
             case UserGameCommand.CommandType.MAKE_MOVE:
-                System.out.println("make_move");
+                MakeMoveCommand makeMoveCommand = new Gson().fromJson(message, MakeMoveCommand.class);
                 //MakeMove commandObj = new Gson().fromJson(message, MakeMove.class);
                 //GameService.makeMove(commandObj.getAuthString(), commandObj.getGameID(), commandObj.getMove(), webSocketSessions);
                 break;
             case UserGameCommand.CommandType.LEAVE:
-                System.out.println("leave");
+                LeaveCommand leaveCommand = new Gson().fromJson(message, LeaveCommand.class);
                 //Leave commandObj = new Gson().fromJson(message, Leave.class);
                 //GameService.leaveGame(commandObj.getAuthString(), commandObj.getGameID(), webSocketSessions);
                 break;
             case UserGameCommand.CommandType.RESIGN:
-                System.out.println("resign");
+                ResignCommand resignCommand = new Gson().fromJson(message, ResignCommand.class);
                 //Resign commandObj = new Gson().fromJson(message, Resign.class);
                 //GameService.resignGame(commandObj.getAuthString(), commandObj.getGameID(), webSocketSessions);
                 break;
-            default:
-                System.out.println("error in WebSocketHandler");
         }
     }
 

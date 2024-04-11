@@ -1,8 +1,14 @@
 package ui;
 
 import chess.*;
+import com.google.gson.Gson;
 import webSocket.WebSocketClient;
+import webSocketMessages.serverMessages.ErrorMessage;
+import webSocketMessages.serverMessages.LoadGameMessage;
+import webSocketMessages.serverMessages.NotificationMessage;
 import webSocketMessages.serverMessages.ServerMessage;
+import webSocketMessages.userCommands.JoinPlayerCommand;
+
 import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,6 +31,7 @@ public class GameplayUI implements Notify{
         //FIXME: notify joined
         //FIXME: notify observed
 
+        /*
         //FIXME: game from database
         ChessGame game = new ChessGame();
         ChessBoard board = new ChessBoard();
@@ -34,7 +41,9 @@ public class GameplayUI implements Notify{
         this.game = game;
         //
 
+
         redraw(null);
+        */
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -232,7 +241,29 @@ public class GameplayUI implements Notify{
 
 
     @Override
-    public void notify(ServerMessage notification) {
-        System.out.println("testing");
+    public void notify(ServerMessage notification, String msg) {
+        System.out.println("got to notify");
+
+        switch(notification.getServerMessageType()){
+            case NOTIFICATION:
+                NotificationMessage notificationMessage = new Gson().fromJson(msg, NotificationMessage.class);
+                String message = notificationMessage.message;
+                System.out.println("Notification: " + message);
+                break;
+
+            case ERROR:
+                ErrorMessage errorMessage = new Gson().fromJson(msg, ErrorMessage.class);
+                String error = errorMessage.errorMessage;
+                System.out.println("Error: " + error);
+                break;
+
+            case LOAD_GAME:
+                LoadGameMessage loadGameMessage = new Gson().fromJson(msg, LoadGameMessage.class);
+                ChessGame game = loadGameMessage.game;
+                this.game = game;
+                redraw(null);
+                break;
+        }
+
     }
 }
