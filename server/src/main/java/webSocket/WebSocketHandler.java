@@ -36,15 +36,15 @@ public class WebSocketHandler {
 
         UserGameCommand msg = new Gson().fromJson(message, UserGameCommand.class);
 
-        Integer gameID;
-        ChessGame game;
-        String authToken;
-        String username;
-        ChessGame.TeamColor playerColor;
-        ServerMessage messageToBroadcast;
-        String whiteUsername;
-        String blackUsername;
-        ServerMessage errorMessage;
+        Integer gameID = null;
+        ChessGame game = null;
+        String authToken = null;
+        String username = null;
+        ChessGame.TeamColor playerColor = null;
+        ServerMessage messageToBroadcast = null;
+        String whiteUsername = null;
+        String blackUsername = null;
+        ServerMessage errorMessage = null;
 
         switch(msg.getCommandType()){
             case null:
@@ -57,11 +57,17 @@ public class WebSocketHandler {
             case UserGameCommand.CommandType.JOIN_PLAYER:
                 JoinPlayerCommand joinPlayerCommand = new Gson().fromJson(message, JoinPlayerCommand.class);
 
-                gameID = joinPlayerCommand.gameID;
-                game = gameDAO.getChessGame(gameID);
-                authToken = joinPlayerCommand.getAuthString();
-                username = authDAO.getUsername(authToken);
-                playerColor = joinPlayerCommand.playerColor;
+                try{
+                    gameID = joinPlayerCommand.gameID;
+                    game = gameDAO.getChessGame(gameID);
+                    authToken = joinPlayerCommand.getAuthString();
+                    username = authDAO.getUsername(authToken);
+                    playerColor = joinPlayerCommand.playerColor;
+                }catch (Exception e){
+                    errorMessage = new ErrorMessage("join info didn't work");
+                    session.getRemote().sendString(new Gson().toJson(errorMessage));
+                    return;
+                }
 
                 //load game to self
                 session.getRemote().sendString(new Gson().toJson(new LoadGameMessage(game)));
