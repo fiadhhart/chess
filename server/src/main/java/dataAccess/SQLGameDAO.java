@@ -217,4 +217,31 @@ public class SQLGameDAO implements GameDAO{
             throw new DataAccessException("Error updating game in the database: " + e.getMessage());
         }
     }
+
+    @Override
+    public void removeUser(ChessGame.TeamColor playerColor, Integer gameID) throws DataAccessException {
+        String usernameColumn;
+        if (playerColor == ChessGame.TeamColor.WHITE) {
+            usernameColumn = "whiteUsername";
+        } else if (playerColor == ChessGame.TeamColor.BLACK) {
+            usernameColumn = "blackUsername";
+        } else {
+            // Handle case where playerColor is null or an invalid TeamColor
+            throw new DataAccessException("Invalid player color provided.");
+        }
+
+        String sql = "UPDATE games SET " + usernameColumn + " = NULL WHERE gameID = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, gameID);
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated == 0) {
+                // Handle case where no rows were updated
+                throw new DataAccessException("Failed to remove user from game with ID " + gameID + ".");
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error removing user from game: " + e.getMessage());
+        }
+    }
 }

@@ -152,4 +152,19 @@ public class GameMemDAO implements GameDAO {
             throw new DataAccessException("Game does not exist in the database.");
         }
     }
+
+    @Override
+    public void removeUser(ChessGame.TeamColor playerColor, Integer gameID) throws DataAccessException {
+        GameData gameData = database.games.get(gameID);
+
+        if (gameData != null) {
+            if (playerColor == ChessGame.TeamColor.WHITE) {
+                gameData.setWhiteUsername(null);
+            } else if (playerColor == ChessGame.TeamColor.BLACK) {
+                gameData.setBlackUsername(null);
+            }
+        } else {
+            throw new DataAccessException("Game with ID " + gameID + " not found.");
+        }
+    }
 }

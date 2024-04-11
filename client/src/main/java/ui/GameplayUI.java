@@ -217,11 +217,8 @@ public class GameplayUI implements Notify{
         redraw(endPositions);
     }
 
-
     @Override
     public void notify(ServerMessage notification, String msg) {
-        System.out.println("got to notify");
-
         switch(notification.getServerMessageType()){
             case NOTIFICATION:
                 NotificationMessage notificationMessage = new Gson().fromJson(msg, NotificationMessage.class);
@@ -242,6 +239,5 @@ public class GameplayUI implements Notify{
                 redraw(null);
                 break;
         }
-
     }
 }
