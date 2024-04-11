@@ -16,6 +16,13 @@ import java.sql.SQLOutput;
 public class WebSocketClient extends Endpoint{
     private Session session;
 
+    public WebSocketClient(String errorMessage, Notify notify) throws DeploymentException, URISyntaxException, IOException {
+        establishConnection();
+
+        UserGameCommand userGameCommand = new UserGameCommand(errorMessage);
+
+        sendAndReceiveMessage(userGameCommand, notify);
+    }
     public WebSocketClient(String authToken,
                            UserGameCommand.CommandType commandType,
                            Integer gameID,

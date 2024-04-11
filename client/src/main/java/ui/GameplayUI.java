@@ -68,7 +68,7 @@ public class GameplayUI implements Notify{
                     highlight(scanner);
                     break;
                 default:
-                    System.out.println("invalid input in GameplayUI");
+                    System.out.println("Error: invalid input in GameplayUI");  //FIXME: invalid input in GameplayUI
             }
         }
     }
@@ -117,8 +117,16 @@ public class GameplayUI implements Notify{
         System.out.println("Leaving game");
         new WebSocketClient(authToken, UserGameCommand.CommandType.LEAVE, gameID, null, null, this);
     }
-
     private void move(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
+        ChessGame.TeamColor whosTurn = this.game.getTeamTurn();
+        if (this.playerColor == null){
+            System.out.println("Error: must be a player to move"); //FIXME: error invalid position
+            return;
+        } else if (this.playerColor != whosTurn){
+            System.out.println("Error: not your turn"); //FIXME: not your turn
+            return;
+        }
+
         System.out.println("Enter the position of the piece you would like to move (i.e. d4)");
         String startInput = scanner.next();
         System.out.println("Enter the position you would like to move this piece to (i.e. d4)");
@@ -130,7 +138,7 @@ public class GameplayUI implements Notify{
             startPosition = parsePosition(startInput);
             endPosition = parsePosition(endInput);
         }catch(Exception e){
-            System.out.println("invalid position");
+            System.out.println("Error: invalid position"); //FIXME: error invalid position
             return;
         }
 
@@ -162,17 +170,13 @@ public class GameplayUI implements Notify{
                 move = new ChessMove(startPosition, endPosition);
             }
         }catch(Exception e){
-            System.out.println("error creating move");
+            System.out.println("Error: error creating move");  //FIXME: error: unable to create move
             return;
         }
 
         new WebSocketClient(authToken, UserGameCommand.CommandType.MAKE_MOVE, gameID, null, move, this);
 
-        boolean isInCheck = this.game.isInCheck(this.game.getTeamTurn());
-        boolean isInCheckmate = this.game.isInCheckmate(this.game.getTeamTurn());
-        boolean isInStalemate = this.game.isInStalemate(this.game.getTeamTurn());
-        //FIXME: websocket notify in check
-        //FIXME: websocket notify in checkmate
+        checkGameStatus();
 
     }
     private ChessPosition parsePosition(String position) {
@@ -180,8 +184,14 @@ public class GameplayUI implements Notify{
         int row = Character.getNumericValue(position.charAt(1)); // Get numeric value of row
         return new ChessPosition(row, column);
     }
-
-
+    private void checkGameStatus(){
+        boolean isInCheck = this.game.isInCheck(this.game.getTeamTurn());
+        boolean isInCheckmate = this.game.isInCheckmate(this.game.getTeamTurn());
+        boolean isInStalemate = this.game.isInStalemate(this.game.getTeamTurn());
+        //FIXME: websocket notify in check
+        //FIXME: websocket notify in checkmate
+        //FIXME:
+    }
     private void resign(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
         System.out.println("Confirm you want to resign [Yes|No]");
         String confirmation = scanner.next();
@@ -193,10 +203,10 @@ public class GameplayUI implements Notify{
         } else if (Objects.equals(confirmation, "No")) {
             System.out.println("Did not resign");
         } else{
-            System.out.println("invalid input");
+            System.out.println("Error: invalid input");    //FIXME: invalid input
         }
     }
-    private void highlight(Scanner scanner){
+    private void highlight(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
         System.out.println("Enter the position of the piece to see its options (i.e. d4)");
         String positionInput = scanner.next();
 
@@ -210,7 +220,9 @@ public class GameplayUI implements Notify{
                 endPositions.add(move.getEndPosition());
             }
         }catch(Exception e){
-            System.out.println("invalid position");
+            String errorMessage = "invalid position";
+            //System.out.println(errorMessage); //FIXME: invalid position
+            new WebSocketClient(errorMessage, this);
             return;
         }
 

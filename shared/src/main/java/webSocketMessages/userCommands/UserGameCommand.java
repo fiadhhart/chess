@@ -10,8 +10,8 @@ import com.google.gson.Gson;
  * methods.
  */
 public class UserGameCommand {
-    private final String authToken;
-    protected CommandType commandType;
+    private final String authToken; //use as error message
+    protected CommandType commandType;  //null means just want error back
 
     public UserGameCommand(String authToken) {
         this.authToken = authToken;

@@ -6,6 +6,7 @@ import dataAccess.*;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import webSocketMessages.serverMessages.ErrorMessage;
 import webSocketMessages.serverMessages.LoadGameMessage;
 import webSocketMessages.serverMessages.NotificationMessage;
 import webSocketMessages.serverMessages.ServerMessage;
@@ -43,9 +44,16 @@ public class WebSocketHandler {
         ServerMessage messageToBroadcast;
         String whiteUsername;
         String blackUsername;
-
+        ServerMessage errorMessage;
 
         switch(msg.getCommandType()){
+            case null:
+                String errorMsg = msg.getAuthString();  //not actually an authString. is actually the error message
+                errorMessage = new ErrorMessage(errorMsg);
+                session.getRemote().sendString(new Gson().toJson(errorMessage));
+
+                break;
+
             case UserGameCommand.CommandType.JOIN_PLAYER:
                 JoinPlayerCommand joinPlayerCommand = new Gson().fromJson(message, JoinPlayerCommand.class);
 
@@ -92,20 +100,14 @@ public class WebSocketHandler {
                 authToken = makeMoveCommand.getAuthString();
                 username = authDAO.getUsername(authToken);
 
-                //confirm is a player
-                whiteUsername = gameDAO.getPlayer(ChessGame.TeamColor.WHITE, gameID);
-                blackUsername = gameDAO.getPlayer(ChessGame.TeamColor.BLACK, gameID);
-                if (!Objects.equals(username, whiteUsername) && !Objects.equals(username, blackUsername)){
-                    //error message: must be a player to move
-                    return;
-                }
-
                 //make the move
                 try {
                     game.makeMove(move);
                     gameDAO.setGame(gameID, game);
                 }catch(InvalidMoveException e) {
-                    throw e;
+                    errorMessage = new ErrorMessage("invalid move");
+                    session.getRemote().sendString(new Gson().toJson(errorMessage));
+                    return;
                 }
 
                 //load game to all
