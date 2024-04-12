@@ -14,7 +14,6 @@ import webSocketMessages.userCommands.*;
 import javax.websocket.OnClose;
 import java.io.IOException;
 import java.util.Objects;
-import javax.websocket.*;
 
 
 @WebSocket
@@ -129,15 +128,22 @@ public class WebSocketHandler {
                 boolean isInCheck = game.isInCheck(game.getTeamTurn());
                 boolean isInCheckmate = game.isInCheckmate(game.getTeamTurn());
                 boolean isInStalemate = game.isInStalemate(game.getTeamTurn());
+                String atRiskUsername;
                 if(isInCheckmate){
-                    messageToBroadcast = new NotificationMessage(username + " is in checkmate. Game over");
+                    if (game.getTeamTurn() == ChessGame.TeamColor.WHITE){atRiskUsername = gameDAO.getPlayer(ChessGame.TeamColor.WHITE, gameID);}
+                    else{atRiskUsername = gameDAO.getPlayer(ChessGame.TeamColor.BLACK, gameID);}
+
+                    messageToBroadcast = new NotificationMessage(atRiskUsername + " is in checkmate. Game over");
                     webSocketSessions.broadcastSession(gameID, null, messageToBroadcast);
 
                     gameDAO.removeUser(ChessGame.TeamColor.WHITE, gameID);
                     gameDAO.removeUser(ChessGame.TeamColor.BLACK, gameID);
 
                 }else if(isInCheck){
-                    messageToBroadcast = new NotificationMessage(username + " is in check.");
+                    if (game.getTeamTurn() == ChessGame.TeamColor.WHITE){atRiskUsername = gameDAO.getPlayer(ChessGame.TeamColor.WHITE, gameID);}
+                    else{atRiskUsername = gameDAO.getPlayer(ChessGame.TeamColor.BLACK, gameID);}
+
+                    messageToBroadcast = new NotificationMessage(atRiskUsername + " is in check.");
                     webSocketSessions.broadcastSession(gameID, null, messageToBroadcast);
 
                 }else if(isInStalemate){
@@ -202,11 +208,8 @@ public class WebSocketHandler {
         }
     }
 
-    /*
     @OnClose
     public void onClose(Integer gameID, String authToken) {
         System.out.println("Connection closed");
     }
-
-     */
 }
