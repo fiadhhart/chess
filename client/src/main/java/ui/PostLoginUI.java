@@ -190,22 +190,15 @@ public class PostLoginUI {
         JoinGameRequest request = new JoinGameRequest(playerColor, gameID);
 
         try {
-            /*AccessGameRequest accessGameRequest = new AccessGameRequest(gameID);
-            AccessGameResponse accessGameResponse = serverFacade.getChessGame(accessGameRequest, authToken);
-            ChessGame game = accessGameResponse.getGame();
-             */
-
             BaseResponse response = serverFacade.joinGame(request, authToken);
 
             if (response.getMessage() == null) {
                 new GameplayUI().run(this.authToken, gameID, playerColor);
             } else {
-                //System.out.println(response.getMessage());
                 new GameplayUI(response.getMessage());
             }
 
         } catch (Exception exception) {
-            //System.out.println(exception.getMessage());
             new GameplayUI(exception.getMessage());
         }
     }
@@ -217,23 +210,15 @@ public class PostLoginUI {
         JoinGameRequest request = new JoinGameRequest(gameID);
 
         try {
-            /*
-            AccessGameRequest accessGameRequest = new AccessGameRequest(gameID);
-            AccessGameResponse accessGameResponse = serverFacade.getChessGame(accessGameRequest, authToken);
-            ChessGame game = accessGameResponse.getGame();
-            */
-
             BaseResponse response = serverFacade.joinGame(request, authToken);
 
             if (response.getMessage() == null) {
                 new GameplayUI().run(this.authToken, gameID, null);
             } else {
-                //System.out.println(response.getMessage());
                 new GameplayUI(response.getMessage());
             }
 
         } catch (Exception exception) {
-            //System.out.println(exception.getMessage());
             new GameplayUI(exception.getMessage());
         }
     }

@@ -127,12 +127,10 @@ public class GameplayUI implements Notify{
     private void move(Scanner scanner) throws DeploymentException, URISyntaxException, IOException {
         ChessGame.TeamColor whosTurn = this.game.getTeamTurn();
         if (this.playerColor == null){
-            //System.out.println("must be a player to move");
             String errorMessage = "must be a player to move";
             new WebSocketClient(errorMessage, this);
             return;
         } else if (this.playerColor != whosTurn){
-            //System.out.println("not your turn");
             String errorMessage = "not your turn";
             new WebSocketClient(errorMessage, this);
             return;
@@ -149,7 +147,6 @@ public class GameplayUI implements Notify{
             startPosition = parsePosition(startInput);
             endPosition = parsePosition(endInput);
         }catch(Exception e){
-            //System.out.println("invalid position");
             String errorMessage = "invalid position";
             new WebSocketClient(errorMessage, this);
             return;
@@ -172,7 +169,6 @@ public class GameplayUI implements Notify{
                         case "QUEEN" -> promotionChoice = ChessPiece.PieceType.QUEEN;
                         case "BISHOP" -> promotionChoice = ChessPiece.PieceType.BISHOP;
                         case null, default -> {
-                            //System.out.println("invalid promotion type");
                             String errorMessage = "invalid promotion type";
                             new WebSocketClient(errorMessage, this);
                             return;
@@ -185,7 +181,6 @@ public class GameplayUI implements Notify{
                 move = new ChessMove(startPosition, endPosition);
             }
         }catch(Exception e){
-            //System.out.println("error creating move");
             String errorMessage = "error creating move";
             new WebSocketClient(errorMessage, this);
             return;
@@ -209,7 +204,6 @@ public class GameplayUI implements Notify{
         } else if (Objects.equals(confirmation, "No")) {
             System.out.println("Did not resign");
         } else{
-            //System.out.println("invalid input");
             String errorMessage = "invalid input";
             new WebSocketClient(errorMessage, this);
         }
@@ -228,7 +222,6 @@ public class GameplayUI implements Notify{
                 endPositions.add(move.getEndPosition());
             }
         }catch(Exception e){
-            //System.out.println("invalid position");
             String errorMessage = "invalid position";
             new WebSocketClient(errorMessage, this);
             return;
