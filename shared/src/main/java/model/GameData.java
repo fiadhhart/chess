@@ -47,9 +47,6 @@ public class GameData {
     public String getGameName() {
         return gameName;
     }
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
-    }
     public ChessGame getGame() {
         return game;
     }
