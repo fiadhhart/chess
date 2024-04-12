@@ -16,7 +16,4 @@ public class RegisterRequest extends LoginRequest {
     public String getEmail() {
         return email;
     }
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
