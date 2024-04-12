@@ -11,7 +11,7 @@ import webSocketMessages.serverMessages.LoadGameMessage;
 import webSocketMessages.serverMessages.NotificationMessage;
 import webSocketMessages.serverMessages.ServerMessage;
 import webSocketMessages.userCommands.*;
-import javax.websocket.OnClose;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -206,10 +206,5 @@ public class WebSocketHandler {
 
                 break;
         }
-    }
-
-    @OnClose
-    public void onClose(Integer gameID, String authToken) {
-        System.out.println("Connection closed");
     }
 }
